@@ -1,0 +1,32 @@
+h1 {
+  text-align: center;
+  color: white;
+  font-size: 800%;
+}
+nav, h1 {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+#weather {
+  text-align: center;
+  font-size: 600%;
+  color: white;
+  padding-bottom: 20px;
+}
+
+td, tr, th, thead {
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  font-size: 200%;
+}
+
+.panel {
+  background-color:rgba(255, 255, 255, 0);
+  border: whitesmoke solid 1px !important;
+  border-radius: 10px;
+}
+
