@@ -39,6 +39,8 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
+import { HomeComponent } from './+home/home.component';
+import { TimeComponent } from './time/time.component';
 
 
 export const MaterialModules = [
@@ -69,7 +71,9 @@ export const MaterialModules = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    TimeComponent
   ],
   imports: [
     BrowserModule,
