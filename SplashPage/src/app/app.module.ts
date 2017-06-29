@@ -1,19 +1,18 @@
+import { WeatherService } from './weather/weather.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
-
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { HomeComponent } from './+home/home.component';
+import { TimeComponent } from './time/time.component';
+import { WeatherComponent } from './weather/weather.component';
+import { HttpModule, JsonpModule } from '@angular/http';
 import {
   MdAutocompleteModule,
   MdButtonModule,
@@ -39,8 +38,7 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
-import { HomeComponent } from './+home/home.component';
-import { TimeComponent } from './time/time.component';
+
 
 
 export const MaterialModules = [
@@ -73,7 +71,8 @@ export const MaterialModules = [
   declarations: [
     AppComponent,
     HomeComponent,
-    TimeComponent
+    TimeComponent,
+    WeatherComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,8 +84,10 @@ export const MaterialModules = [
     BrowserAnimationsModule,
     MaterialModules,
     FlexLayoutModule,
+    HttpModule,
+    JsonpModule,
   ],
-  providers: [],
+  providers: [WeatherService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
