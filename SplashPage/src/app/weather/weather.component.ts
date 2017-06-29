@@ -14,7 +14,7 @@ interface WeatherData {
 })
 
 export class WeatherComponent implements OnInit, OnDestroy {
-  showGeolocation: boolean;
+  geoEnabled = false;
   geoOptions = {
     timeout: 10 * 1000,
   }
@@ -26,36 +26,45 @@ export class WeatherComponent implements OnInit, OnDestroy {
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
-    if (navigator.geolocation) {
-      this.showGeolocation = true;
-      //this.updateLocationAndWeather();
-      this.loadWeather()
-    } else {
-      this.showGeolocation = false;
-    }
+    this.loadWeather();
   }
 
   ngOnDestroy() {
   }
 
   loadWeather() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.weatherService.load(position).then(weatherData => {
-          this.city = weatherData.name;
-          this.country = weatherData.sys.country;
-          this.temp = weatherData.main.temp;
-          this.iconClass = 'wi wi-owm-' + weatherData.cod;
-          console.log('weatherData', weatherData);
-        })
-      }, (error) => {
-        this.weatherError(error);
-      }, this.geoOptions )
-    }
+    navigator.geolocation.getCurrentPosition((position) => {
+      let latitude = position.coords.latitude;
+      let longitude = position.coords.longitude;
+      this.getWeatherData(latitude, longitude);
+      this.geoEnabled = true;
+    }, (error) => {
+      this.locationError(error);
+    }, this.geoOptions)
   }
 
-  weatherError(error){
-    console.log('Error in retrieving geolocation', error)
+  getWeatherData(latitude, longitude) {
+    this.weatherService.load(latitude, longitude).then(weatherData => {
+      this.city = weatherData.name;
+      this.country = weatherData.sys.country;
+      this.temp = String(weatherData.main.temp).split('.')[0];
+      this.iconClass = 'wi wi-owm-' + weatherData.weather[weatherData.weather.length-1].id;
+      console.log('weatherData', weatherData);
+    })
+  }
+
+  locationError(error) {
+    if (error.code == error.PERMISSION_DENIED) {
+      this.weatherService.getIPLocation().then(locationData => {
+        console.log(locationData);
+        let coords = locationData.loc.split(",");
+        let latitude = coords[0]
+        let longitude = coords[1]
+        this.getWeatherData(latitude, longitude);
+      })
+    } else {
+      console.log('Error in retreiving weather data',error)
+    }
   }
 
 }

@@ -26,15 +26,24 @@ export class WeatherService {
   //   return this.http.get(url).map(this.extractData);
   // }
 
-  load(position): Promise<any>{
+  load(latitude, longitude): Promise<any> {
     return new Promise(resolve => {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
       let url = this.weatherBaseUrl + latitude + '&lon=' + longitude + '&units=' + this.units + this.weatherApiKey;
       this.http.get(url)
         .map(this.extractData)
         .subscribe(weatherData => {
-        resolve(weatherData);
+          resolve(weatherData);
+        })
+    })
+  }
+
+  getIPLocation(): Promise<any> {
+    return new Promise(resolve => {
+      let url = 'http://ipinfo.io/json'
+      this.http.get(url)
+        .map(this.extractData)
+        .subscribe(locationData => {
+          resolve(locationData)
         })
     })
   }
