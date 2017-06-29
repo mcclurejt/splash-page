@@ -15,8 +15,9 @@ interface WeatherData {
 
 export class WeatherComponent implements OnInit, OnDestroy {
   showGeolocation: boolean;
-  observableLocation: Observable<any>;
-  observableWeather: Observable<any>;
+  geoOptions = {
+    timeout: 10 * 1000,
+  }
   city = '';
   country = '';
   temp = '';
@@ -37,16 +38,24 @@ export class WeatherComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  loadWeather(){
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.weatherService.load(position).then( weatherData => {
-        this.city = weatherData.name;
-        this.country = weatherData.sys.country;
-        this.temp = weatherData.main.temp;
-        this.iconClass ='wi wi-owm-' + weatherData.cod;
-        console.log('weatherData',weatherData);
-      })
-    })
+  loadWeather() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.weatherService.load(position).then(weatherData => {
+          this.city = weatherData.name;
+          this.country = weatherData.sys.country;
+          this.temp = weatherData.main.temp;
+          this.iconClass = 'wi wi-owm-' + weatherData.cod;
+          console.log('weatherData', weatherData);
+        })
+      }, (error) => {
+        this.weatherError(error);
+      }, this.geoOptions )
+    }
+  }
+
+  weatherError(error){
+    console.log('Error in retrieving geolocation', error)
   }
 
 }
