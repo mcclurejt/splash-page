@@ -19,7 +19,8 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "./assets/weather-icons/css/weather-icons.min.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

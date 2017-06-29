@@ -12,7 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './+home/home.component';
 import { TimeComponent } from './time/time.component';
 import { WeatherComponent } from './weather/weather.component';
-import { HttpModule, JsonpModule } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import {
   MdAutocompleteModule,
   MdButtonModule,
@@ -85,7 +85,6 @@ export const MaterialModules = [
     MaterialModules,
     FlexLayoutModule,
     HttpModule,
-    JsonpModule,
   ],
   providers: [WeatherService],
   bootstrap: [AppComponent]

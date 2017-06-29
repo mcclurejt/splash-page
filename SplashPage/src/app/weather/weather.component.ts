@@ -20,7 +20,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   city = '';
   country = '';
   temp = '';
-  icon = '';
+  iconClass = '';
 
   constructor(private weatherService: WeatherService) { }
 
@@ -43,8 +43,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
         this.city = weatherData.name;
         this.country = weatherData.sys.country;
         this.temp = weatherData.main.temp;
-        this.icon = weatherData.weather[weatherData.weather.length-1].icon;
-        console.log('icon',this.icon);
+        this.iconClass ='wi wi-owm-' + weatherData.cod;
+        console.log('weatherData',weatherData);
       })
     })
   }

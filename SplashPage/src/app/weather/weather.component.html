@@ -1,5 +1,4 @@
 <button md-button *ngIf="showGeolocation" (click)='loadService()'>
   Update Weather
 </button>
-<h1>{{temp}}</h1>
-<h1>{{icon}}</h1>
+<h1>{{city}} {{temp}} <i [class]="iconClass"></i></h1>
