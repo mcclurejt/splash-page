@@ -1,11 +1,11 @@
 <div class='container'>
   <div id='weather' fxLayoutAlign='center center'>
-    <i [class]="iconClass"></i>
-    {{temp}}
+    <i [class]="weather.iconClass"></i>
+    {{weather.temp}}
     <i class='wi wi-fahrenheit' style='font-size: 120%;'></i>
   </div>
   <div id='location' fxLayoutAlign='center center'>
-     {{city}}, {{country}}
+     {{weather.city}}, {{weather.country}}
   </div>
   <button md-button *ngIf="!geoEnabled" (click)='loadWeather()'>
     Update Weather

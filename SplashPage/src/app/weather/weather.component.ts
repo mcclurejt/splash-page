@@ -2,8 +2,16 @@ import { Observable } from 'rxjs/Observable';
 import { WeatherService } from './weather.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-interface WeatherData {
-  weather
+export interface Weather {
+  city: string;
+  country: string;
+  temp: string;
+  iconClass: string;
+}
+
+export interface Coordinates {
+  latitude: string;
+  longitude: string;
 }
 
 @Component({
@@ -18,10 +26,12 @@ export class WeatherComponent implements OnInit, OnDestroy {
   geoOptions = {
     timeout: 10 * 1000,
   }
-  city = '';
-  country = '';
-  temp = '';
-  iconClass = '';
+  weather : Weather = {
+    'city' : '',
+    'country' : '',
+    'temp' : '',
+    'iconClass' : '',
+  }
 
   constructor(private weatherService: WeatherService) { }
 
@@ -44,23 +54,15 @@ export class WeatherComponent implements OnInit, OnDestroy {
   }
 
   getWeatherData(latitude, longitude) {
-    this.weatherService.load(latitude, longitude).then(weatherData => {
-      this.city = weatherData.name;
-      this.country = weatherData.sys.country;
-      this.temp = String(weatherData.main.temp).split('.')[0];
-      this.iconClass = 'wi wi-owm-' + weatherData.weather[weatherData.weather.length-1].id;
-      console.log('weatherData', weatherData);
+    this.weatherService.load(latitude, longitude).then(weather => {
+      this.weather = weather;
     })
   }
 
   locationError(error) {
     if (error.code == error.PERMISSION_DENIED) {
-      this.weatherService.getIPLocation().then(locationData => {
-        console.log(locationData);
-        let coords = locationData.loc.split(",");
-        let latitude = coords[0]
-        let longitude = coords[1]
-        this.getWeatherData(latitude, longitude);
+      this.weatherService.getIPLocation().then(coordinates => {
+        this.getWeatherData(coordinates.latitude, coordinates.longitude);
       })
     } else {
       console.log('Error in retreiving weather data',error)
