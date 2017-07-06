@@ -38,6 +38,8 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
+import { CalendarComponent } from './calendar/calendar.component';
+import { SignInComponent } from './+sign-in/sign-in.component';
 
 
 
@@ -73,6 +75,8 @@ export const MaterialModules = [
     HomeComponent,
     TimeComponent,
     WeatherComponent,
+    CalendarComponent,
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
