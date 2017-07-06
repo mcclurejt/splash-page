@@ -13,26 +13,16 @@ export class WeatherService {
 
   constructor(private http: Http) { }
 
-  load(latitude, longitude): Promise<Weather> {
-    return new Promise(resolve => {
+  getWeather(latitude, longitude): Observable<Weather> {
       let url = this.weatherBaseUrl + latitude + '&lon=' + longitude + '&units=' + this.units + this.weatherApiKey;
-      this.http.get(url)
+      return this.http.get(url)
         .map(this.mapWeatherData)
-        .subscribe(weatherData => {
-          resolve(weatherData);
-        })
-    })
   }
 
-  getIPLocation(): Promise<Coordinates> {
-    return new Promise(resolve => {
+  getIPLocation(): Observable<Coordinates> {
       let url = 'http://ipinfo.io/json'
-      this.http.get(url)
+      return this.http.get(url)
         .map(this.mapLocationData)
-        .subscribe(locationData => {
-          resolve(locationData)
-        })
-    })
   }
 
   private mapWeatherData(res: Response): Weather{

@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs/Observable';
 import { WeatherService } from './weather.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
 
 export interface Weather {
   city: string;
@@ -22,51 +22,59 @@ export interface Coordinates {
 })
 
 export class WeatherComponent implements OnInit, OnDestroy {
-  geoEnabled = false;
   geoOptions = {
     timeout: 10 * 1000,
   }
-  weather : Weather = {
-    'city' : '',
-    'country' : '',
-    'temp' : '',
-    'iconClass' : '',
+  weatherSub: Subscription;
+  weather = {
+    city: 'Chicago',
+    country: 'US',
+    temp: '75',
+    iconClass: 'wi wi-owm-802',
   }
 
   constructor(private weatherService: WeatherService) { }
 
   ngOnInit() {
-    this.loadWeather();
+    this.getWeather();
   }
 
-  ngOnDestroy() {
-  }
-
-  loadWeather() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-      this.getWeatherData(latitude, longitude);
-      this.geoEnabled = true;
-    }, (error) => {
-      this.locationError(error);
-    }, this.geoOptions)
-  }
-
-  getWeatherData(latitude, longitude) {
-    this.weatherService.load(latitude, longitude).then(weather => {
-      this.weather = weather;
-    })
+  private getWeather() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        this.weatherSub = this.weatherService.getWeather(latitude, longitude).subscribe(
+          weather => {
+            console.log(weather);
+            this.weather = weather;
+          }
+        );
+      },
+      error => {
+        this.locationError(error);
+      },
+      this.geoOptions)
   }
 
   locationError(error) {
     if (error.code == error.PERMISSION_DENIED) {
-      this.weatherService.getIPLocation().then(coordinates => {
-        this.getWeatherData(coordinates.latitude, coordinates.longitude);
-      })
+      this.weatherSub = this.weatherService.getIPLocation().subscribe(
+        coordinates => {
+          this.weatherSub = this.weatherService.getWeather(coordinates.latitude, coordinates.longitude).subscribe(
+            weather => {
+              console.log(weather);
+              this.weather = weather;
+            }
+          );
+        });
     } else {
-      console.log('Error in retreiving weather data',error)
+      console.log('Error in retreiving weather data', error)
     }
+  }
+
+  ngOnDestroy() {
+    this.weatherSub.unsubscribe();
   }
 
 }
