@@ -1,18 +1,6 @@
-import { WeatherService } from './weather.service';
+import { WeatherService } from '../services/weather.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
-
-export interface Weather {
-  city: string;
-  country: string;
-  temp: string;
-  iconClass: string;
-}
-
-export interface Coordinates {
-  latitude: string;
-  longitude: string;
-}
 
 @Component({
   selector: 'app-weather',

@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import { Weather, Coordinates } from './weather.component'
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+
+export interface Weather {
+  city: string;
+  country: string;
+  temp: string;
+  iconClass: string;
+}
+
+export interface Coordinates {
+  latitude: string;
+  longitude: string;
+}
 
 @Injectable()
 export class WeatherService {
