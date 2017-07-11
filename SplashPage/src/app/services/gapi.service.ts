@@ -7,10 +7,8 @@ import 'rxjs/add/observable/fromPromise';
 @Injectable()
 export class GapiService {
 
-  private api: Subject<any>;
-
   API_KEY = 'AIzaSyCQyVbMdr7JFtL0lA-VCW8RmTq2o3xnGgE';
-  DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
+  DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest", "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
   CLIENT_ID = '874945954684-krbb8l7db5e59kerl2o5kvum2hdv1uok.apps.googleusercontent.com';
   SCOPES = 'https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar';
 
@@ -19,18 +17,18 @@ export class GapiService {
   private accessToken: string;
   private idToken: string;
 
-  public getAccessToken(): string{
-    if(this.isSignedIn()){
+  public getAccessToken(): string {
+    if (this.isSignedIn()) {
       return this.accessToken;
     } else {
       return null;
     }
   }
 
-  public getIdToken(): string{
-    if(this.isSignedIn()){
+  public getIdToken(): string {
+    if (this.isSignedIn()) {
       return this.idToken;
-    } else{
+    } else {
       return null;
     }
   }
@@ -47,7 +45,7 @@ export class GapiService {
       })
   }
 
-  load(): Subject<boolean> {
+  load(): Subject<any> {
     console.log('load');
     let apiSubject = new Subject();
     let gapi = window['gapi'];
@@ -68,7 +66,7 @@ export class GapiService {
     if (gapiAuthLoaded && gapiAuthLoaded.currentUser) {
       return subject.next(gapiAuthLoaded);
     }
-    gapi.load('auth2', response => subject.next(response));
+    gapi.load('client:auth2', response => subject.next(response));
   }
 
   initApi() {
@@ -129,14 +127,15 @@ export class GapiService {
     return this.googleAuth && this.googleAuth.isSignedIn.get();
   }
 
-  public getCalendarList() {
-    if(this.isSignedIn()){
-      let calparams = {
-        maxResults: 10,
-        showHidden: true,
-      }
-      return gapi.client.calendar.calendarList.list(calparams);
-    }
+  // API METHODS
+
+  getBatch(): gapi.client.HttpBatch{
+    let batch: gapi.client.HttpBatch = window['gapi'].client.newBatch();
+    return batch;
+  }
+
+  getRequest(params): gapi.client.HttpRequest<any>{
+    return window['gapi'].client.request(params);
   }
 
 }

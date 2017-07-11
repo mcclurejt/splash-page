@@ -9,18 +9,27 @@ import { Component, OnInit } from '@angular/core';
 export class CalendarComponent implements OnInit {
 
   calendarList: gapi.client.calendar.CalendarList;
+  api: any;
 
-  constructor(gapiService: GapiService) {
+  constructor(private gapiService: GapiService) {
     
-    gapiService.getCalendarList().then( (resp) => {
-      this.calendarList = resp.result;
-   });
-
   }
   
   ngOnInit() {
     
     
+  }
+
+  getCalendarList(){
+    let batch: gapi.client.HttpBatch = this.gapiService.getBatch();
+    let requestParams = {
+      path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+      method: 'GET',
+    }
+    batch.add(this.gapiService.getRequest(requestParams));
+    batch.execute( (resp) => {
+      console.log(resp);
+    })
   }
 
 
