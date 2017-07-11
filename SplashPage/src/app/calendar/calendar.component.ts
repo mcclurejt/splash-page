@@ -1,3 +1,4 @@
+import { GapiService } from './../services/gapi.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor() { }
+  calendarList: gapi.client.calendar.CalendarList;
+
+  constructor(gapiService: GapiService) {
+    
+    gapiService.getCalendarList().then( (resp) => {
+      this.calendarList = resp.result;
+   });
+
+  }
   
   ngOnInit() {
+    
+    
   }
+
+
 
 }

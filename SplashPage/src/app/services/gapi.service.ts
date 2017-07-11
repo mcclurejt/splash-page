@@ -12,7 +12,7 @@ export class GapiService {
   API_KEY = 'AIzaSyCQyVbMdr7JFtL0lA-VCW8RmTq2o3xnGgE';
   DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
   CLIENT_ID = '874945954684-krbb8l7db5e59kerl2o5kvum2hdv1uok.apps.googleusercontent.com';
-  SCOPES = 'https://www.googleapis.com/auth/gmail.modify';
+  SCOPES = 'https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar';
 
   private googleAuth: gapi.auth2.GoogleAuth;
   private currentUser: gapi.auth2.GoogleUser;
@@ -34,9 +34,6 @@ export class GapiService {
       return null;
     }
   }
-
-
-
 
   constructor(private zone: NgZone, private router: Router) {
     this.load()
@@ -84,7 +81,7 @@ export class GapiService {
     return Observable.fromPromise(window['gapi'].auth2.init(initConfig));
   }
 
-  private saveGoogleAuth(googleAuth: gapi.auth2.GoogleAuth): gapi.auth2.GoogleAuth {
+  saveGoogleAuth(googleAuth: gapi.auth2.GoogleAuth): gapi.auth2.GoogleAuth {
     console.log('saveGoogleAuth');
     this.googleAuth = googleAuth;
     return googleAuth;
@@ -130,6 +127,16 @@ export class GapiService {
   isSignedIn() {
     // console.log('isSignedIn', this.googleAuth && this.googleAuth.isSignedIn.get());
     return this.googleAuth && this.googleAuth.isSignedIn.get();
+  }
+
+  public getCalendarList() {
+    if(this.isSignedIn()){
+      let calparams = {
+        maxResults: 10,
+        showHidden: true,
+      }
+      return gapi.client.calendar.calendarList.list(calparams);
+    }
   }
 
 }
