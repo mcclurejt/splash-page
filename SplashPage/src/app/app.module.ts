@@ -44,7 +44,6 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { SignInComponent } from './+sign-in/sign-in.component';
 
 
-
 export const MaterialModules = [
   MdAutocompleteModule,
   MdButtonModule,

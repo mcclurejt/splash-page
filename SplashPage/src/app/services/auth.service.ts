@@ -1,55 +1,73 @@
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-declare var gapi;
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { AsyncSubject } from "rxjs/AsyncSubject";
+
+declare var gapi: any;
 
 @Injectable()
 export class AuthService {
 
 
+  API_KEY = 'AIzaSyCQyVbMdr7JFtL0lA-VCW8RmTq2o3xnGgE';
   DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"];
   CLIENT_ID = '874945954684-krbb8l7db5e59kerl2o5kvum2hdv1uok.apps.googleusercontent.com';
   SCOPES = 'https://www.googleapis.com/auth/gmail.modify';
+  
+  isSignedInStream: BehaviorSubject<boolean>;
 
-  constructor() {
-    gapi.load('client:auth2', this.initClient)
+  constructor(private router: Router) {
+    gapi.load('client:auth2', this.initClient.bind(this));
   }
 
   initClient(): void {
-    console.log('Init Client');
-    gapi.client.init({
-      discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
-      clientId: '874945954684-krbb8l7db5e59kerl2o5kvum2hdv1uok',
-      scope: 'https://www.googleapis.com/auth/gmail.readonly'
-    }).then(function () {
-      // Listen for sign-in state changes.
-      gapi.auth2.getAuthInstance().isSignedIn.listen(() => {
-        // Handle the initial sign-in state.
-        if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-          console.log('Signed In');
-        } else {
-          console.log('Not Signed In');
-        }
-      });
+    console.log('Init Client Reached');
+    let initConfig = {
+      discoveryDocs: this.DISCOVERY_DOCS,
+      clientId: this.CLIENT_ID,
+      scope: this.SCOPES,
+    }
+    gapi.client.init(initConfig).then(() => {
+      // // Listen for state changes
+      // gapi.auth2.getAuthInstance().isSignedIn.listen(isSignedIn => {
+      //   console.log('Auth State:', isSignedIn);
+      //   this.updateSignInStatus(isSignedIn);
+      // });
+      this.isSignedInStream = new BehaviorSubject(gapi.auth2.getAuthInstance().isSignedIn)
+      gapi.auth2.getAuthInstance().isSignedIn
+        .listen(isSignedIn => {
+          console.log('Auth State:', isSignedIn);
+          this.updateSignInStatus(isSignedIn);
+        });
 
-
-      console.log('update sign in');
+      // Handle initial sign-in state.
+      this.updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
     });
   }
 
-  updateSigninStatus(isSignedIn: boolean) {
+  updateSignInStatus(isSignedIn: boolean): void {
+    this.isSignedInStream.next(isSignedIn);
     if (isSignedIn) {
-      console.log('Signed In');
+      console.log('Authenticated');
     } else {
-
+      console.log('Not Authenticated');
     }
   }
 
-  public signIn(): void {
-    if (gapi.auth2)
-      gapi.auth2.getAuthInstance().signIn();
+  signIn(): void {
+    gapi.auth2.getAuthInstance().signIn().then( () => {
+      console.log('Signed In');
+      this.router.navigate(['/']);
+    })
   }
 
   signOut(): void {
-    gapi.auth2.getAuthInstance().signOut();
+    gapi.auth2.getAuthInstance().signOut().then( () => {
+      this.router.navigate(['/signin']);
+    });
+    console.log('Signed Out');
   }
 
 }
