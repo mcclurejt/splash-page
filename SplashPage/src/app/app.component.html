@@ -11,6 +11,9 @@
     <button md-raised-button [routerLink]="['/']">
         <md-icon>settings</md-icon>
     </button>
+    <button md-raised-button *ngIf="apiService.isSignedIn()" (click)='apiService.signOut()'>
+        Sign Out
+    </button>
 </md-toolbar>
 
 <router-outlet></router-outlet>

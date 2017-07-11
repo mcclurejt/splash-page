@@ -1,3 +1,4 @@
+import { ApiService } from './services/api.service';
 import { AuthGuard } from './services/auth.guard';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
@@ -95,6 +96,7 @@ export const MaterialModules = [
     WeatherService,
     AuthService,
     AuthGuard,
+    ApiService,
     ],
   bootstrap: [AppComponent]
 })

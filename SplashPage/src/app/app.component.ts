@@ -1,3 +1,4 @@
+import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from "angularfire2/database";
@@ -9,7 +10,7 @@ import { AngularFireDatabase } from "angularfire2/database";
 })
 export class AppComponent {
 
-  constructor(db: AngularFireDatabase, public authService: AuthService) {
+  constructor(db: AngularFireDatabase, public authService: AuthService, public apiService: ApiService) {
 
   }
 

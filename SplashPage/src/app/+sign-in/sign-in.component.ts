@@ -1,3 +1,4 @@
+import { ApiService } from './../services/api.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignInComponent implements OnInit {
 
-  constructor(public authService : AuthService) { }
+  constructor(public authService : AuthService, public apiService: ApiService) { }
 
   ngOnInit() {
   }
