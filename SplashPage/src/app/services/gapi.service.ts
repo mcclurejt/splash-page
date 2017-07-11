@@ -5,7 +5,7 @@ import { Injectable, NgZone } from '@angular/core';
 import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
-export class ApiService {
+export class GapiService {
 
   private api: Subject<any>;
 
@@ -16,8 +16,24 @@ export class ApiService {
 
   private googleAuth: gapi.auth2.GoogleAuth;
   private currentUser: gapi.auth2.GoogleUser;
+  private accessToken: string;
+  private idToken: string;
 
-  //public apiLoadedStream: Observable<boolean>
+  public getAccessToken(): string{
+    if(this.isSignedIn()){
+      return this.accessToken;
+    } else {
+      return null;
+    }
+  }
+
+  public getIdToken(): string{
+    if(this.isSignedIn()){
+      return this.idToken;
+    } else{
+      return null;
+    }
+  }
 
 
 
@@ -83,7 +99,8 @@ export class ApiService {
   handleSuccessLogin(googleUser: gapi.auth2.GoogleUser) {
     console.log('handleSuccessLogin');
     const authResponse = googleUser.getAuthResponse();
-    const token = authResponse.access_token;
+    this.accessToken = authResponse.access_token;
+    this.idToken = authResponse.id_token;
     const profile = googleUser.getBasicProfile();
     this.router.navigate(['/'])
   }
@@ -111,7 +128,7 @@ export class ApiService {
   }
 
   isSignedIn() {
-    console.log('isSignedIn', this.googleAuth && this.googleAuth.isSignedIn.get());
+    // console.log('isSignedIn', this.googleAuth && this.googleAuth.isSignedIn.get());
     return this.googleAuth && this.googleAuth.isSignedIn.get();
   }
 

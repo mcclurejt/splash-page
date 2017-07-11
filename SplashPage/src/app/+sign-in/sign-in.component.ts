@@ -1,4 +1,4 @@
-import { ApiService } from './../services/api.service';
+import { GapiService } from './../services/gapi.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignInComponent implements OnInit {
 
-  constructor(public authService : AuthService, public apiService: ApiService) { }
+  constructor(public authService : AuthService, public gapiService: GapiService) { }
 
   ngOnInit() {
   }
