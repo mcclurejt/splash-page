@@ -46,7 +46,6 @@ export class GapiService {
   }
 
   load(): Subject<any> {
-    console.log('load');
     let apiSubject = new Subject();
     let gapi = window['gapi'];
     let isGapiLoaded = gapi && gapi.load;
@@ -60,7 +59,6 @@ export class GapiService {
   }
 
   _loadHelper(subject) {
-    console.log('loadHelper');
     let gapi = window['gapi'];
     let gapiAuthLoaded = gapi && gapi.auth2 && gapi.auth2.getAuthInstance();
     if (gapiAuthLoaded && gapiAuthLoaded.currentUser) {
@@ -70,7 +68,6 @@ export class GapiService {
   }
 
   initApi() {
-    console.log('initApi');
     let initConfig = {
       discoveryDocs: this.DISCOVERY_DOCS,
       clientId: this.CLIENT_ID,
@@ -80,19 +77,16 @@ export class GapiService {
   }
 
   saveGoogleAuth(googleAuth: gapi.auth2.GoogleAuth): gapi.auth2.GoogleAuth {
-    console.log('saveGoogleAuth');
     this.googleAuth = googleAuth;
     return googleAuth;
   }
 
   listenToGoogleAuthStream(googleAuth: gapi.auth2.GoogleAuth) {
     window['gapi']['auth2'].getAuthInstance().isSignedIn.listen(authState => {
-      console.log('authState changed', authState);
     });
   }
 
   handleSuccessLogin(googleUser: gapi.auth2.GoogleUser) {
-    console.log('handleSuccessLogin');
     const authResponse = googleUser.getAuthResponse();
     this.accessToken = authResponse.access_token;
     this.idToken = authResponse.id_token;
@@ -101,12 +95,10 @@ export class GapiService {
   }
 
   handleFailedLogin(response) {
-    console.log('FAILED TO LOGIN:', response);
     return false;
   }
 
   signIn() {
-    console.log('Signin');
     let signOptions: gapi.auth2.SigninOptions = {
       scope: this.SCOPES,
     };
@@ -117,7 +109,6 @@ export class GapiService {
   }
 
   signOut() {
-    console.log('Sign Out');
     this.router.navigate(['/signin'])
     return Observable.fromPromise(this.googleAuth.signOut());
   }

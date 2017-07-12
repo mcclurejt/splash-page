@@ -5,20 +5,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   templateUrl: './time.component.html',
   styleUrls: ['./time.component.scss']
 })
-export class TimeComponent implements OnInit, OnDestroy {
+export class TimeComponent implements OnDestroy {
 
-  date;
-  id;
+  date: any;
+  id: any;
 
   constructor() {
-  }
-
-
-  ngOnInit() {
+    this.date = new Date()
     this.id = setInterval(() => {
       this.date = new Date();
     }, 1000)
   }
+
 
   ngOnDestroy() {
     if (this.id){

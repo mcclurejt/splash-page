@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import 'rxjs/add/observable/fromPromise';
 
 export interface Weather {
   city: string;
@@ -9,50 +11,65 @@ export interface Weather {
   iconClass: string;
 }
 
-export interface Coordinates {
-  latitude: string;
-  longitude: string;
-}
-
 @Injectable()
 export class WeatherService {
 
-  weatherApiKey = '&APPID=dd6e2828f19f1157a6935e1e7d8f6b9e';
-  weatherBaseUrl = 'http://api.openweathermap.org/data/2.5/weather?lat='
-  units = 'imperial';
+  static weatherApiKey = '&APPID=dd6e2828f19f1157a6935e1e7d8f6b9e';
+  static weatherBaseUrl = 'http://api.openweathermap.org/data/2.5/weather?lat='
+  static ipLocationUrl = 'http://ipinfo.io/json'
+  static units = 'imperial';
 
-  constructor(private http: Http) { }
+  public weatherStream: Observable<Weather>;
+  startTime;
 
-  getWeather(latitude, longitude): Observable<Weather> {
-      let url = this.weatherBaseUrl + latitude + '&lon=' + longitude + '&units=' + this.units + this.weatherApiKey;
-      return this.http.get(url)
-        .map(this.mapWeatherData)
+  constructor(private http: Http) {
+    this.weatherStream = Observable.fromPromise(new Promise((resolve, reject) => {
+      this.getIpLocation()
+        .map((resp) => this.mapLocation(resp))
+        .map((coords) => this.getWeather(coords))
+        .subscribe((resp) => {
+          resp.map((resp) => this.mapWeather(resp))
+            .subscribe((weather) => {
+              resolve(weather);
+            });
+        });
+    }));
   }
 
-  getIPLocation(): Observable<Coordinates> {
-      let url = 'http://ipinfo.io/json'
-      return this.http.get(url)
-        .map(this.mapLocationData)
+  getIpLocation(): Observable<Response> {
+    return this.http.get(WeatherService.ipLocationUrl);
   }
 
-  private mapWeatherData(res: Response): Weather{
+  getWeather(coords): Observable<Response> {
+    return this.http.get(this._getUrl(coords));
+  }
+
+  private mapWeather(res: Response): Weather {
     let body = res.json();
-    let weather : Weather = {
-      city : body.name,
+    let weather: Weather = {
+      city: body.name,
       country: body.sys.country,
       temp: String(body.main.temp).split('.')[0],
-      iconClass: 'wi wi-owm-' + body.weather[body.weather.length-1].id,
+      iconClass: 'wi wi-owm-' + body.weather[body.weather.length - 1].id,
     }
     return weather;
   }
 
-  private mapLocationData(res: Response): Coordinates {
+  private mapLocation(res: Response) {
     let body = res.json();
     let coordArray = body.loc.split(",");
-    let coordinates: Coordinates = {
+    let coords = {
       latitude: coordArray[0],
-      longitude: coordArray[1],
+      longitude: coordArray[1]
     }
-    return coordinates;
+    return coords;
+  }
+
+  private _getUrl(coords): string {
+    return WeatherService.weatherBaseUrl +
+      coords.latitude + '&lon=' +
+      coords.longitude + '&units=' +
+      WeatherService.units +
+      WeatherService.weatherApiKey;
   }
 }

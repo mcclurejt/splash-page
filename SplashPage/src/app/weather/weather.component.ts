@@ -1,5 +1,6 @@
-import { WeatherService } from '../services/weather.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { WeatherService, Weather } from '../services/weather.service';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
 @Component({
@@ -9,61 +10,30 @@ import { Subscription } from 'rxjs/Rx';
   providers: [WeatherService],
 })
 
-export class WeatherComponent implements OnInit, OnDestroy {
-  geoOptions = {
-    timeout: 10 * 1000,
-  }
-  weatherSub: Subscription;
-  weather = {
-    city: 'Chicago',
-    country: 'US',
-    temp: '75',
-    iconClass: 'wi wi-owm-802',
-  }
+export class WeatherComponent implements OnDestroy {
 
-  constructor(private weatherService: WeatherService) { }
+  weatherSubscription: Subscription;
+  city: string;
+  country: string;
+  temp: string;
+  iconClass: string;
 
-  ngOnInit() {
-    this.getWeather();
-  }
-
-  private getWeather() {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        this.weatherSub = this.weatherService.getWeather(latitude, longitude).subscribe(
-          weather => {
-            console.log(weather);
-            this.weather = weather;
-          }
-        );
-      },
-      error => {
-        this.locationError(error);
-      },
-      this.geoOptions)
+  constructor(private weatherService: WeatherService) {
+    this.weatherService.weatherStream.subscribe( (weather: Weather) => {
+      this.city = weather.city;
+      this.country = weather.country;
+      this.temp = weather.temp;
+      this.iconClass = weather.iconClass;
+    })
   }
 
-  locationError(error) {
-    if (error.code == error.PERMISSION_DENIED) {
-      this.weatherSub = this.weatherService.getIPLocation().subscribe(
-        coordinates => {
-          this.weatherSub = this.weatherService.getWeather(coordinates.latitude, coordinates.longitude).subscribe(
-            weather => {
-              console.log(weather);
-              this.weather = weather;
-            }
-          );
-        });
-    } else {
-      console.log('Error in retreiving weather data', error)
-    }
+  ngOnInit(): void{
+    
   }
 
-  ngOnDestroy() {
-    if(this.weatherSub){
-      this.weatherSub.unsubscribe();
+  ngOnDestroy(): void {
+    if(this.weatherSubscription){
+      this.weatherSubscription.unsubscribe();
     }
   }
 
