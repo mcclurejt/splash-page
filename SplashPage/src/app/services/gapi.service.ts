@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, NgZone } from '@angular/core';
 import 'rxjs/add/observable/fromPromise';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class GapiService {
@@ -16,6 +17,8 @@ export class GapiService {
   private currentUser: gapi.auth2.GoogleUser;
   private accessToken: string;
   private idToken: string;
+
+  private isSignedInSubject : BehaviorSubject<boolean>;
 
   public getAccessToken(): string {
     if (this.isSignedIn()) {
@@ -34,6 +37,7 @@ export class GapiService {
   }
 
   constructor(private zone: NgZone, private router: Router) {
+    this.isSignedInSubject = new BehaviorSubject<boolean>(this.isSignedIn())
     this.load()
       .switchMap(() => this.initApi())
       .do((googleAuth: gapi.auth2.GoogleAuth) => this.saveGoogleAuth(googleAuth))
@@ -83,6 +87,7 @@ export class GapiService {
 
   listenToGoogleAuthStream(googleAuth: gapi.auth2.GoogleAuth) {
     window['gapi']['auth2'].getAuthInstance().isSignedIn.listen(authState => {
+      this.isSignedInSubject.next(authState);
     });
   }
 
@@ -91,6 +96,7 @@ export class GapiService {
     this.accessToken = authResponse.access_token;
     this.idToken = authResponse.id_token;
     const profile = googleUser.getBasicProfile();
+    this.isSignedInSubject.next(true);
     this.router.navigate(['/'])
   }
 
@@ -110,22 +116,26 @@ export class GapiService {
 
   signOut() {
     this.router.navigate(['/signin'])
-    return Observable.fromPromise(this.googleAuth.signOut());
+    this.googleAuth.signOut()
+    this.isSignedInSubject.next(false);
   }
 
-  isSignedIn() {
-    // console.log('isSignedIn', this.googleAuth && this.googleAuth.isSignedIn.get());
+  private isSignedIn() {
     return this.googleAuth && this.googleAuth.isSignedIn.get();
+  }
+
+  public getIsSignedInObservable(): Observable<boolean>{
+    return this.isSignedInSubject.asObservable().share();
   }
 
   // API METHODS
 
-  getBatch(): gapi.client.HttpBatch{
+  getBatch(): gapi.client.HttpBatch {
     let batch: gapi.client.HttpBatch = window['gapi'].client.newBatch();
     return batch;
   }
 
-  getRequest(params): gapi.client.HttpRequest<any>{
+  getRequest(params): gapi.client.HttpRequest<any> {
     return window['gapi'].client.request(params);
   }
 

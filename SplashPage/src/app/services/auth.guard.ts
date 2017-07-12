@@ -14,15 +14,16 @@ export class AuthGuard implements CanActivate {
               private fireService: FireService){}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(!this.gapiService.isSignedIn()){
-      this.router.navigate(['/signin'])
-    } else {
-      this.fireService.isSignedInStream.subscribe((isSignedIn: boolean) => {
-        if(!isSignedIn){
+    return this.gapiService.getIsSignedInObservable().map<boolean, boolean>( (isSignedIn: boolean) => {
+      if(!isSignedIn){
+        this.router.navigate(['/signin'])
+      } else {
+        if(!this.fireService.isSignedInSubject.value){
+          console.log('AuthGuard getValue');
           this.fireService.loadFirebaseAuth();
         }
-      });
-    }
-    return this.gapiService.isSignedIn();
+      }
+      return isSignedIn;
+    });
   }
 }
