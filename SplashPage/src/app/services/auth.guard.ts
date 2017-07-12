@@ -7,14 +7,17 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  isSignedInObservable: Observable<boolean>;
 
   constructor(private router: Router,
               private gapiService: GapiService,
               private authService: AuthService,
-              private fireService: FireService){}
+              private fireService: FireService){
+                this.isSignedInObservable = this.gapiService.getIsSignedInObservable();
+              }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.gapiService.getIsSignedInObservable().map<boolean, boolean>( (isSignedIn: boolean) => {
+    return this.isSignedInObservable.map<boolean, boolean>( (isSignedIn: boolean) => {
       if(!isSignedIn){
         this.router.navigate(['/signin'])
       } else {

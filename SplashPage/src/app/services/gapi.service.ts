@@ -21,6 +21,7 @@ export class GapiService {
   private isSignedInSubject : BehaviorSubject<boolean>;
 
   public getAccessToken(): string {
+    console.log('gapi.getAccessToken()');
     if (this.isSignedIn()) {
       return this.accessToken;
     } else {
@@ -29,6 +30,7 @@ export class GapiService {
   }
 
   public getIdToken(): string {
+    console.log('gapi.getAccessToken()');
     if (this.isSignedIn()) {
       return this.idToken;
     } else {
@@ -50,6 +52,7 @@ export class GapiService {
   }
 
   load(): Subject<any> {
+    console.log('gapi.load()');
     let apiSubject = new Subject();
     let gapi = window['gapi'];
     let isGapiLoaded = gapi && gapi.load;
@@ -63,6 +66,7 @@ export class GapiService {
   }
 
   _loadHelper(subject) {
+    console.log('gapi.loadHelper()');
     let gapi = window['gapi'];
     let gapiAuthLoaded = gapi && gapi.auth2 && gapi.auth2.getAuthInstance();
     if (gapiAuthLoaded && gapiAuthLoaded.currentUser) {
@@ -72,6 +76,7 @@ export class GapiService {
   }
 
   initApi() {
+    console.log('gapi.initApi()');
     let initConfig = {
       discoveryDocs: this.DISCOVERY_DOCS,
       clientId: this.CLIENT_ID,
@@ -81,17 +86,20 @@ export class GapiService {
   }
 
   saveGoogleAuth(googleAuth: gapi.auth2.GoogleAuth): gapi.auth2.GoogleAuth {
+    console.log('gapi.saveGoogleAuth()');
     this.googleAuth = googleAuth;
     return googleAuth;
   }
 
   listenToGoogleAuthStream(googleAuth: gapi.auth2.GoogleAuth) {
+    console.log('gapi.listenToGoogleAuthStream()');
     window['gapi']['auth2'].getAuthInstance().isSignedIn.listen(authState => {
       this.isSignedInSubject.next(authState);
     });
   }
 
   handleSuccessLogin(googleUser: gapi.auth2.GoogleUser) {
+    console.log('gapi.handleSuccessLogin()');
     const authResponse = googleUser.getAuthResponse();
     this.accessToken = authResponse.access_token;
     this.idToken = authResponse.id_token;
@@ -101,10 +109,12 @@ export class GapiService {
   }
 
   handleFailedLogin(response) {
+    console.log('gapi.handleFailedLogin()');
     return false;
   }
 
   signIn() {
+    console.log('gapi.signIn()');
     let signOptions: gapi.auth2.SigninOptions = {
       scope: this.SCOPES,
     };
@@ -115,27 +125,32 @@ export class GapiService {
   }
 
   signOut() {
+    console.log('gapi.signOut()');
     this.router.navigate(['/signin'])
     this.googleAuth.signOut()
     this.isSignedInSubject.next(false);
   }
 
   private isSignedIn() {
+    console.log('gapi.isSignedIn()');
     return this.googleAuth && this.googleAuth.isSignedIn.get();
   }
 
   public getIsSignedInObservable(): Observable<boolean>{
+    console.log('gapi.getIsSignedInObservable()');
     return this.isSignedInSubject.asObservable().share();
   }
 
   // API METHODS
 
   getBatch(): gapi.client.HttpBatch {
+    console.log('gapi.getBatch()');
     let batch: gapi.client.HttpBatch = window['gapi'].client.newBatch();
     return batch;
   }
 
   getRequest(params): gapi.client.HttpRequest<any> {
+    console.log('gapi.getRequest()');
     return window['gapi'].client.request(params);
   }
 

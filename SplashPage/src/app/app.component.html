@@ -11,7 +11,7 @@
     <button md-raised-button [routerLink]="['/']">
         <md-icon>settings</md-icon>
     </button>
-    <button md-raised-button *ngIf="(gapiService.getIsSignedInObservable() | async)" (click)='gapiService.signOut()'>
+    <button md-raised-button *ngIf="(isSignedInObservable | async)" (click)='gapiService.signOut()'>
         Sign Out
     </button>
     <span fxFlex></span>

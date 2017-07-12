@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { FireService } from './services/fire.service';
 import { GapiService } from './services/gapi.service';
 import { AuthService } from './services/auth.service';
@@ -10,10 +11,13 @@ import { AngularFireDatabase } from "angularfire2/database";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  isSignedInObservable: Observable<boolean>;
 
   constructor(db: AngularFireDatabase,
-              public authService: AuthService,
-              public gapiService: GapiService,
-              public fireService: FireService) {}
+    public authService: AuthService,
+    public gapiService: GapiService,
+    public fireService: FireService) {
+    this.isSignedInObservable = this.gapiService.getIsSignedInObservable();
+  }
 
 }

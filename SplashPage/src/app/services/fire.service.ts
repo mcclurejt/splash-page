@@ -27,7 +27,7 @@ export class FireService {
       });
 
     this.gapiService.getIsSignedInObservable().subscribe((isSignedIn: boolean) => {
-      if (!isSignedIn) {
+      if (!isSignedIn && this.isSignedInSubject.getValue()) {
         console.log('Signing out of firebase');
         this.signOut();
       } else {
@@ -50,8 +50,8 @@ export class FireService {
 
   signOut() {
     console.log('Signed Out');
-    this.afAuth.auth.signOut();
     this.isSignedInSubject.next(false);
+    this.afAuth.auth.signOut();
   }
 
   private isSignedIn(): boolean{
