@@ -1,8 +1,9 @@
-import { FireService } from './services/fire.service';
-import { GapiService } from './services/gapi.service';
-import { AuthGuard } from './services/auth.guard';
+import { RootGuard } from './services/root.guard';
+import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
+import { FireService } from './services/fire.service';
+import { GoogleService } from './services/google.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -96,9 +97,10 @@ export const MaterialModules = [
   providers: [
     WeatherService,
     AuthService,
-    AuthGuard,
-    GapiService,
+    RootGuard,
+    GoogleService,
     FireService,
+    SignInGuard,
     ],
   bootstrap: [AppComponent]
 })

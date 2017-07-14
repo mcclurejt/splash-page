@@ -1,4 +1,5 @@
-import { GapiService } from './../services/gapi.service';
+import { FireService } from './../services/fire.service';
+import { GoogleService } from './../services/google.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -8,11 +9,10 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.scss']
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent{
 
-  constructor(public authService : AuthService, public gapiService: GapiService) { }
+  constructor(private authService: AuthService) { 
 
-  ngOnInit() {
   }
 
 }

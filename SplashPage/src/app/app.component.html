@@ -11,12 +11,12 @@
     <button md-raised-button [routerLink]="['/']">
         <md-icon>settings</md-icon>
     </button>
-    <button md-raised-button *ngIf="(isSignedInObservable | async)" (click)='gapiService.signOut()'>
+    <button md-raised-button *ngIf="authService.isSignedInStream | async" (click)='this.authService.signOut()'>
         Sign Out
     </button>
     <span fxFlex></span>
     <h1>
-        {{this.fireService.displayNameStream | async}}
+        {{authService.displayNameStream | async}}
     </h1>
 </md-toolbar>
 

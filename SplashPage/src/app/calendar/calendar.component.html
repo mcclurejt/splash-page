@@ -1,6 +1,7 @@
 <md-grid-list cols='5' rowHeight='100px' style='width: 50%;'>
   <md-grid-tile colspan='5' rowspan='1' style='background-color: lightblue; width: 100%;'>
-    <button md-raised-button (click)='this.getCalendarList();'>Get Calendar List</button>
+    <button md-raised-button (click)='this.googleService.getCalendarList();'>Get Calendar List</button>
+    <button md-raised-button (click)='this.googleService.handleAuthLoad();'>Load</button>
   </md-grid-tile>
   <md-grid-tile colspan='1' rowspan='1' style='background-color: lightgreen; width: 100%;'>Text</md-grid-tile>
   <md-grid-tile colspan='1' rowspan='1' style='background-color: lightpink; width: 100%;'>Text</md-grid-tile>
