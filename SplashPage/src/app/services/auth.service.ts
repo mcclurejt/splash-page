@@ -13,15 +13,16 @@ export class AuthService {
   public isSignedInStream: Observable<boolean>;
   public displayNameStream: Observable<string>;
   public photoUrlStream: Observable<string>;
+  public currentUserStream: Observable<firebase.User>;
 
-  constructor(private af: AngularFireAuth, private router: Router, private googleService: GoogleService) {
+  constructor(private afAuth: AngularFireAuth, private router: Router, private googleService: GoogleService) {
     
-    this.isSignedInStream = this.af.authState
+    this.isSignedInStream = this.afAuth.authState
       .map<firebase.User, boolean>((user: firebase.User) => {
         return user != null;
       });
     
-    this.displayNameStream = this.af.authState
+    this.displayNameStream = this.afAuth.authState
       .map<firebase.User, string>((user: firebase.User) => {
         if (user) {
           return user.displayName;
@@ -29,23 +30,25 @@ export class AuthService {
         return '';
       });
 
-    this.photoUrlStream = this.af.authState
+    this.photoUrlStream = this.afAuth.authState
       .map<firebase.User, string>((user: firebase.User) => {
         if(user) {
           return user.photoURL;
         }
         return '/assets/images/missing_photo.png';
       });
+
+      this.currentUserStream = this.afAuth.authState;
   }
 
   signInWithGoogle() {
     let googleAuthProvider = new firebase.auth.GoogleAuthProvider()
     googleAuthProvider.addScope(this.googleService.GMAIL_SCOPE);
     googleAuthProvider.addScope(this.googleService.GCAL_SCOPE);
-    this.af.auth.signInWithPopup(googleAuthProvider)
+    this.afAuth.auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
         // Initialize Google Api for Calendar and Email
-        this.googleService.initializeApi(result);
+        this.googleService.handleUserLogin(result);
         // Navigate to the naked domain
         this.router.navigate(['/']);
       })
@@ -57,7 +60,7 @@ export class AuthService {
   }
 
   signOut() {
-    this.af.auth.signOut();
+    this.afAuth.auth.signOut();
     this.googleService.signOut();
     this.router.navigate(['/signin'])
   }

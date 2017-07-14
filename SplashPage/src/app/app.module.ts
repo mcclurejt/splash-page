@@ -1,3 +1,5 @@
+import { GapiService } from './services/gapi.service';
+import { GapiLoader } from './services/gapi-loader.service';
 import { RootGuard } from './services/root.guard';
 import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
@@ -101,6 +103,8 @@ export const MaterialModules = [
     GoogleService,
     FireService,
     SignInGuard,
+    GapiLoader,
+    GapiService,
     ],
   bootstrap: [AppComponent]
 })

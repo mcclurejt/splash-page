@@ -1,11 +1,16 @@
+import { GapiLoader } from './gapi-loader.service';
 import { AuthService } from './auth.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import * as firebase from 'firebase/app';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 
 interface CalendarList {
   nextPageToken: string,
@@ -22,85 +27,76 @@ export class GoogleService {
   GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar';
   SCOPES = 'https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar'
 
-  public isSignedInSubject = new BehaviorSubject<boolean>(this.hasToken())
+  public isSignedInSubject = new BehaviorSubject<boolean>(this.isSignedIn());
+  public googleAuthSubject: Observable<gapi.auth2.GoogleAuth>
 
-  constructor(private af: AngularFireAuth, private router: Router) {
-    if (this.isSignedInSubject.getValue()) {
-      this.handleAuthLoad();
-    } else {
-      console.log('User Not Signed In!!');
-    }
+  constructor(private router: Router, private gapiLoader: GapiLoader, private zone: NgZone, ) {
+    // this.gapiLoader.load()
+    this.googleAuthSubject = this.gapiLoader
+      .isLoadedSubject
+      .asObservable()
+      .map<gapi.auth2.GoogleAuth, gapi.auth2.GoogleAuth>
+      ((googleAuth: gapi.auth2.GoogleAuth) => {
+        console.log(googleAuth);
+        return googleAuth;
+      });
   }
 
-  initializeApi(result) {
+  load() {
+    console.log('LoadAuth');
+    this.gapiLoader.load();
+    this.googleAuthSubject = this.gapiLoader
+      .isLoadedSubject
+      .asObservable()
+      .map<gapi.auth2.GoogleAuth, gapi.auth2.GoogleAuth>
+      ((googleAuth: gapi.auth2.GoogleAuth) => {
+        console.log(googleAuth);
+        return googleAuth;
+      });
+
+  }
+
+  handleUserLogin(result) {
     // Add accessToken to localStorage
     localStorage.setItem('GoogleToken', result.credential.accessToken);
-    this.isSignedInSubject.next(result.credential.accessToken);
-    this.handleAuthLoad();
-  }
-
-  handleAuthLoad() {
-    gapi.load('client', this.initClient.bind(this))
-  }
-
-  initClient() {
-    gapi.client.init({
-      apiKey: this.API_KEY,
-      discoveryDocs: this.DISCOVERY_DOCS,
-      clientId: this.CLIENT_ID,
-      scope: this.SCOPES
-    }).then(() => {
-      let gapi = window['gapi'];
-      let access_token = localStorage.getItem('GoogleToken');
-      gapi.client.setToken({ access_token: access_token });
-      this.isSignedInSubject.next(gapi.auth2.getAuthInstance().isSignedIn.get());
-    });
+    this.gapiLoader.load();
+    this.googleAuthSubject = this.gapiLoader
+      .isLoadedSubject
+      .asObservable()
+      .map<gapi.auth2.GoogleAuth, gapi.auth2.GoogleAuth>
+      ((googleAuth: gapi.auth2.GoogleAuth) => {
+        console.log(googleAuth);
+        return googleAuth;
+      });
   }
 
   signOut() {
     if (this.isSignedInSubject.getValue()) {
       localStorage.removeItem('GoogleToken');
-      this.isSignedInSubject.next(false);
     } else {
       console.log('GoogleService is not signed in, but signout was attempted');
     }
   }
 
-  // API METHODS
-
-  getCalendarList() {
-    if (this.hasToken()) {
+  getCalendarList(): gapi.client.HttpRequest<any> {
+    if (this.isSignedInSubject.getValue()) {
+      console.log('GoogleService getCalendarList Successful');
       return gapi.client.request({
         path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
         method: 'GET',
-      }).then(
-        (result) => {
-          console.log(result);
-        },
-        (error) => {
-          console.log(error);
-        });
+      });
     }
-  }
+  };
 
-  parseCalendarList(jsonResp, rawResp) {
-
-    return []
-  }
-
-  getBatch(): gapi.client.HttpBatch {
-    console.log('gapi.getBatch()');
-    let batch: gapi.client.HttpBatch = window['gapi'].client.newBatch();
-    return batch;
-  }
-
-  getRequest(params): gapi.client.HttpRequest<any> {
-    console.log('gapi.getRequest()');
-    return window['gapi'].client.request(params);
-  }
-
-  private hasToken(): boolean {
-    return !!localStorage.getItem('GoogleToken');
+  isSignedIn() {
+    let gapi = window['gapi'];
+    let gapiAuthLoaded = gapi && gapi.auth2 && gapi.auth2.getAuthInstance();
+    if (gapiAuthLoaded && gapiAuthLoaded.currentUser) {
+      console.log('isLoaded', true);
+      return true;
+    }
+    console.log('isLoaded', false);
+    return false;
   }
 
 }
