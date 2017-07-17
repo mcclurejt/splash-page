@@ -1,5 +1,3 @@
-import { FireService } from './../services/fire.service';
-import { GoogleService } from './../services/google.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 

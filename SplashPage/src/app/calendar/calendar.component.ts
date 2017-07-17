@@ -1,41 +1,36 @@
+import { GapiService, CalendarList } from './../services/gapi.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../services/auth.service';
-import { GoogleService } from './../services/google.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnDestroy{
+export class CalendarComponent implements OnInit, OnDestroy {
 
-  isLoaded: boolean;
-  gapiSubscription: Subscription;
-
-  constructor(private googleService: GoogleService) {
-    this.gapiSubscription = this.googleService.isSignedInSubject.subscribe( (isSignedIn) => {
-      if(isSignedIn){
+  constructor(private gapiService: GapiService) {
+    this.gapiService.isLoadedStream.subscribe( (isLoaded) => {
+      console.log('Check loaded');
+      if(isLoaded){
+        console.log('Gapi Loaded');
         this.loadCalendar();
       };
     });
   }
 
-  loadCalendar(){
-    let loadSuccess = (response) => {
-      console.log(response.result.items);
-    }
+  loadCalendar() {
+    this.gapiService.getCalendarList().then( (calList: CalendarList) => {
+      console.log('CalendarList',calList);
+    })
+  }
 
-    let loadFail = (error) => {
-      console.log(error);
-    }
-    this.googleService.getCalendarList().then( (response) => {
-      console.log(response.result);
-    });
+  ngOnInit(): void{
+
   }
 
   ngOnDestroy(): void {
-    this.gapiSubscription.unsubscribe();
   }
-  
+
 }

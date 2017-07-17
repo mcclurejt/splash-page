@@ -1,5 +1,6 @@
+import { GapiLoader } from './gapi-loader.service';
+import { GapiService } from './gapi.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GoogleService } from './google.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +16,7 @@ export class AuthService {
   public photoUrlStream: Observable<string>;
   public currentUserStream: Observable<firebase.User>;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private googleService: GoogleService) {
+  constructor(private afAuth: AngularFireAuth, private router: Router, private gapiService: GapiService) {
     
     this.isSignedInStream = this.afAuth.authState
       .map<firebase.User, boolean>((user: firebase.User) => {
@@ -43,12 +44,12 @@ export class AuthService {
 
   signInWithGoogle() {
     let googleAuthProvider = new firebase.auth.GoogleAuthProvider()
-    googleAuthProvider.addScope(this.googleService.GMAIL_SCOPE);
-    googleAuthProvider.addScope(this.googleService.GCAL_SCOPE);
+    googleAuthProvider.addScope(this.gapiService.GMAIL_SCOPE);
+    googleAuthProvider.addScope(this.gapiService.GCAL_SCOPE);
     this.afAuth.auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
         // Initialize Google Api for Calendar and Email
-        this.googleService.handleUserLogin(result);
+        this.gapiService.handleUserLogin(result);
         // Navigate to the naked domain
         this.router.navigate(['/']);
       })
@@ -61,7 +62,7 @@ export class AuthService {
 
   signOut() {
     this.afAuth.auth.signOut();
-    this.googleService.signOut();
+    this.gapiService.signOut();
     this.router.navigate(['/signin'])
   }
 
