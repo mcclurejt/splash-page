@@ -10,23 +10,37 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 })
 export class CalendarComponent implements OnInit, OnDestroy {
 
+  eventArray = [];
+
   constructor(private gapiService: GapiService) {
-    // this.gapiService.isLoadedStream.subscribe( (isLoaded) => {
-    //   console.log('Check loaded');
-    //   if(isLoaded){
-    //     console.log('Gapi Loaded');
-    //     this.loadCalendars();
-    //   };
-    // });
+    this.gapiService.isSignedInStream.subscribe((isLoaded) => {
+      console.log('Check loaded');
+      if (isLoaded) {
+        console.log('Gapi Loaded');
+        this.loadCalendarFromGoogle();
+      };
+    });
   }
 
-  loadCalendars() {
-    this.gapiService.loadCalendars().then( (response) => {
-      console.log('Events',response);
-    })
+  loadCalendarFromGoogle() {
+    this.gapiService.loadCalendars().then((events) => {
+      this.sortEvents(events);
+    });
   }
 
-  ngOnInit(): void{
+  sortEvents(events) {
+    for (let event of events) {
+      for (let item of event.items) {
+        console.log('event', event);
+        if (item) {
+          this.eventArray.push(item)
+        }
+      }
+    }
+    console.log('eventArray', this.eventArray);
+  }
+
+  ngOnInit(): void {
 
   }
 

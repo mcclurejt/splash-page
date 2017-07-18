@@ -82,7 +82,9 @@ export class GapiLoader {
 
   signOut(): void{
     console.log('signOut');
-    this.tokenTimer.unsubscribe();
+    if(this.tokenTimer){
+      this.tokenTimer.unsubscribe();
+    }
     this.googleAuth.signOut();
   }
 

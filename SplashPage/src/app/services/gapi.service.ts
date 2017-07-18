@@ -33,7 +33,7 @@ export class GapiService {
   /**
    * handles the obtaining of calendars and their events when the calendar component is loaded
    */
-  loadCalendars() {
+  loadCalendars(){
     return this
       .getCalendars()
       .then((cals: GoogleCalendarList[]) => this.getEvents(cals))
@@ -107,7 +107,7 @@ export class GapiService {
       let calId = cals[i].id;
       if (response.result[calId].status == 200) {
         let eventProto = Object.assign(response.result[calId].result, GoogleEvent.prototype)
-        events.push(eventProto);
+        events.push(eventProto)
       } else {
         //console.log('Calendar not found', response.result[calId]);
       }
@@ -182,6 +182,7 @@ export class GoogleCalendarList {
   }
   primary: boolean;
   deleted: boolean;
+  events?: GoogleEvent[];
 }
 
 export class GoogleEvent {

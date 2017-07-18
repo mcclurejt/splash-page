@@ -46,6 +46,7 @@ import {
 } from '@angular/material';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SignInComponent } from './+sign-in/sign-in.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 export const MaterialModules = [
@@ -82,6 +83,7 @@ export const MaterialModules = [
     WeatherComponent,
     CalendarComponent,
     SignInComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
