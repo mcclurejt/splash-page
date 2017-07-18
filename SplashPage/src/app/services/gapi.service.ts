@@ -1,3 +1,5 @@
+import { CalendarEvent } from './../models/calendar-event';
+import { Http } from '@angular/http';
 import { GapiLoader } from './gapi-loader.service';
 import { AuthService } from './auth.service';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -7,6 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, NgZone } from '@angular/core';
 import * as firebase from 'firebase/app';
+import 'rxjs/add/operator/concat';
 
 @Injectable()
 export class GapiService {
@@ -16,41 +19,33 @@ export class GapiService {
 
   public isSignedInStream: Observable<boolean>
 
-  constructor(private gapiLoader: GapiLoader) {
+  constructor(private gapiLoader: GapiLoader, private http: Http) {
     this.isSignedInStream = gapiLoader.getIsSignedInStream();
   }
 
-  signIn(){
+  signIn() {
     this.gapiLoader.signIn();
   }
 
-  signOut(){
+  signOut() {
     this.gapiLoader.signOut();
   }
 
   // Calendar API
 
   /**
-   * handles the obtaining of calendars and their events when the calendar component is loaded
-   */
-  loadCalendars(){
-    return this
-      .getCalendars()
-      .then((cals: GoogleCalendarList[]) => this.getEvents(cals))
-  }
-
-  /**
    * Same as CalendarList.list() from Google Calendar Api
    * https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list
    */
-  getCalendars(): Promise<GoogleCalendarList[]> {
-    return gapi.client.request({
-      path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-      method: 'GET',
-    }).then((response) => {
-      // console.log('CalendarList.list()', response);
-      return this.parseCalendars(response);
-    })
+  getCalendars(): Observable<any> {
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      gapi.client.request({
+        path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+        method: 'GET',
+      }).then((response) => {
+        resolve(response);
+      });
+    }));
   }
 
   /**
@@ -58,8 +53,9 @@ export class GapiService {
    * https://developers.google.com/google-apps/calendar/v3/reference/events/list
    * @param cals The calendarList obtained from getCalendars()
    */
-  getEvents(cals: GoogleCalendarList[]): Promise<any> {
-    let gapi = window['gapi']
+  getEvents(cals): Observable<any> {
+    console.log('Google CalendarList', cals);
+    let gapi = window['gapi'];
     let batch = gapi.client.newBatch();
     let d = this.getFirstDayOfWeek();
     let params = {
@@ -79,41 +75,52 @@ export class GapiService {
       batch.add(req, { 'id': calId });
     }
     // Execute the request and send the results to get parsed before returning
-    return batch
-      .then((response) => { return this.parseEvents(response, cals) })
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      batch.execute((response) => resolve([response, cals]), reject);
+    }));
   }
 
   /**
-   * Assigns the events to Objects matching Event resource from Google Calendar Api
-   * @param response Http Response from CalendarList.list() call
+   * Takes in a calendarList.list() and array of events.list() and converts
+   * it to an array of calendarEvents
+   * @param calEventArray 
    */
-  private parseCalendars(response): GoogleCalendarList[] {
-    let calendars = [];
-    for (let i = 0; i < response.result.items.length; i++) {
-      let calProto = Object.assign(response.result.items[i], GoogleCalendarList.prototype)
-      calendars.push(calProto);
-    }
-    return calendars;
-  }
-
-  /**
-   * Assigns the events to Objects matching Event resource from Google Calendar Api
-   * @param response Http Batch Response from all calendar's Events.list() call
-   * @param cals Parsed GoogleCalendarList[] stemming from CalendarList.list()
-   */
-  private parseEvents(response, cals: GoogleCalendarList[]) {
-    let events = [];
-    for (let i = 0; i < cals.length; i++) {
-      let calId = cals[i].id;
-      if (response.result[calId].status == 200) {
-        let eventProto = Object.assign(response.result[calId].result, GoogleEvent.prototype)
-        events.push(eventProto)
-      } else {
-        //console.log('Calendar not found', response.result[calId]);
+  mapEvents(calEventArray): CalendarEvent[] {
+    console.log('calEventArray', calEventArray);
+    // Pull out the goodies from calArray
+    let eventArray = calEventArray[0];
+    let calArray = calEventArray[1];
+    // Initialize what we'll eventually return
+    let eventList: CalendarEvent[] = []
+    for (let cal of calArray) {
+      // Add the background and foreground colors of the cals to the event arrays
+      eventArray[cal.id].backgroundColor = cal.backgroundColor;
+      eventArray[cal.id].foregroundColor = cal.foregroundColor;
+      let eventCal = eventArray[cal.id];
+      if (eventCal.result && !(eventCal.result.error)) {
+        let id = eventCal.id;
+        let summary = eventCal.result.summary;
+        let timeZone = eventCal.result.timeZone;
+        let foregroundColor = eventCal.foregroundColor;
+        let backgroundColor = eventCal.backgroundColor;
+        if (eventCal.result != 'Not Found' && eventCal.result.items != null) {
+          for (let event of eventCal.result.items) {
+            let calEvent = new CalendarEvent();
+            calEvent.calendar.id = id;
+            calEvent.id = event.id;
+            calEvent.calendar.summary = summary;
+            calEvent.summary = event.summary;
+            calEvent.calendar.foregroundColor = foregroundColor;
+            calEvent.calendar.backgroundColor = backgroundColor;
+            calEvent.timeZone = timeZone;
+            calEvent.start = event.start;
+            calEvent.end = event.end;
+            eventList.push(calEvent);
+          }
+        }
       }
     }
-    //console.log('Events', events);
-    return events;
+    return eventList;
   }
 
   /**
@@ -132,12 +139,12 @@ export class GapiService {
       return sign + pad(Math.floor(offset / 60)) + ':' + pad(offset % 60);
     }
     return d.getFullYear() + "-" +
-        pad(d.getMonth() + 1) + "-" +
-        pad(d.getDate()) + "T" +
-        pad(d.getHours()) + ":" +
-        pad(d.getMinutes()) + ":" +
-        pad(d.getSeconds()) + 
-        timezoneOffset(d.getTimezoneOffset());
+      pad(d.getMonth() + 1) + "-" +
+      pad(d.getDate()) + "T" +
+      pad(d.getHours()) + ":" +
+      pad(d.getMinutes()) + ":" +
+      pad(d.getSeconds()) +
+      timezoneOffset(d.getTimezoneOffset());
   }
   /**
    * Returns the Date object representing the first day of the week
