@@ -11,13 +11,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 export class CalendarComponent implements OnInit, OnDestroy {
 
   constructor(private gapiService: GapiService) {
-    this.gapiService.isLoadedStream.subscribe( (isLoaded) => {
-      console.log('Check loaded');
-      if(isLoaded){
-        console.log('Gapi Loaded');
-        this.loadCalendars();
-      };
-    });
+    // this.gapiService.isLoadedStream.subscribe( (isLoaded) => {
+    //   console.log('Check loaded');
+    //   if(isLoaded){
+    //     console.log('Gapi Loaded');
+    //     this.loadCalendars();
+    //   };
+    // });
   }
 
   loadCalendars() {

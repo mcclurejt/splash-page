@@ -14,17 +14,17 @@ export class GapiService {
   GMAIL_SCOPE = 'https://www.googleapis.com/auth/gmail.modify';
   GCAL_SCOPE = 'https://www.googleapis.com/auth/calendar';
 
-  public isLoadedStream: Observable<boolean>
+  public isSignedInStream: Observable<boolean>
 
   constructor(private gapiLoader: GapiLoader) {
-    this.isLoadedStream = this.gapiLoader.getLoadedStream();
+    this.isSignedInStream = gapiLoader.getIsSignedInStream();
   }
 
-  handleUserLogin(result) {
-    this.gapiLoader.updateToken(result.credential.accessToken);
+  signIn(){
+    this.gapiLoader.signIn();
   }
 
-  signOut() {
+  signOut(){
     this.gapiLoader.signOut();
   }
 
