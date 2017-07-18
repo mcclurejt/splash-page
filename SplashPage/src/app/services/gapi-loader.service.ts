@@ -1,6 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from "angularfire2/auth";
+import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 @Injectable()
@@ -14,8 +16,9 @@ export class GapiLoader {
 
   private isLoadedSubject = new BehaviorSubject(this.isLoaded());
   googleAuth: gapi.auth2.GoogleAuth
+  googleUser: gapi.auth2.GoogleUser
 
-  constructor() {
+  constructor(private afAuth: AngularFireAuth) {
     this.loadScript();
     window['handleClientLoad'] = this.handleClientLoad.bind(this);
   }
@@ -51,12 +54,10 @@ export class GapiLoader {
 
   updateToken(access_token: string) {
     localStorage.setItem('GoogleToken', access_token);
-    if (this.isLoaded()) {
-      let gapi = window['gapi'];
-      gapi.client.setToken({ access_token: access_token });
-      gapi.auth.setToken({ access_token: access_token });
-      this.googleAuth = gapi.auth2.getAuthInstance();
-    }
+    // if (this.isLoaded()) {
+    //   this.setToken();
+    // }
+    this.setToken();
   }
 
   signOut() {
@@ -70,7 +71,7 @@ export class GapiLoader {
     let isGapiLoaded = gapi && gapi.load;
     if (isGapiLoaded) {
       let isAuthLoaded = gapi && gapi.auth2 && gapi.auth2.getAuthInstance();
-      if (isAuthLoaded && isAuthLoaded.currentUser) {
+      if (isAuthLoaded && isAuthLoaded.isSignedIn.get()) {
         return true;
       }
     }

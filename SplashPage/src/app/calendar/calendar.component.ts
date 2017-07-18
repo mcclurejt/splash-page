@@ -1,4 +1,4 @@
-import { GapiService, CalendarList } from './../services/gapi.service';
+import { GapiService } from './../services/gapi.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../services/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -15,14 +15,14 @@ export class CalendarComponent implements OnInit, OnDestroy {
       console.log('Check loaded');
       if(isLoaded){
         console.log('Gapi Loaded');
-        this.loadCalendar();
+        this.loadCalendars();
       };
     });
   }
 
-  loadCalendar() {
-    this.gapiService.getCalendarList().then( (calList: CalendarList) => {
-      console.log('CalendarList',calList);
+  loadCalendars() {
+    this.gapiService.loadCalendars().then( (response) => {
+      console.log('Events',response);
     })
   }
 

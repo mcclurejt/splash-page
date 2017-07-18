@@ -49,11 +49,12 @@ export class AuthService {
     this.afAuth.auth.signInWithPopup(googleAuthProvider)
       .then((result) => {
         // Initialize Google Api for Calendar and Email
+        console.log('Signed in with google');
         this.gapiService.handleUserLogin(result);
         // Navigate to the naked domain
         this.router.navigate(['/']);
       })
-      .catch((error) => this.handleFailedLogin(error))
+      .catch((error) => this.handleFailedLogin(error));
   }
 
   handleFailedLogin(error) {
