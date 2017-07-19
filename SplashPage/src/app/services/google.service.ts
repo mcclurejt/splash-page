@@ -88,6 +88,16 @@ export class GoogleService {
     }
   };
 
+  getEmailMessagesList(): gapi.client.HttpRequest<any> {
+    if (this.isSignedInSubject.getValue()) {
+      console.log('GoogleService getEmailMessagesList Successful');
+      return gapi.client.request({
+        path: 'https://www.googleapis.com/gmail/v1/me/messages',
+        method: 'GET',
+      });
+    }
+  }
+
   isSignedIn() {
     let gapi = window['gapi'];
     let gapiAuthLoaded = gapi && gapi.auth2 && gapi.auth2.getAuthInstance();

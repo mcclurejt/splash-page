@@ -47,6 +47,8 @@ import {
 } from '@angular/material';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SignInComponent } from './+sign-in/sign-in.component';
+import { MailComponent } from './mail/mail.component';
+import { EmailObjectComponent } from './email-object/email-object.component';
 
 
 export const MaterialModules = [
@@ -83,6 +85,8 @@ export const MaterialModules = [
     WeatherComponent,
     CalendarComponent,
     SignInComponent,
+    MailComponent,
+    EmailObjectComponent,
   ],
   imports: [
     BrowserModule,
