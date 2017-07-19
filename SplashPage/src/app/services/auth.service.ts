@@ -1,4 +1,3 @@
-import { GapiLoader } from './../google/gapi-loader.service';
 import { GapiService } from './../google/gapi.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
@@ -14,7 +13,6 @@ export class AuthService {
   public isSignedInStream: Observable<boolean>;
   public displayNameStream: Observable<string>;
   public photoUrlStream: Observable<string>;
-  private hasAttemptedLogin = false;
 
   constructor(private afAuth: AngularFireAuth, private router: Router, private gapiService: GapiService) {
 
@@ -41,18 +39,16 @@ export class AuthService {
   }
 
   signInWithGoogle() {
-    this.gapiService.signIn();
-    this.gapiService.isSignedInStream.subscribe((isSignedIn: boolean) => {
-      if (isSignedIn && !this.hasAttemptedLogin ) {
-        this.hasAttemptedLogin = true;
-        let access_token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
-        let cred = firebase.auth.GoogleAuthProvider.credential(null, access_token);
+    this.gapiService.signIn()
+      .then((user: gapi.auth2.GoogleUser) => {
+        let idToken = user.getAuthResponse().id_token;
+        let access_token = user.getAuthResponse().access_token;
+        let cred = firebase.auth.GoogleAuthProvider.credential(idToken, access_token);
         this.afAuth.auth.signInWithCredential(cred).then((user) => {
           console.log('User Signed in to firebase:', user);
           this.router.navigate(['/']);
         });
-      }
-    });
+      });
   }
 
   handleFailedLogin(error) {
@@ -60,9 +56,12 @@ export class AuthService {
   }
 
   signOut() {
-    this.afAuth.auth.signOut();
-    this.gapiService.signOut();
-    this.router.navigate(['/signin'])
+    this.gapiService.signOut()
+    this.afAuth.auth.signOut()
+      .then((resp) => {
+        console.log('afAuthSignedOut');
+        this.router.navigate(['/signin'])
+      });
   }
 
 }

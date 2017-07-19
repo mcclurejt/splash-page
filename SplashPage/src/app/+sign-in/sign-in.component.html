@@ -1,9 +1,14 @@
-<div fxLayoutAlign='center center'>
+<div *ngIf="!this.showLoading;else loadingTemplate"  fxLayoutAlign='center center'>
   <md-card fxLayout='column' fxLayoutAlign='none center'>
     <md-card-title>
       <span fxShow='false' fxShow.gt-xs>You must be signed in to use this app</span>
       <span fxShow='false' fxShow.xs>You must be signed in</span>
     </md-card-title>
-    <button id='google-button' md-button (click)='this.authService.signInWithGoogle()'></button>
+    <button id='google-button' md-button (click)='this.googleSignInClick();'></button>
   </md-card>
 </div>
+ <ng-template #loadingTemplate>
+  <div fxLayout='row' fxLayoutAlign='center stretch' style='height: 2000px'>
+    <h1>Loading...</h1>
+  </div>
+</ng-template> 

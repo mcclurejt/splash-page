@@ -1,5 +1,5 @@
+import { GoogleCalendarService } from './google/google-calendar.service';
 import { GapiService } from './google/gapi.service';
-import { GapiLoader } from './google/gapi-loader.service';
 import { RootGuard } from './services/root.guard';
 import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
@@ -103,8 +103,8 @@ export const MaterialModules = [
     RootGuard,
     FireService,
     SignInGuard,
-    GapiLoader,
     GapiService,
+    GoogleCalendarService,
     ],
   bootstrap: [AppComponent]
 })

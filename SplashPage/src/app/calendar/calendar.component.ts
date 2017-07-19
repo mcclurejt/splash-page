@@ -1,3 +1,4 @@
+import { GoogleCalendarService } from './../google/google-calendar.service';
 import { Observable } from 'rxjs/Observable';
 import { CalendarEvent } from './../models/calendar-event';
 import { GapiService } from './../google/gapi.service';
@@ -16,28 +17,21 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   calendarEventList: Observable<CalendarEvent[]>
 
-  constructor(private gapiService: GapiService) {
-    this.gapiService.isSignedInStream.subscribe((isLoaded) => {
-      console.log('Check loaded');
+  constructor(private gapiService: GapiService, private googleCalendarService: GoogleCalendarService) {
+    this.gapiService.getIsSignedInStream().subscribe((isLoaded) => {
       if (isLoaded) {
-        console.log('Gapi Loaded');
-        this.loadCal();
+        this.loadGoogleCalendar();
       };
     });
   }
 
-  loadCal(){
-    this.calendarEventList = this.gapiService.getCalendars()
+  loadGoogleCalendar(){
+    this.calendarEventList = this.googleCalendarService.getCalendars()
       .map((response) => {return response.result.items})
-      .flatMap((calList) => this.gapiService.getEvents(calList))
+      .flatMap((calList) => this.googleCalendarService.getEvents(calList))
       .map((calArray) => {
-        return this.gapiService.mapEvents(calArray);
-      })
-      // .map((calArray) => this.gapiService.mapEvents(calArray))
-      // .subscribe( (calendarEventList: CalendarEvent[] ) => {
-      //   this.calendarEventList = calendarEventList;
-      //   return calendarEventList;
-      // });
+        return this.googleCalendarService.mapEvents(calArray);
+      });
   }
 
   ngOnInit(): void {
