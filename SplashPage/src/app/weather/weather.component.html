@@ -1,10 +1,11 @@
 <div class='container'>
-  <div id='weather' fxLayoutAlign='center center'>
-    <i [class]="(weatherService.weatherStream | async)?.iconClass"></i>
-    {{temp}}
-    <i class='wi wi-fahrenheit' style='font-size: 120%;'></i>
-  </div>
-  <div id='location' fxLayoutAlign='center center'>
-     {{city}}, {{country}}
-  </div>
+  <md-card>
+    <div id='weather' fxLayoutAlign='center center'>
+      <i [class]="(weatherService.weatherStream | async)?.iconClass"></i> {{temp}}
+      <i class='wi wi-fahrenheit' style='font-size: 120%;'></i>
+    </div>
+    <div id='location' fxLayoutAlign='center center'>
+      {{city}}, {{country}}
+    </div>
+  </md-card>
 </div>

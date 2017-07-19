@@ -45,8 +45,8 @@ export class AuthService {
         let access_token = user.getAuthResponse().access_token;
         let cred = firebase.auth.GoogleAuthProvider.credential(idToken, access_token);
         this.afAuth.auth.signInWithCredential(cred).then((user) => {
-          console.log('User Signed in to firebase:', user);
-          this.router.navigate(['/']);
+          console.log('User Signed in to firebase:', user.displayName);
+          // this.router.navigate(['/']);
         });
       });
   }
@@ -60,7 +60,7 @@ export class AuthService {
     this.afAuth.auth.signOut()
       .then((resp) => {
         console.log('afAuthSignedOut');
-        this.router.navigate(['/signin'])
+        // this.router.navigate(['/signin'])
       });
   }
 

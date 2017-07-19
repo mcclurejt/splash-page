@@ -1,7 +1,6 @@
+import { GmailService } from './google/gmail.service';
 import { GoogleCalendarService } from './google/google-calendar.service';
 import { GapiService } from './google/gapi.service';
-import { RootGuard } from './services/root.guard';
-import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
 import { FireService } from './services/fire.service';
@@ -45,7 +44,6 @@ import {
   MdTooltipModule
 } from '@angular/material';
 import { CalendarComponent } from './calendar/calendar.component';
-import { SignInComponent } from './+sign-in/sign-in.component';
 import { MailComponent } from './mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -84,7 +82,6 @@ export const MaterialModules = [
     TimeComponent,
     WeatherComponent,
     CalendarComponent,
-    SignInComponent,
     MailComponent,
     EmailObjectComponent,
     NavbarComponent,
@@ -104,11 +101,10 @@ export const MaterialModules = [
   providers: [
     WeatherService,
     AuthService,
-    RootGuard,
     FireService,
-    SignInGuard,
     GapiService,
     GoogleCalendarService,
+    GmailService,
     ],
   bootstrap: [AppComponent]
 })
