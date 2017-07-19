@@ -66,6 +66,7 @@ export class GapiService {
     gapi.auth2.getAuthInstance().signOut();
   }
 
+<<<<<<< HEAD
   private loadScript() {
     let node = document.createElement('script');
     node.src = this.SCRIPT_URL;
@@ -73,5 +74,20 @@ export class GapiService {
     document.getElementsByTagName('head')[0].appendChild(node);
     window['handleClientLoad'] = this.handleClientLoad.bind(this);
   }
+=======
+  // Email API
+
+  getEmailMessagesList(): Observable<any> {
+   return Observable.fromPromise(new Promise((resolve, reject) => {
+    gapi.client.request({
+      path: 'https://www.googleapis.com/gmail/v1/me/messsages',
+      method: 'GET',
+    }).then((response) => { 
+      resolve(response);
+    });
+   }));
+  }
+
+>>>>>>> 703deafc85b536111e06cfbfba0ada2ce58016ef
 }
 
