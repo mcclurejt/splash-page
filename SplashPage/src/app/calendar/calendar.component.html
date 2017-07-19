@@ -1,24 +1,15 @@
 <div class='container'>
   <md-card>
-    <!-- Headers for each day of week  -->
-    <md-grid-list cols='7' rowHeight='100px'>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Sunday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Monday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Tuesday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Wednesday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Thursday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Friday</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Saturday</md-grid-tile>
-    </md-grid-list>
-    <!-- Events -->
-    <md-grid-list cols='7' rowHeight='25px'>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1' style='width: 100%;'>Event</md-grid-tile>
-    </md-grid-list>
+    <ngx-datatable
+    class='material stripped'
+    [rows]='eventListStream | async'
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="auto">
+
+    <ngx-datatable-column name='Summary'></ngx-datatable-column>
+    <ngx-datatable-column name='StartDate'></ngx-datatable-column>
+    </ngx-datatable> 
   </md-card>
 </div>

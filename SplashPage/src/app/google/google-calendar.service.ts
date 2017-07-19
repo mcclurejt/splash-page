@@ -1,13 +1,24 @@
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { CalendarEvent } from "app/models/calendar-event";
+import 'rxjs/add/operator/distinctUntilChanged';
 
 @Injectable()
 export class GoogleCalendarService {
 
   constructor() { }
-
-  // Calendar API
+  /**
+   * Returns an observable of CalendarEvents
+   */
+  getEvents(): Observable<any>{
+    return this.getCalendars()
+      .map( (response) => {return response.result.items})
+      .flatMap( (calList) => this.getEventsFromCalendars(calList))
+      .map( (calArray) => this.mapEvents(calArray))
+      .distinctUntilChanged()
+      .share();
+      
+  }
 
   /**
    * Same as CalendarList.list() from Google Calendar Api
@@ -29,7 +40,7 @@ export class GoogleCalendarService {
    * https://developers.google.com/google-apps/calendar/v3/reference/events/list
    * @param cals The calendarList obtained from getCalendars()
    */
-  getEvents(cals): Observable<any> {
+  getEventsFromCalendars(cals): Observable<any> {
     console.log('Google CalendarList', cals);
     let gapi = window['gapi'];
     let batch = gapi.client.newBatch();
@@ -82,15 +93,28 @@ export class GoogleCalendarService {
         if (eventCal.result != 'Not Found' && eventCal.result.items != null) {
           for (let event of eventCal.result.items) {
             let calEvent = new CalendarEvent();
-            calEvent.calendar.id = id;
+            calEvent.calendarId = id;
             calEvent.id = event.id;
-            calEvent.calendar.summary = summary;
+            calEvent.calendarSummary = summary;
             calEvent.summary = event.summary;
-            calEvent.calendar.foregroundColor = foregroundColor;
-            calEvent.calendar.backgroundColor = backgroundColor;
+            calEvent.calendarForegroundColor = foregroundColor;
+            calEvent.calendarBackgroundColor = backgroundColor;
             calEvent.timeZone = timeZone;
-            calEvent.start = event.start;
-            calEvent.end = event.end;
+            if(event.start.date != null){
+              calEvent.startDate = event.start.date;
+              calEvent.startTime = '00:00:00';
+              calEvent.endDate = event.end.date;
+              calEvent.endTime = '00:00:00';
+              calEvent.allDayEvent = true;
+            } else {
+              let startDateTime = event.start.dateTime.split('T');
+              let endDateTime = event.end.dateTime.split('T');
+              calEvent.startDate = startDateTime[0];
+              calEvent.startTime = startDateTime[1];
+              calEvent.endDate = endDateTime[0];
+              calEvent.endTime = endDateTime[1];
+              calEvent.allDayEvent = false;
+            }
             eventList.push(calEvent);
           }
         }

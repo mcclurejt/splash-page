@@ -15,23 +15,49 @@ import 'rxjs/add/operator/map';
 })
 export class CalendarComponent implements OnInit, OnDestroy {
 
-  calendarEventList: Observable<CalendarEvent[]>
+  eventListStream: Observable<CalendarEvent[]>;
+  allDayEventListStream: Observable<CalendarEvent[]>;
+  calendarEventList: CalendarEvent[] = [];
+  allDayEventList: CalendarEvent[] = [];
+  columns = { name: 'summary' };
+
 
   constructor(private gapiService: GapiService, private googleCalendarService: GoogleCalendarService) {
+    this.loadEvents();
+  }
+
+  loadEvents() {
     this.gapiService.getIsSignedInStream().subscribe((isLoaded) => {
       if (isLoaded) {
-        this.loadGoogleCalendar();
+        this.assignEventStreams();
       };
     });
   }
 
-  loadGoogleCalendar(){
-    this.calendarEventList = this.googleCalendarService.getCalendars()
-      .map((response) => {return response.result.items})
-      .flatMap((calList) => this.googleCalendarService.getEvents(calList))
-      .map((calArray) => {
-        return this.googleCalendarService.mapEvents(calArray);
-      });
+  assignEventStreams(){
+    this.eventListStream = this.googleCalendarService.getEvents();
+    this.allDayEventListStream = this.eventListStream
+      .map( (eventList: CalendarEvent[]) => {
+        let allDayEvents = [];
+        for(let event of eventList){
+          if(event.allDayEvent){
+            allDayEvents.push(event);
+          }
+        }
+        return allDayEvents;
+      })
+  }
+
+  getAllDayEventStream(){
+    return this.eventListStream.map((eventList: CalendarEvent[]) => {
+        let allDayEvents = [];
+        for(let event of eventList){
+          if(event.allDayEvent){
+            allDayEvents.push(event);
+          }
+        }
+        return allDayEvents;
+      }).share();
   }
 
   ngOnInit(): void {
@@ -39,6 +65,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    
   }
 
 }

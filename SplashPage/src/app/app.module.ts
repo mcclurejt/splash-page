@@ -18,6 +18,11 @@ import { HomeComponent } from './+home/home.component';
 import { TimeComponent } from './time/time.component';
 import { WeatherComponent } from './weather/weather.component';
 import { HttpModule } from '@angular/http';
+import { CalendarComponent } from './calendar/calendar.component';
+import { MailComponent } from './mail/mail.component';
+import { EmailObjectComponent } from './email-object/email-object.component';
+import { NavbarComponent } from './navbar/navbar.component';
+
 import {
   MdAutocompleteModule,
   MdButtonModule,
@@ -43,10 +48,8 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
-import { CalendarComponent } from './calendar/calendar.component';
-import { MailComponent } from './mail/mail.component';
-import { EmailObjectComponent } from './email-object/email-object.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 
 
 export const MaterialModules = [
@@ -97,6 +100,7 @@ export const MaterialModules = [
     MaterialModules,
     FlexLayoutModule,
     HttpModule,
+    NgxDatatableModule,
   ],
   providers: [
     WeatherService,
