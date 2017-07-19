@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { CalendarEvent } from './../models/calendar-event';
-import { GapiService } from './../services/gapi.service';
+import { GapiService } from './../google/gapi.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../services/auth.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';

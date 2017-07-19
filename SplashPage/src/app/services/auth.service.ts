@@ -1,5 +1,5 @@
-import { GapiLoader } from './gapi-loader.service';
-import { GapiService } from './gapi.service';
+import { GapiLoader } from './../google/gapi-loader.service';
+import { GapiService } from './../google/gapi.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';

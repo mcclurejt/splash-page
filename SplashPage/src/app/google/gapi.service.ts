@@ -1,7 +1,7 @@
 import { CalendarEvent } from './../models/calendar-event';
 import { Http } from '@angular/http';
 import { GapiLoader } from './gapi-loader.service';
-import { AuthService } from './auth.service';
+import { AuthService } from './../services/auth.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
@@ -21,6 +21,10 @@ export class GapiService {
 
   constructor(private gapiLoader: GapiLoader, private http: Http) {
     this.isSignedInStream = gapiLoader.getIsSignedInStream();
+  }
+
+  checkIsSignedIn(){
+    console.log('checkissignedin',this.gapiLoader.googleUser.isSignedIn());
   }
 
   signIn() {
@@ -158,150 +162,3 @@ export class GapiService {
 
 }
 
-export class GoogleCalendarList {
-  kind: string;
-  etag: string;
-  id: string;
-  summary: string;
-  description: string;
-  location: string;
-  timeZone: string;
-  summaryOverride: string;
-  colorId: string;
-  backgroundColor: string;
-  foregroundColor: string;
-  hidden: boolean;
-  selected: boolean;
-  accessRole: string;
-  defaultReminders: [
-    {
-      method: string,
-      minutes: number,
-    }
-  ]
-  notificationSettings: {
-    notifications: [
-      {
-        type: string,
-        method: string,
-      }
-    ]
-  }
-  primary: boolean;
-  deleted: boolean;
-  events?: GoogleEvent[];
-}
-
-export class GoogleEvent {
-  kind: string;
-  etag: string;
-  id: string;
-  status: string;
-  htmlLink: string;
-  created: string;
-  updated: string;
-  summary: string;
-  description: string;
-  location: string;
-  colorId: string;
-  creator: {
-    id: string,
-    email: string,
-    displayName: string,
-    self: boolean
-  }
-  organizer: {
-    id: string,
-    email: string,
-    displayName: string,
-    self: boolean
-  }
-  start: {
-    date: string,
-    dateTime: string,
-    timeZone: string,
-  }
-  end: {
-    date: string
-    dateTime: string,
-    timeZone: string,
-  }
-  endTimeUnspecified: boolean;
-  recurrence: [
-    string
-  ]
-  recurringEventId: string;
-  originalStartTime: {
-    date: string,
-    dateTime: string,
-    timeZone: string
-  }
-  transparency: string;
-  visibility: string
-  iCalUID: string
-  sequence: number;
-  attendees: [
-    {
-      id: string,
-      email: string,
-      displayName: string,
-      organizer: boolean,
-      self: boolean,
-      resource: boolean,
-      optional: boolean,
-      responseStatus: string,
-      comment: string,
-      additionalGuests: number
-    }
-  ]
-  attendeesOmitted: boolean
-  extendedProperties: {
-    private: {
-      (key): string
-    }
-    shared: {
-      (key): string
-    }
-  }
-  hangoutLink: string
-  gadget: {
-    type: string
-    title: string
-    link: string
-    iconLink: string
-    width: number
-    height: number
-    display: string
-    preferences: {
-      (key): string
-    }
-  }
-  anyoneCanAddSelf: boolean
-  guestsCanInviteOthers: boolean
-  guestsCanModify: boolean
-  guestsCanSeeOtherGuests: boolean
-  privateCopy: boolean
-  locked: boolean
-  reminders: {
-    useDefault: boolean
-    overrides: [
-      {
-        method: string
-        minutes: number
-      }
-    ]
-  }
-  source: {
-    url: string
-    title: string
-  }
-  attachments: [
-    {
-      fileUrl: string
-      title: string
-      mimeType: string
-      iconLink: string
-      fileId: string
-    }
-  ]
-}

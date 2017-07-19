@@ -25,7 +25,7 @@ export class GapiLoader {
 
   isSignedInSubject = new BehaviorSubject<boolean>(this.isSignedIn());
 
-  getIsSignedInStream(): Observable<boolean>{
+  getIsSignedInStream(): Observable<boolean> {
     return this.isSignedInSubject.asObservable().distinctUntilChanged().share();
   }
 
@@ -33,12 +33,12 @@ export class GapiLoader {
     this.loadScript();
   }
 
-  handleClientLoad(): void{
+  handleClientLoad(): void {
     console.log('handleClientLoad');
     gapi.load('client:auth2', this.initClient.bind(this));
   }
 
-  initClient(){
+  initClient() {
     console.log('initClient');
     this.googleAuth = gapi.auth2.init({
       client_id: this.CLIENT_ID,
@@ -52,72 +52,75 @@ export class GapiLoader {
     this.googleAuth.currentUser.listen(this.userChanged.bind(this));
 
     // Sign in the user if they are currently signed in
-    if (this.googleAuth.isSignedIn.get() == true){
+    if (this.googleAuth.isSignedIn.get() == true) {
       this.googleAuth.signIn().then((googleUser) => this.handleSignIn(googleUser));
     }
     this.refreshValues();
   }
 
-  signInChanged(isSignedIn: boolean): void{
-    console.log('isLoadedSubject.next() signInChanged',isSignedIn);
+  signInChanged(isSignedIn: boolean): void {
+    console.log('isLoadedSubject.next() signInChanged', isSignedIn);
     this.isSignedInSubject.next(isSignedIn);
   }
 
-  userChanged(googleUser: gapi.auth2.GoogleUser): void{
-    console.log('userChanged',googleUser);
+  userChanged(googleUser: gapi.auth2.GoogleUser): void {
+    console.log('userChanged', googleUser);
     this.googleUser = googleUser;
   }
 
-  refreshValues(): void{
+  refreshValues(): void {
     this.googleAuth = gapi.auth2.getAuthInstance();
     this.googleUser = this.googleAuth.currentUser.get();
   }
 
-  signIn(): void{
+  signIn(): void {
     console.log('signIn');
-    if(this.googleAuth){
-      this.googleAuth.signIn().then((googleUser) => this.handleSignIn(googleUser))
+    if (this.googleAuth) {
+      this.googleAuth.signIn()
+        .then(
+        (googleUser) => this.handleSignIn(googleUser),
+        (error) => console.log('Error while signing in',error));
     }
   }
 
-  signOut(): void{
+  signOut(): void {
     console.log('signOut');
-    if(this.tokenTimer){
+    if (this.tokenTimer) {
       this.tokenTimer.unsubscribe();
     }
     this.googleAuth.signOut();
   }
 
-  handleSignIn(googleUser: gapi.auth2.GoogleUser){
-    if(googleUser.isSignedIn()){
+  handleSignIn(googleUser: gapi.auth2.GoogleUser) {
+    if (googleUser.isSignedIn()) {
       this.googleUser = googleUser;
       this.isSignedInSubject.next(true);
-      console.log('handleSignIn',googleUser);
+      console.log('handleSignIn', googleUser);
       this.startTokenTimer(googleUser);
     }
   }
 
-  startTokenTimer(googleUser: gapi.auth2.GoogleUser){
-    console.log('StartTokenTimer',googleUser.getAuthResponse().expires_in);
+  startTokenTimer(googleUser: gapi.auth2.GoogleUser) {
+    console.log('StartTokenTimer', googleUser.getAuthResponse().expires_in);
     let expires_in = googleUser.getAuthResponse().expires_in;
-    this.tokenTimer = Observable.timer(expires_in*1000)
+    this.tokenTimer = Observable.timer(expires_in * 1000)
       .timeInterval()
-      .subscribe( (resp) => this.handleTokenRefresh(resp));
+      .subscribe((resp) => this.handleTokenRefresh(resp));
   }
 
-  handleTokenRefresh(response){
-    console.log('handleTokenRefresh Outer',response);
+  handleTokenRefresh(response) {
+    console.log('handleTokenRefresh Outer', response);
     this.googleUser.reloadAuthResponse()
-      .then( (authResponse: gapi.auth2.AuthResponse) => {
-        console.log('handleTokenRefresh Inner',authResponse);
+      .then((authResponse: gapi.auth2.AuthResponse) => {
+        console.log('handleTokenRefresh Inner', authResponse);
         this.tokenTimer.unsubscribe();
         this.refreshValues();
         this.startTokenTimer(this.googleUser);
       });
   }
 
-  private isSignedIn(){
-    console.log('isSignedIn',this.googleAuth && this.googleAuth.isSignedIn.get() );
+  private isSignedIn() {
+    console.log('isSignedIn', this.googleAuth && this.googleAuth.isSignedIn.get());
     return this.googleAuth && this.googleAuth.isSignedIn.get();
   }
 
@@ -126,7 +129,7 @@ export class GapiLoader {
     node.src = this.SCRIPT_URL;
     node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);
-    window['onApiLoaded'] = this.handleClientLoad.bind(this); 
+    window['onApiLoaded'] = this.handleClientLoad.bind(this);
   }
 
 }

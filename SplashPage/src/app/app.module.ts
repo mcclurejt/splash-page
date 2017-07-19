@@ -1,5 +1,5 @@
-import { GapiService } from './services/gapi.service';
-import { GapiLoader } from './services/gapi-loader.service';
+import { GapiService } from './google/gapi.service';
+import { GapiLoader } from './google/gapi-loader.service';
 import { RootGuard } from './services/root.guard';
 import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
