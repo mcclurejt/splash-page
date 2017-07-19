@@ -46,12 +46,9 @@ import {
 } from '@angular/material';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SignInComponent } from './+sign-in/sign-in.component';
-<<<<<<< HEAD
 import { MailComponent } from './mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
-=======
 import { NavbarComponent } from './navbar/navbar.component';
->>>>>>> 77c5f1a6f944b0e49f0a04b5ee49d7819aaafcf6
 
 
 export const MaterialModules = [
@@ -88,12 +85,9 @@ export const MaterialModules = [
     WeatherComponent,
     CalendarComponent,
     SignInComponent,
-<<<<<<< HEAD
     MailComponent,
     EmailObjectComponent,
-=======
     NavbarComponent,
->>>>>>> 77c5f1a6f944b0e49f0a04b5ee49d7819aaafcf6
   ],
   imports: [
     BrowserModule,
