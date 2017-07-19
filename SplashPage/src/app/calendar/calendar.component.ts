@@ -1,41 +1,50 @@
+import { Observable } from 'rxjs/Observable';
+import { CalendarEvent } from './../models/calendar-event';
+import { GapiService } from './../google/gapi.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../services/auth.service';
-import { GoogleService } from './../services/google.service';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnDestroy{
+export class CalendarComponent implements OnInit, OnDestroy {
 
-  isLoaded: boolean;
-  gapiSubscription: Subscription;
+  calendarEventList: Observable<CalendarEvent[]>
 
-  constructor(private googleService: GoogleService) {
-    this.gapiSubscription = this.googleService.isSignedInSubject.subscribe( (isSignedIn) => {
-      if(isSignedIn){
-        this.loadCalendar();
+  constructor(private gapiService: GapiService) {
+    this.gapiService.isSignedInStream.subscribe((isLoaded) => {
+      console.log('Check loaded');
+      if (isLoaded) {
+        console.log('Gapi Loaded');
+        this.loadCal();
       };
     });
   }
 
-  loadCalendar(){
-    let loadSuccess = (response) => {
-      console.log(response.result.items);
-    }
+  loadCal(){
+    this.calendarEventList = this.gapiService.getCalendars()
+      .map((response) => {return response.result.items})
+      .flatMap((calList) => this.gapiService.getEvents(calList))
+      .map((calArray) => {
+        return this.gapiService.mapEvents(calArray);
+      })
+      // .map((calArray) => this.gapiService.mapEvents(calArray))
+      // .subscribe( (calendarEventList: CalendarEvent[] ) => {
+      //   this.calendarEventList = calendarEventList;
+      //   return calendarEventList;
+      // });
+  }
 
-    let loadFail = (error) => {
-      console.log(error);
-    }
-    this.googleService.getCalendarList().then( (response) => {
-      console.log(response.result);
-    });
+  ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void {
-    this.gapiSubscription.unsubscribe();
   }
-  
+
 }

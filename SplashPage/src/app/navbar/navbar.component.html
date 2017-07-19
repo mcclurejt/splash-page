@@ -1,0 +1,26 @@
+<md-toolbar color='primary'>
+  <button md-button [routerLink]="['/']">
+        <md-icon>home</md-icon>
+    </button>
+  <button md-button [routerLink]="['/']">
+        <md-icon>perm_contact_cal</md-icon>
+    </button>
+  <button md-button [routerLink]="['/']">
+        <md-icon>email</md-icon>
+    </button>
+  <button md-button [routerLink]="['/']">
+        <md-icon>settings</md-icon>
+    </button>
+  <span fxFlex></span>
+  <h1>
+    {{authService.displayNameStream | async}}
+  </h1>
+  <button md-fab [mdMenuTriggerFor]='signOutMenu'>
+    <md-icon>account_circle</md-icon>
+  </button>
+  <md-menu [overlapTrigger]='false' #signOutMenu='mdMenu'>
+    <button md-menu-item *ngIf="authService.isSignedInStream | async" (click)='this.authService.signOut()'>
+        Sign Out
+    </button>
+  </md-menu>
+</md-toolbar>

@@ -1,7 +1,3 @@
-import { Observable } from 'rxjs/Observable';
-import { FireService } from './services/fire.service';
-import { GoogleService } from './services/google.service';
-import { AuthService } from './services/auth.service';
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from "angularfire2/database";
 
@@ -11,5 +7,5 @@ import { AngularFireDatabase } from "angularfire2/database";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private authService: AuthService) {}
+  constructor() {}
 }

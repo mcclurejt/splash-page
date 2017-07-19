@@ -1,11 +1,10 @@
-import { GapiService } from './services/gapi.service';
-import { GapiLoader } from './services/gapi-loader.service';
+import { GapiService } from './google/gapi.service';
+import { GapiLoader } from './google/gapi-loader.service';
 import { RootGuard } from './services/root.guard';
 import { SignInGuard } from './services/sign-in.guard';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
 import { FireService } from './services/fire.service';
-import { GoogleService } from './services/google.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -47,8 +46,12 @@ import {
 } from '@angular/material';
 import { CalendarComponent } from './calendar/calendar.component';
 import { SignInComponent } from './+sign-in/sign-in.component';
+<<<<<<< HEAD
 import { MailComponent } from './mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
+=======
+import { NavbarComponent } from './navbar/navbar.component';
+>>>>>>> 77c5f1a6f944b0e49f0a04b5ee49d7819aaafcf6
 
 
 export const MaterialModules = [
@@ -85,8 +88,12 @@ export const MaterialModules = [
     WeatherComponent,
     CalendarComponent,
     SignInComponent,
+<<<<<<< HEAD
     MailComponent,
     EmailObjectComponent,
+=======
+    NavbarComponent,
+>>>>>>> 77c5f1a6f944b0e49f0a04b5ee49d7819aaafcf6
   ],
   imports: [
     BrowserModule,
@@ -104,7 +111,6 @@ export const MaterialModules = [
     WeatherService,
     AuthService,
     RootGuard,
-    GoogleService,
     FireService,
     SignInGuard,
     GapiLoader,
