@@ -1,15 +1,22 @@
 <div class='container'>
   <md-card>
-    <ngx-datatable
-    class='material stripped'
-    [rows]='eventListStream | async'
-    [columnMode]="'force'"
-    [headerHeight]="50"
-    [footerHeight]="50"
-    [rowHeight]="auto">
-
-    <ngx-datatable-column name='Summary'></ngx-datatable-column>
-    <ngx-datatable-column name='StartDate'></ngx-datatable-column>
-    </ngx-datatable> 
+    
+    <md-grid-list cols='7' rowHeight='200px'>
+      <md-grid-tile fxFlex *ngFor='let eventList of eventMap["allDay"]; let idx = index' colspan='1' rowspan='1'>
+        <md-chip-list fxFlex class='mat-chip-list-stacked' fxLayout='column'>
+          <md-chip fxFlex='auto' *ngFor='let event of eventList' color='accent'>
+            {{event && event.summary}}
+          </md-chip>
+        </md-chip-list>
+      </md-grid-tile>
+    </md-grid-list>
   </md-card>
+
+  <!-- <md-grid-list cols='4' rowHeight='200px'>
+    <md-grid-tile [colspan]='1' [rowspan]='1'>
+
+    </md-grid-tile>
+  </md-grid-list> -->
 </div>
+
+<!-- *ngIf="eventMap['allDay'][idx]!=null" -->

@@ -1,23 +1,41 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import { CalendarEvent } from './../models/calendar-event';
+import { Subscription } from 'rxjs/Rx';
+import { GapiService } from './gapi.service';
 import { Observable } from 'rxjs/Observable';
-import { Injectable } from '@angular/core';
-import { CalendarEvent } from "app/models/calendar-event";
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 @Injectable()
-export class GoogleCalendarService {
+export class GoogleCalendarService implements OnDestroy {
 
-  constructor() { }
+  private gapiSignedInSubscription: Subscription
+  allEventStream: Observable<CalendarEvent[]>;
+
+
+  constructor(private gapiService: GapiService) {
+    // Build the streams once gapi is done loading
+    this.gapiSignedInSubscription = this.gapiService.getIsSignedInStream()
+      .subscribe((isSignedIn: boolean) => {
+        this.buildStream();
+      });
+  }
+
+  buildStream() {
+    this.allEventStream = this.getEvents().share();
+  }
+
   /**
    * Returns an observable of CalendarEvents
    */
-  getEvents(): Observable<any>{
+  getEvents(): Observable<any> {
     return this.getCalendars()
-      .map( (response) => {return response.result.items})
-      .flatMap( (calList) => this.getEventsFromCalendars(calList))
-      .map( (calArray) => this.mapEvents(calArray))
+      .map((response) => { return response.result.items })
+      .flatMap((calList) => this.getEventsFromCalendars(calList))
+      .map((calArray) => this.mapEvents(calArray))
       .distinctUntilChanged()
       .share();
-      
   }
 
   /**
@@ -26,11 +44,15 @@ export class GoogleCalendarService {
    */
   getCalendars(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
-      gapi.client.request({
-        path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-        method: 'GET',
-      }).then((response) => {
-        resolve(response);
+      this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
+        if (isSignedIn) {
+          gapi.client.request({
+            path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+            method: 'GET',
+          }).then((response) => {
+            resolve(response);
+          });
+        }
       });
     }));
   }
@@ -100,7 +122,7 @@ export class GoogleCalendarService {
             calEvent.calendarForegroundColor = foregroundColor;
             calEvent.calendarBackgroundColor = backgroundColor;
             calEvent.timeZone = timeZone;
-            if(event.start.date != null){
+            if (event.start.date != null) {
               calEvent.startDate = event.start.date;
               calEvent.startTime = '00:00:00';
               calEvent.endDate = event.end.date;
@@ -154,6 +176,12 @@ export class GoogleCalendarService {
     let day = d.getDay();
     let diff = d.getDate() - day;
     return new Date(d.setDate(diff));
+  }
+
+  ngOnDestroy() {
+    if (this.gapiSignedInSubscription) {
+      this.gapiSignedInSubscription.unsubscribe();
+    }
   }
 
 }

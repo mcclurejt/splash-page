@@ -41,12 +41,13 @@ export class AuthService {
   signInWithGoogle() {
     this.gapiService.signIn()
       .then((user: gapi.auth2.GoogleUser) => {
-        let idToken = user.getAuthResponse().id_token;
-        let access_token = user.getAuthResponse().access_token;
+        let idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
+        let access_token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
+        let timeInSeconds = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().expires_in;
+        this.gapiService.startTokenTimer(access_token,timeInSeconds);
         let cred = firebase.auth.GoogleAuthProvider.credential(idToken, access_token);
         this.afAuth.auth.signInWithCredential(cred).then((user) => {
           console.log('User Signed in to firebase:', user.displayName);
-          // this.router.navigate(['/']);
         });
       });
   }
@@ -58,10 +59,7 @@ export class AuthService {
   signOut() {
     this.gapiService.signOut()
     this.afAuth.auth.signOut()
-      .then((resp) => {
-        console.log('afAuthSignedOut');
-        // this.router.navigate(['/signin'])
-      });
+    console.log('afAuthSignedOut')
   }
 
 }
