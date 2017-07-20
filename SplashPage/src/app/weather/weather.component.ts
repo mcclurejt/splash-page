@@ -18,7 +18,7 @@ export class WeatherComponent implements OnDestroy {
   temp: string;
   iconClass: string;
 
-  constructor(private weatherService: WeatherService) {
+  constructor(public weatherService: WeatherService) {
     this.weatherService.weatherStream.subscribe( (weather: Weather) => {
       this.city = weather.city;
       this.country = weather.country;

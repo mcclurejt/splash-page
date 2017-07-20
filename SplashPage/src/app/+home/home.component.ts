@@ -10,7 +10,7 @@ export class HomeComponent{
 
   isLoading = true;
 
-  constructor(private authService: AuthService) { 
+  constructor(public authService: AuthService) { 
     this.authService.isSignedInStream.subscribe( (isSignedIn) => {
       if(this.isLoading){
         this.isLoading = isSignedIn;
