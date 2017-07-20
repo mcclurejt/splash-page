@@ -29,12 +29,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   assignEvents() {
-    this.googleCalendarService.allEventStream.subscribe((events: CalendarEvent[]) => {
-      // Assign filtered events to their respective lists
-      this.eventMap['all'] = events;
-      this.eventMap['allDay'] = this.filterAllDayEvents(events);
+    // this.googleCalendarService.allEventStream.subscribe((events: CalendarEvent[]) => {
+    //   // Assign filtered events to their respective lists
+    //   this.eventMap['all'] = events;
+    //   this.eventMap['allDay'] = this.filterAllDayEvents(events);
 
-    });
+    // });
   }
 
   filterAllDayEvents(events: CalendarEvent[]) {

@@ -22,7 +22,7 @@ import { CalendarComponent } from './calendar/calendar.component';
 import { MailComponent } from './mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
 import { NavbarComponent } from './navbar/navbar.component';
-
+import { DatePipe } from '@angular/common'
 import {
   MdAutocompleteModule,
   MdButtonModule,
