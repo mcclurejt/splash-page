@@ -2,7 +2,6 @@
 export class CalendarEvent {
     id: string;
     summary: string;
-    timeZone: string;
     allDayEvent: boolean;
     startDate: string;
     startTime: string;
@@ -15,7 +14,6 @@ export class CalendarEvent {
     constructor(obj? : any){
         this.id = obj && obj.id || '';
         this.summary = obj && obj.summary || '';
-        this.timeZone = obj && obj.timeZone || '';
         this.allDayEvent = obj && obj.allDayEvent || '';
         this.startDate = obj && obj.startDate || '';
         this.startTime = obj && obj.startTime || '';

@@ -121,7 +121,6 @@ export class GoogleCalendarService implements OnDestroy {
             calEvent.summary = event.summary;
             calEvent.calendarForegroundColor = foregroundColor;
             calEvent.calendarBackgroundColor = backgroundColor;
-            calEvent.timeZone = timeZone;
             if (event.start.date != null) {
               calEvent.startDate = event.start.date;
               calEvent.startTime = '00:00:00';

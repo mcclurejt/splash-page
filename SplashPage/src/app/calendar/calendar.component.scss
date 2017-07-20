@@ -2,9 +2,27 @@
   width: 50%;
   padding: 10px;
   md-card {
-    padding: 10px;
-    md-grid-tile {
-      border: 1px solid black;
+    md-grid-list {
+      padding: 10px;
+      md-grid-tile {
+        border: 1px solid black;
+        width: 100%;
+        md-chip-list {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+          md-chip {
+            flex: 1 1;
+            justify-content: flex-start;
+            align-items: stretch;
+            overflow: hidden;
+            white-space: nowrap; 
+            margin: 0px;
+            font-size: 12px;
+          }
+        }
+      }
     }
   }
 }

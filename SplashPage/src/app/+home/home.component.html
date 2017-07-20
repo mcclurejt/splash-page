@@ -5,13 +5,17 @@
   <app-mail></app-mail>
 </div>
 <ng-template #signInTemplate>
-  <div fxLayoutAlign='center center'>
+  <div fxLayoutAlign='center center' *ngIf='!isLoading'>
     <md-card fxLayout='column' fxLayoutAlign='none center'>
       <md-card-title>
         <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
         <span fxShow='false' fxShow.xs>You must be signed in</span>
       </md-card-title>
-      <button id='google-button' md-button (click)='this.authService.signInWithGoogle();'></button>
+      <button id='google-button' md-button (click)='signInWithGoogle();'></button>
     </md-card>
+  </div>
+  <div *ngIf='isLoading' fxLayoutAlign='center center'>
+    <md-progress-spinner color="primary" mode="indeterminate" value="indeterminate">
+    </md-progress-spinner>
   </div>
 </ng-template>
