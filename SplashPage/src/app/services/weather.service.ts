@@ -15,7 +15,7 @@ export interface Weather {
 export class WeatherService {
 
   static weatherApiKey = '&APPID=dd6e2828f19f1157a6935e1e7d8f6b9e';
-  static weatherBaseUrl = 'http://api.openweathermap.org/data/2.5/weather?lat='
+  static weatherBaseUrl = 'https://crossorigin.me/http://api.openweathermap.org/data/2.5/weather?lat='
   static ipLocationUrl = 'https://ipinfo.io/json'
   static units = 'imperial';
 
