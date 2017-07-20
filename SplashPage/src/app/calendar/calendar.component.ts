@@ -52,10 +52,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
   getEventsByDay(events: CalendarEvent[]){
     let eventsByDay = [ [], [], [], [], [], [], [] ];
     let refDate = this.getFirstDayOfWeek();
-    console.log('StartDate',refDate.getDate());
-    console.log('StartMonth',refDate.getMonth());
-    console.log('StartYear',refDate.getFullYear());
-    console.log('StartHour',refDate.getHours());
     let oneDay = 24*60*60*1000;
     for(let event of events){
       let dateArray = event.startDate.split('-');

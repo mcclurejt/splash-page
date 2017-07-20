@@ -22,8 +22,9 @@
       <md-icon>account_circle</md-icon>
     </button>
     <md-menu [overlapTrigger]='false' #signOutMenu='mdMenu'>
-      <button md-menu-item *ngIf="authService.isSignedInStream | async" (click)='authService.signOut()'>
-        Sign Out
+      <button md-menu-item color='primary' *ngIf="authService.isSignedInStream | async" (click)='authService.signOut()'>
+        <md-icon>exit_to_app</md-icon>
+        <span>Sign Out</span>
       </button>
     </md-menu>
   </div>

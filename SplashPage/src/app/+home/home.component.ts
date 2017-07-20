@@ -8,17 +8,12 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent{
 
-  isLoading = false;
+  isLoading = true;
 
-  constructor(private authService: AuthService) { }
-
-  signInWithGoogle(){
-    this.isLoading = true;
-    this.authService.signInWithGoogle();
-    // Get rid of the loading component when signed in
+  constructor(private authService: AuthService) { 
     this.authService.isSignedInStream.subscribe( (isSignedIn) => {
-      if(isSignedIn){
-        this.isLoading = false;
+      if(this.isLoading){
+        this.isLoading = isSignedIn;
       }
     });
   }
