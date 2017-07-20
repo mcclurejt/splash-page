@@ -2,10 +2,18 @@
   padding: 10px;
   md-card {
     #weather {
+      h3 {
+        padding: 0px;
+        margin: 0px;
+        font-weight: normal;
+      }
+      padding: 0px;
       font-size: 48px;
       background-color: rgba(255, 70, 255, 1.0);
     }
     #location {
+      padding: 0px;
+      margin: 0px;
       background-color: rgba(20, 100, 255, 1.0)
     }
   }

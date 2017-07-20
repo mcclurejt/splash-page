@@ -6,18 +6,18 @@ import 'rxjs/add/observable/fromPromise';
 
 export interface Weather {
   city: string;
-  country: string;
+  region: string;
   temp: string;
-  iconClass: string;
+  icon: string;
 }
 
 @Injectable()
 export class WeatherService {
 
-  static weatherApiKey = '&APPID=dd6e2828f19f1157a6935e1e7d8f6b9e';
-  static weatherBaseUrl = 'https://crossorigin.me/http://api.openweathermap.org/data/2.5/weather?lat='
+  static weatherBaseUrl = 'https://crossorigin.me/https://api.darksky.net/forecast/ffd941872a25813256d6d849d37140cf/'
   static ipLocationUrl = 'https://ipinfo.io/json'
-  static units = 'imperial';
+  private city;
+  private region;
 
   public weatherStream: Observable<Weather>;
   startTime;
@@ -47,29 +47,24 @@ export class WeatherService {
   private mapWeather(res: Response): Weather {
     let body = res.json();
     let weather: Weather = {
-      city: body.name,
-      country: body.sys.country,
-      temp: String(body.main.temp).split('.')[0],
-      iconClass: 'wi wi-owm-' + body.weather[body.weather.length - 1].id,
+      city: this.city,
+      region: this.region,
+      temp: String(body.currently.temperature).split('.')[0],
+      icon: 'wi wi-forecast-io-' + body.currently.icon,
     }
+    console.log('Weather Icon',weather.icon);
     return weather;
   }
 
   private mapLocation(res: Response) {
     let body = res.json();
-    let coordArray = body.loc.split(",");
-    let coords = {
-      latitude: coordArray[0],
-      longitude: coordArray[1]
-    }
+    this.city = body.city;
+    this.region = body.region;
+    let coords = body.loc;
     return coords;
   }
 
   private _getUrl(coords): string {
-    return WeatherService.weatherBaseUrl +
-      coords.latitude + '&lon=' +
-      coords.longitude + '&units=' +
-      WeatherService.units +
-      WeatherService.weatherApiKey;
+    return WeatherService.weatherBaseUrl + coords + '/?exclude=minutely,hourly,daily,alerts,flags';
   }
 }

@@ -14,16 +14,16 @@ export class WeatherComponent implements OnDestroy {
 
   weatherSubscription: Subscription;
   city: string;
-  country: string;
+  region: string;
   temp: string;
-  iconClass: string;
+  icon: string;
 
   constructor(public weatherService: WeatherService) {
     this.weatherService.weatherStream.subscribe( (weather: Weather) => {
       this.city = weather.city;
-      this.country = weather.country;
+      this.region = weather.region;
       this.temp = weather.temp;
-      this.iconClass = weather.iconClass;
+      this.icon = weather.icon;
     })
   }
 

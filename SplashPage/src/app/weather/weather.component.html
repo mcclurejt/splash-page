@@ -1,11 +1,12 @@
 <div class='container'>
   <md-card>
-    <div id='weather' fxLayoutAlign='center center'>
-      <i [class]="(weatherService.weatherStream | async)?.iconClass"></i> {{temp}}
+    <div id='weather' fxLayoutAlign='center end'>
+      <i [class]="icon" style='font-size:120%;'></i>
+        <h3>{{temp}}</h3>
       <i class='wi wi-fahrenheit' style='font-size: 120%;'></i>
     </div>
     <div id='location' fxLayoutAlign='center center'>
-      {{city}}, {{country}}
+      {{city}}, {{region}}
     </div>
   </md-card>
 </div>
