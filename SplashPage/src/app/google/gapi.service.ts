@@ -35,7 +35,6 @@ export class GapiService implements OnDestroy {
   }
 
   initClient() {
-    console.log('initClient');
     gapi.client.init({
       'apiKey': this.API_KEY,
       'discoveryDocs': this.DISCOVERY_DOCS,
@@ -49,21 +48,17 @@ export class GapiService implements OnDestroy {
 
   updateSignInStatus(isSignedIn){
     if(isSignedIn){
-      console.log('UpdateSigninStatus: isSignedIn=true');
       this.isSignedInSubject.next(true);
     } else {
-      console.log('UpdateSigninStatus: isSignedIn=false');
       this.isSignedInSubject.next(false);
     }
   }
 
   signIn(): Promise<gapi.auth2.GoogleUser>{
-    console.log('Gapi SignIn');
     return gapi.auth2.getAuthInstance().signIn();
   }
 
   signOut(){
-    console.log('Gapi SignOut');
     gapi.auth2.getAuthInstance().signOut();
   }
 

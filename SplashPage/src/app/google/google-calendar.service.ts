@@ -69,7 +69,6 @@ export class GoogleCalendarService implements OnDestroy {
    * @param cals The calendarList obtained from getCalendars()
    */
   getEventsFromCalendars(cals): Observable<any> {
-    console.log('Google CalendarList', cals);
     this.nextSyncToken = cals.nextSyncToken;
     cals = cals.items;
     let gapi = window['gapi'];
@@ -104,7 +103,6 @@ export class GoogleCalendarService implements OnDestroy {
    * @param calEventArray 
    */
   mapEvents(calEventArray): CalendarEvent[] {
-    console.log('calEventArray', calEventArray);
     // Pull out the goodies from calArray
     let eventArray = calEventArray[0];
     let calArray = calEventArray[1];
@@ -150,7 +148,6 @@ export class GoogleCalendarService implements OnDestroy {
         }
       }
     }
-    localStorage.setItem('CalendarEvents', JSON.stringify(eventList));
     return eventList;
   }
 

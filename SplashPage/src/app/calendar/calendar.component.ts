@@ -33,7 +33,6 @@ export class CalendarComponent{
     let date = String(d.getDate())
     date = date.length > 1 ? date : '0' + date;
     this.todaysDate =  year + '-' + month + '-' + date;
-    console.log(this.todaysDate);
   }
 
   assignEventStream() {

@@ -49,7 +49,6 @@ export class AuthService {
         this.gapiService.startTokenTimer(access_token, timeInSeconds);
         let cred = firebase.auth.GoogleAuthProvider.credential(idToken, access_token);
         this.afAuth.auth.signInWithCredential(cred).then((user) => {
-          console.log('User Signed in to firebase:', user.displayName);
           this.isLoadingSubject.next(false);
         });
       }, (error) => {
@@ -65,7 +64,6 @@ export class AuthService {
   signOut() {
     this.gapiService.signOut()
     this.afAuth.auth.signOut()
-    console.log('afAuthSignedOut')
   }
 
 }
