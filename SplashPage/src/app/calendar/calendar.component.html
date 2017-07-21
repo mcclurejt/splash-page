@@ -1,27 +1,40 @@
 <div>
   <md-card style='padding: 0px;border-radius: 5px;'>
-    <md-toolbar color='primary' style='border-radius: 5px;padding:0px;'>
+    <md-toolbar class='md-tall' color='primary' style='border-radius: 5px 5px 0px 0px;padding:0px;'>
       <!-- <span fxFlex='5%'></span>
       <span fxFlex fxLayoutAlign='start center' style='font-size:24px'>Calendar</span> -->
     </md-toolbar>
-    <md-list style='background-color:#f5f5f5;padding:0px'>
-      <div *ngFor="let eventArray of (eventStream | event:'agenda' | async)">
-        <md-list-item style='border-radius: 5px;'>
-          <span *ngIf="todaysDate==eventArray[0].startDate;else blankTemplate" fxFlex='20%' fxLayoutAlign='start center'>Today</span>
-          <ng-template #blankTemplate><div fxFlex='20%'></div></ng-template>
-          <h3 fxFlex='60%'fxLayoutAlign='center center' md-subheader style='font-size:20px;color:#424242;'>{{eventArray[0].startDate | date:'EEEE, MMMM d'}}</h3>
-          <button md-icon-button (click)='handleAddEvent()' fxFlex='20%' fxLayoutAlign='end center'><md-icon style='color:#4CAF50;'>add_circle</md-icon></button>
-        </md-list-item>
-        <div *ngFor="let event of eventArray">
-          <md-list-item md-line [style.background-color]='event.calendarBackgroundColor' style='border-radius: 5px;'>
-            <span fxFlex='15%' fxLayoutAlign='center center' style='color:#f5f5f5;'>{{event.allDayEvent ? 'All Day' : event.startTime }}</span>
+    <div id='scrollArea'
+    infinite-scroll
+    [infiniteScrollDistance]='2'
+    [infiniteScrollThrottle]='500'
+    [infiniteScrollDisabled]='isScrollLoading'
+    [scrollWindow]='false'
+    (scrolled)='onScrollDown()'
+    style='height:425px;overflow:scroll;'>
+      <md-list style='background-color:#f5f5f5;padding:0px;'>
+        <div *ngFor="let eventArray of (eventStream | event:'agenda' | async)">
+          <md-list-item>
+            <span *ngIf="todaysDate==eventArray[0].startDate;else blankTemplate" fxFlex='15%' fxLayoutAlign='center center'>Today</span>
+            <ng-template #blankTemplate>
+              <div fxFlex='15%'></div>
+            </ng-template>
             <span fxFlex='5%'></span>
-            <span fxFlex fxLayoutAlign='start center' style='color:#f5f5f5;'>{{event.summary | truncate : 60}}</span>
-            <button md-icon-button><md-icon style='color:#f5f5f5;'>mode_edit</md-icon></button>
+            <h4 fxFlex fxLayoutAlign='start center' style='font-size:20px;color:#424242;'>{{eventArray[0].startDate | date:'EEEE, MMMM d'}}</h4>
+            <button md-icon-button (click)='handleAddEvent()'><md-icon style='color:#4CAF50;'>add_circle</md-icon></button>
           </md-list-item>
           <md-divider></md-divider>
+          <div *ngFor="let event of eventArray">
+            <md-list-item md-line [style.background-color]='event.calendarBackgroundColor' style='border-radius: 10px;'>
+              <span fxFlex='15%' fxLayoutAlign='center center' style='color:#f5f5f5;'>{{event.allDayEvent ? 'All Day' : event.startTime }}</span>
+              <span fxFlex='5%'></span>
+              <span fxFlex fxLayoutAlign='start center' style='color:#f5f5f5;'>{{event.summary | truncate : 60}}</span>
+              <button md-icon-button><md-icon style='color:#f5f5f5;'>mode_edit</md-icon></button>
+            </md-list-item>
+            <md-divider></md-divider>
+          </div>
         </div>
-      </div>
-    </md-list>
+      </md-list>
+    </div>
   </md-card>
 </div>

@@ -52,6 +52,7 @@ import {
 import { EventPipe } from './pipes/event.pipe';
 import { InlineEditComponent } from './inline-edit/inline-edit.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 
@@ -107,6 +108,7 @@ export const MaterialModules = [
     MaterialModules,
     FlexLayoutModule,
     HttpModule,
+    InfiniteScrollModule,
   ],
   providers: [
     WeatherService,

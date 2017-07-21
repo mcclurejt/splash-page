@@ -8,6 +8,7 @@ import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/timeInterval';
 import 'rxjs/add/observable/timer';
+import 'rxjs/add/operator/share';
 
 @Injectable()
 export class GapiService implements OnDestroy {
@@ -19,7 +20,6 @@ export class GapiService implements OnDestroy {
   SCOPES = 'https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar'
 
   private tokenSubscription: Subscription;
-
   isSignedInSubject = new BehaviorSubject<boolean>(false);
 
   getIsSignedInStream(): Observable<boolean> {
@@ -31,7 +31,6 @@ export class GapiService implements OnDestroy {
   }
 
   handleClientLoad(): void {
-    console.log('handleClientLoad');
     gapi.load('client:auth2', this.initClient.bind(this));
   }
 

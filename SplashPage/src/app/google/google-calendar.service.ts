@@ -6,12 +6,15 @@ import { GapiService } from './gapi.service';
 import { Observable } from 'rxjs/Observable';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
 export class GoogleCalendarService implements OnDestroy {
 
   private gapiSignedInSubscription: Subscription
-  public allEventStream: Observable<CalendarEvent[]>;
+  public eventStream: Observable<CalendarEvent[]>;
+  private nextSyncToken: string = '';
+  private calendarIds: Array<string> = [];
 
 
   constructor(private gapiService: GapiService) {
@@ -23,10 +26,10 @@ export class GoogleCalendarService implements OnDestroy {
   }
 
   buildStream() {
-    this.allEventStream = this.getEvents().share();
+    this.eventStream = this.getEvents().share();
   }
 
-  addEvent(event: CalendarEvent){
+  addEvent(event: CalendarEvent) {
     console.log('addEvent()');
   }
 
@@ -35,10 +38,9 @@ export class GoogleCalendarService implements OnDestroy {
    */
   getEvents(): Observable<any> {
     return this.getCalendars()
-      .map((response) => { return response.result.items })
+      .map((response) => { return response.result })
       .flatMap((calList) => this.getEventsFromCalendars(calList))
       .map((calArray) => this.mapEvents(calArray))
-      .distinctUntilChanged()
       .share();
   }
 
@@ -68,6 +70,8 @@ export class GoogleCalendarService implements OnDestroy {
    */
   getEventsFromCalendars(cals): Observable<any> {
     console.log('Google CalendarList', cals);
+    this.nextSyncToken = cals.nextSyncToken;
+    cals = cals.items;
     let gapi = window['gapi'];
     let batch = gapi.client.newBatch();
     let d = this.getFirstDayOfWeek();
@@ -79,6 +83,7 @@ export class GoogleCalendarService implements OnDestroy {
     // Iterate through all the calendars to get dates for each
     for (let i = 0; i < cals.length; i++) {
       let calId = cals[i].id;
+      this.calendarIds.push(calId);
       let url = 'https://www.googleapis.com/calendar/v3/calendars/' + calId + '/events'
       let req = gapi.client.request({
         path: url,
@@ -87,9 +92,9 @@ export class GoogleCalendarService implements OnDestroy {
       });
       batch.add(req, { 'id': calId });
     }
-    // Execute the request and send the results to get parsed before returning
-    return Observable.fromPromise(new Promise((resolve, reject) => {
-      batch.execute((response) => resolve([response, cals]), reject);
+    // Execute the request and return the events along with calendar data
+    return Observable.fromPromise(new Promise((resolve) => {
+      batch.execute((response, other) => resolve([response, cals]));
     }));
   }
 
@@ -135,9 +140,9 @@ export class GoogleCalendarService implements OnDestroy {
               let startDateTime = event.start.dateTime.split('T');
               let endDateTime = event.end.dateTime.split('T');
               calEvent.startDate = startDateTime[0];
-              calEvent.startTime = startDateTime[1].split('-')[0].substr(0,5);
+              calEvent.startTime = startDateTime[1].split('-')[0].substr(0, 5);
               calEvent.endDate = endDateTime[0];
-              calEvent.endTime = endDateTime[1].split('-')[0].substr(0,5);
+              calEvent.endTime = endDateTime[1].split('-')[0].substr(0, 5);
               calEvent.allDayEvent = false;
             }
             eventList.push(calEvent);
@@ -145,6 +150,7 @@ export class GoogleCalendarService implements OnDestroy {
         }
       }
     }
+    localStorage.setItem('CalendarEvents', JSON.stringify(eventList));
     return eventList;
   }
 

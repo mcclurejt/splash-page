@@ -7,13 +7,13 @@
   </div>
 </div>
 <ng-template #signInTemplate>
-  <div fxLayoutAlign='center center' *ngIf='!isLoading;else loadingTemplate'>
+  <div fxLayoutAlign='center center' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
     <md-card id='signIn' fxLayout='column' fxLayoutAlign='none center'>
       <md-card-title>
         <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
         <span fxShow='false' fxShow.xs>You must be signed in</span>
       </md-card-title>
-      <button id='google-button' md-button (click)='authService.signInWithGoogle();isLoading=true'></button>
+      <button id='google-button' md-button (click)='authService.signInWithGoogle();'></button>
     </md-card>
   </div>
   <ng-template #loadingTemplate>

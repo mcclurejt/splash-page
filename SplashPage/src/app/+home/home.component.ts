@@ -8,14 +8,6 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent{
 
-  isLoading = true;
-
-  constructor(public authService: AuthService) { 
-    this.authService.isSignedInStream.subscribe( (isSignedIn) => {
-      if(this.isLoading){
-        this.isLoading = isSignedIn;
-      }
-    });
-  }
+  constructor(public authService: AuthService) {}
 
 }
