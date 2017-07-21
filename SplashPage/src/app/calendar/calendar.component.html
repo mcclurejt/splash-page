@@ -1,59 +1,22 @@
-<!-- <div class='container'>
-  <md-card>
-    <md-grid-list cols='7' rowHeight='200px'>
-      <md-grid-tile *ngFor='let eventList of eventMap["allDay"]; let idx = index' colspan='1' rowspan='1'>
-        <md-chip-list class='mat-chip-list-stacked'>
-          <div>
-            <md-chip *ngFor='let event of eventList' color='accent'>
-              {{event && event.summary}}
-            </md-chip>
+<div>
+  <md-card style='padding: 0px;border-radius: 5px;'>
+    <md-toolbar  color='accent' style='border-radius: 5px;'>
+      <span md-subheading>Calendar</span>
+    </md-toolbar>
+    <md-card-content>
+      <md-list style='background-color:#f5f5f5;'>
+        <div *ngFor="let eventArray of (eventStream | event:'agenda' | async)">
+          <h3 md-subheader style='font-size:18px'>{{eventArray[0].startDate | date:'EEE MMM d'}}</h3>
+          <div *ngFor="let event of eventArray">
+            <md-list-item md-line [style.background-color]='event.calendarBackgroundColor' style='border-radius: 5px;'>
+              <span fxFlex='10%' fxLayoutAlign='center center' style='color:#f5f5f5;'>{{event.allDayEvent ? 'All Day' : event.startTime }}</span>
+              <span fxFlex='15%'></span>
+              <span fxFlex fxLayoutAlign='start center' style='color:#f5f5f5;'>{{event.summary | truncate : 30}}</span>
+            </md-list-item>
+            <md-divider></md-divider>
           </div>
-        </md-chip-list>
-      </md-grid-tile>
-    </md-grid-list>
-    
-    <md-grid-list cols='7' rowHeight='100px'>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'><div></div></md-grid-tile>
-    </md-grid-list>
-
-    <md-grid-list cols='7' rowHeight='100px'>
-      
-    </md-grid-list>
-  </md-card>
-</div> -->
-
-<div class='container'>
-  <md-card>
-    <md-grid-list cols='3' rowHeight='100px'>
-      <md-grid-tile colspan='1' rowspan='1'>
-        Date
-      </md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'>
-        Time
-      </md-grid-tile>
-      <md-grid-tile colspan='1' rowspan='1'>
-        Summary
-      </md-grid-tile>
-    </md-grid-list>
-    <hr>
-    <md-grid-list cols='3' rowHeight='100px'>
-      <div  *ngFor="let event of (googleCalendarService.allEventStream | async)">
-        <md-grid-tile colspan='1' rowspan='1'>
-          {{event.startDate | date:'MMMM d'}}
-        </md-grid-tile>
-        <md-grid-tile colspan='1' rowspan='1'>
-          {{event.allDayEvent ? 'All Day' : event.startTime }}
-        </md-grid-tile>
-        <md-grid-tile colspan='1' rowspan='1'>
-          {{event.summary}}
-        </md-grid-tile>
-      </div>
-    </md-grid-list>
+        </div>
+      </md-list>
+    </md-card-content>
   </md-card>
 </div>

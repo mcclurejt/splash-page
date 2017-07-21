@@ -49,6 +49,9 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
+import { EventPipe } from './pipes/event.pipe';
+import { InlineEditComponent } from './inline-edit/inline-edit.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 
 
@@ -89,6 +92,9 @@ export const MaterialModules = [
     MailComponent,
     EmailObjectComponent,
     NavbarComponent,
+    EventPipe,
+    InlineEditComponent,
+    TruncatePipe,
   ],
   imports: [
     BrowserModule,

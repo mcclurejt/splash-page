@@ -123,17 +123,17 @@ export class GoogleCalendarService implements OnDestroy {
             calEvent.calendarBackgroundColor = backgroundColor;
             if (event.start.date != null) {
               calEvent.startDate = event.start.date;
-              calEvent.startTime = '00:00:00';
+              calEvent.startTime = '00:00';
               calEvent.endDate = event.end.date;
-              calEvent.endTime = '00:00:00';
+              calEvent.endTime = '00:00';
               calEvent.allDayEvent = true;
             } else {
               let startDateTime = event.start.dateTime.split('T');
               let endDateTime = event.end.dateTime.split('T');
               calEvent.startDate = startDateTime[0];
-              calEvent.startTime = startDateTime[1];
+              calEvent.startTime = startDateTime[1].split('-')[0].substr(0,5);
               calEvent.endDate = endDateTime[0];
-              calEvent.endTime = endDateTime[1];
+              calEvent.endTime = endDateTime[1].split('-')[0].substr(0,5);
               calEvent.allDayEvent = false;
             }
             eventList.push(calEvent);

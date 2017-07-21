@@ -52,7 +52,7 @@ export class WeatherService {
       temp: String(body.currently.temperature).split('.')[0],
       icon: 'wi wi-forecast-io-' + body.currently.icon,
     }
-    console.log('Weather Icon',weather.icon);
+    console.log('Weather Response',body);
     return weather;
   }
 

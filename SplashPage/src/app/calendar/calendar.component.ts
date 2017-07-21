@@ -4,7 +4,7 @@ import { CalendarEvent } from './../models/calendar-event';
 import { GapiService } from './../google/gapi.service';
 import { Subscription } from 'rxjs/Rx';
 import { AuthService } from './../services/auth.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 
@@ -14,65 +14,24 @@ import 'rxjs/add/operator/map';
   styleUrls: ['./calendar.component.scss']
 })
 
-export class CalendarComponent implements OnInit, OnDestroy {
+export class CalendarComponent{
 
   eventStream: Observable<CalendarEvent[]>;
   allDayEventStream: Observable<CalendarEvent[]>;
   eventMap: Map<string, CalendarEvent[]> = new Map< string, CalendarEvent[]>();
+  tempDate: string = null;
 
   constructor(private gapiService: GapiService, public googleCalendarService: GoogleCalendarService) {
     this.assignEventStream();
-  }
-
-  ngOnInit(): void {
-
   }
 
   assignEventStream() {
     this.eventStream = this.googleCalendarService.allEventStream;
   }
 
-  filterAllDayEvents(events: CalendarEvent[]) {
-    let allDayEvents = [];
-    for (let event of events) {
-      if (event.allDayEvent) {
-        allDayEvents.push(event);
-      }
-    }
-    let eventsByDay = this.getEventsByDay(allDayEvents);
-    console.log('Events By Day', eventsByDay);
-    return eventsByDay;
-  }
-
-  getEventsByDay(events: CalendarEvent[]){
-    let eventsByDay = [ [], [], [], [], [], [], [] ];
-    let refDate = this.getFirstDayOfWeek();
-    let oneDay = 24*60*60*1000;
-    for(let event of events){
-      let dateArray = event.startDate.split('-');
-      let eventDate = new Date(event.startDate);
-      let idx = Math.round(Math.abs((eventDate.getTime() - refDate.getTime())/oneDay));
-      if(idx < 7){
-        eventsByDay[idx].push(event);
-      }
-    }
-    return eventsByDay;
-  }
-
-
-  /**
-   * Returns the Date object representing the first day of the week
-   */
-  private getFirstDayOfWeek(): Date {
-    let d = new Date();
-    d = new Date(d.getFullYear(),d.getMonth(),d.getDate())
-    let day = d.getDay();
-    let diff = d.getDate() - day;
-    return new Date(d.setDate(diff));
-  }
-
-  ngOnDestroy(): void {
-
+  onClick(id: string){
+    console.log('Item with id:',id);
   }
 
 }
+

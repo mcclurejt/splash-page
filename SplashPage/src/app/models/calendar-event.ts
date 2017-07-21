@@ -11,6 +11,7 @@ export class CalendarEvent {
     calendarSummary: string;
     calendarForegroundColor: string;
     calendarBackgroundColor: string;
+    agendaViewBreak = false;
     constructor(obj? : any){
         this.id = obj && obj.id || '';
         this.summary = obj && obj.summary || '';
