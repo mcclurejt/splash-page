@@ -16,25 +16,20 @@ import 'rxjs/add/operator/map';
 
 export class CalendarComponent implements OnInit, OnDestroy {
 
-  allEventStream: Observable<CalendarEvent[]>;
+  eventStream: Observable<CalendarEvent[]>;
   allDayEventStream: Observable<CalendarEvent[]>;
   eventMap: Map<string, CalendarEvent[]> = new Map< string, CalendarEvent[]>();
 
-  constructor(private gapiService: GapiService, private googleCalendarService: GoogleCalendarService) {
-    this.assignEvents();
+  constructor(private gapiService: GapiService, public googleCalendarService: GoogleCalendarService) {
+    this.assignEventStream();
   }
 
   ngOnInit(): void {
 
   }
 
-  assignEvents() {
-    // this.googleCalendarService.allEventStream.subscribe((events: CalendarEvent[]) => {
-    //   // Assign filtered events to their respective lists
-    //   this.eventMap['all'] = events;
-    //   this.eventMap['allDay'] = this.filterAllDayEvents(events);
-
-    // });
+  assignEventStream() {
+    this.eventStream = this.googleCalendarService.allEventStream;
   }
 
   filterAllDayEvents(events: CalendarEvent[]) {

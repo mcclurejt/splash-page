@@ -49,7 +49,6 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 
 
@@ -102,7 +101,6 @@ export const MaterialModules = [
     MaterialModules,
     FlexLayoutModule,
     HttpModule,
-    NgxDatatableModule,
   ],
   providers: [
     WeatherService,

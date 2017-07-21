@@ -11,7 +11,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 export class GoogleCalendarService implements OnDestroy {
 
   private gapiSignedInSubscription: Subscription
-  allEventStream: Observable<CalendarEvent[]>;
+  public allEventStream: Observable<CalendarEvent[]>;
 
 
   constructor(private gapiService: GapiService) {

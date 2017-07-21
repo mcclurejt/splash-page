@@ -1,4 +1,4 @@
-md-card {
+#signIn {
     padding: 30px 20px;
     margin: 20px 40px;
     #google-button{
@@ -12,4 +12,12 @@ md-card {
             background-image: url('/assets/images/google_signin_dark_pressed.png');
         }
     }
+}
+
+app-calendar{
+    padding: 10px;
+}
+
+app-mail{
+    padding: 10px;
 }

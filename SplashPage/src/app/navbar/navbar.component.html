@@ -1,5 +1,6 @@
 <md-toolbar color='primary'>
-  <div fxFlex fxLayoutAlign='start center' class='navigationButtons'>
+  <!-- Expand buttons on desktop -->
+  <div fxShow='false' fxShow.gt-xs fxFlex fxLayoutAlign='start center' class='navigationButtons'>
     <button md-button [routerLink]="['/']">
       <md-icon>home</md-icon>
     </button>
@@ -13,11 +14,31 @@
       <md-icon>settings</md-icon>
     </button>
   </div>
+  <!-- Condense buttons on mobile -->
+  <div fxShow='false' fxShow.xs fxFlex fxLayoutAlign='start center' class='navigationButtons'>
+    <button md-icon-button [mdMenuTriggerFor]='buttonMenu'>
+      <md-icon>menu</md-icon>
+    </button>
+  </div>
+  <md-menu [overlapTrigger]='false' #buttonMenu='mdMenu'>
+    <button md-menu-item [routerLink]="['/']">
+      <md-icon>home</md-icon>
+    </button>
+    <button md-menu-item [routerLink]="['/']">
+      <md-icon>perm_contact_cal</md-icon>
+    </button>
+    <button md-menu-item [routerLink]="['/']">
+      <md-icon>email</md-icon>
+    </button>
+    <button md-menu-item [routerLink]="['/']">
+      <md-icon>settings</md-icon>
+    </button>
+  </md-menu>
   <div fxFlex fxLayoutAlign='center center' class='timeContainer'>
     <app-time></app-time>
   </div>
-  <div fxFlex fxLayoutAlign='end center' class='userInfo' fxLayout='row'>
-    <h1>{{authService.displayNameStream | async}}</h1>
+  <div fxFlex fxLayoutAlign='end center' class='userInfo'>
+    <span id='displayName' fxHide.xs>{{authService.displayNameStream | async}}</span>
     <button md-icon-button [mdMenuTriggerFor]='signOutMenu'>
       <md-icon>account_circle</md-icon>
     </button>
