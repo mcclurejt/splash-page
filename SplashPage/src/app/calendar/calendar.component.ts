@@ -17,20 +17,32 @@ import 'rxjs/add/operator/map';
 export class CalendarComponent{
 
   eventStream: Observable<CalendarEvent[]>;
-  allDayEventStream: Observable<CalendarEvent[]>;
-  eventMap: Map<string, CalendarEvent[]> = new Map< string, CalendarEvent[]>();
-  tempDate: string = null;
+  todaysDate: string;
 
   constructor(private gapiService: GapiService, public googleCalendarService: GoogleCalendarService) {
     this.assignEventStream();
+    this.setTodaysDate();
+  }
+
+  setTodaysDate(){
+    let d = new Date();
+    let year = String(d.getFullYear());
+    let month = String(d.getMonth() + 1);
+    month = month.length > 1 ? month : '0' + month;
+    let date = String(d.getDate())
+    date = date.length > 1 ? date : '0' + date;
+    this.todaysDate =  year + '-' + month + '-' + date;
+    console.log(this.todaysDate);
   }
 
   assignEventStream() {
     this.eventStream = this.googleCalendarService.allEventStream;
   }
 
-  onClick(id: string){
-    console.log('Item with id:',id);
+  handleAddEvent(date: string){
+    console.log('handleAddEvent()');
+    let event = new CalendarEvent();
+    this.googleCalendarService.addEvent(event);
   }
 
 }

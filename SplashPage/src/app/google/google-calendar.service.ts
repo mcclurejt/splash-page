@@ -26,6 +26,10 @@ export class GoogleCalendarService implements OnDestroy {
     this.allEventStream = this.getEvents().share();
   }
 
+  addEvent(event: CalendarEvent){
+    console.log('addEvent()');
+  }
+
   /**
    * Returns an observable of CalendarEvents
    */
