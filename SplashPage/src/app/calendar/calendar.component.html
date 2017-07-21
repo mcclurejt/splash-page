@@ -41,7 +41,7 @@
         Summary
       </md-grid-tile>
     </md-grid-list>
-
+    <hr>
     <md-grid-list cols='3' rowHeight='100px'>
       <div  *ngFor="let event of (googleCalendarService.allEventStream | async)">
         <md-grid-tile colspan='1' rowspan='1'>
