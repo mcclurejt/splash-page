@@ -64,6 +64,7 @@ export class AuthService {
   signOut() {
     this.gapiService.signOut()
     this.afAuth.auth.signOut()
+    this.isLoadingSubject.next(false);
   }
 
 }

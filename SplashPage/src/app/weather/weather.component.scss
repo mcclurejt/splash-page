@@ -1,20 +1,30 @@
 .container {
   padding: 10px;
   md-card {
+    // background-color: rgba(0, 0, 0, 0);
     #weather {
-      h3 {
+      #icon{
+        padding: 10px;
+        font-size: 96px;
+        font-weight: bold;
+      }
+      #temp {
         padding: 0px;
         margin: 0px;
-        // font-weight: normal;
+        font-size: 96px;
+        font-weight: bold;
       }
-      padding: 0px;
-      font-size: 48px;
-      background-color: rgba(255, 70, 255, 1.0);
+      #units {
+        padding: 0px;
+        margin: 0px;
+        font-size: 96px;
+        font-weight: bold;
+      }
     }
     #location {
       padding: 0px;
-      margin: 0px;
-      background-color: rgba(20, 100, 255, 1.0)
+      margin: 0px; // background-color: rgba(20, 100, 255, 1.0)
+      text-align: right;
     }
   }
 }
