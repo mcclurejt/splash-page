@@ -1,3 +1,4 @@
+import { CalendarDialogComponent } from './calendar/calendar-dialog/calendar-dialog.component';
 import { GmailService } from './google/gmail.service';
 import { GoogleCalendarService } from './google/google-calendar.service';
 import { GapiService } from './google/gapi.service';
@@ -18,7 +19,7 @@ import { HomeComponent } from './+home/home.component';
 import { TimeComponent } from './time/time.component';
 import { WeatherComponent } from './weather/weather.component';
 import { HttpModule } from '@angular/http';
-import { CalendarComponent } from './calendar/calendar.component';
+import { CalendarComponent} from './calendar/calendar.component';
 import { MailComponent } from './mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -31,6 +32,7 @@ import {
   MdCheckboxModule,
   MdChipsModule,
   MdDialogModule,
+  MD_DIALOG_DATA,
   MdGridListModule,
   MdIconModule,
   MdInputModule,
@@ -96,6 +98,7 @@ export const MaterialModules = [
     EventPipe,
     InlineEditComponent,
     TruncatePipe,
+    CalendarDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -118,6 +121,9 @@ export const MaterialModules = [
     GoogleCalendarService,
     GmailService,
     ],
+  entryComponents: [
+    CalendarDialogComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

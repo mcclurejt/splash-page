@@ -1,13 +1,28 @@
-// .container{
-//   md-card{
-//     margin: 0px;
-//     md-card-title{
-//     }
-//     hr{
-//       padding: 0px;
-//     }
-//     md-card-content{
-//       padding: 0px;
-//     }
-//   }
-// }
+.calendarContainer{
+    height: inherit;
+    width: inherit;
+    md-card{
+        padding: 0px;
+        border-radius: 5px;
+        md-toolbar{
+            padding: 0px;
+            border-radius: 5px 5px 0px 0px;
+        }
+        #eventContainer{
+            height: 425px;
+            overflow: scroll;
+            md-list{
+                padding: 0px;
+                background-color: #f5f5f5;
+                .dateRow{
+                    span{
+                        font-weight: bold;
+                    }
+                }
+                .eventRow{
+
+                }
+            }
+        }
+    }
+}

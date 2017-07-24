@@ -1,11 +1,29 @@
-<div *ngIf="(authService.isSignedInStream | async);else signInTemplate">
+<!-- <div *ngIf="(authService.isSignedInStream | async);else signInTemplate">
   <app-navbar></app-navbar>
   <app-weather></app-weather>
   <div class='container' fxLayout='row' fxLayoutAlign='center start'>
     <app-calendar fxFlex='50%' ></app-calendar>
     <app-mail fxFlex='50%' ></app-mail>
   </div>
+</div> -->
+
+<div class='navbarContainer' *ngIf="(authService.isSignedInStream | async)">
+  <app-navbar></app-navbar>
 </div>
+<div class='contentContainer' *ngIf="(authService.isSignedInStream | async);else signInTemplate">
+  <div class='weatherContainer'>
+    <app-weather></app-weather>
+  </div>
+  <div fxFlex fxLayout='row' fxLayoutAlign='space-around start' >
+    <div fxFlex class='calendarContainer'>
+      <app-calendar></app-calendar>
+    </div>
+    <div fxFlex class='mailContainer'>
+      <app-mail></app-mail>
+    </div>
+  </div>
+</div>
+
 <ng-template #signInTemplate>
   <div fxLayoutAlign='center center' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
     <md-card id='signIn' fxLayout='column' fxLayoutAlign='none center'>
