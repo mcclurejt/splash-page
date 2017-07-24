@@ -4,7 +4,6 @@ import { GoogleCalendarService } from './google/google-calendar.service';
 import { GapiService } from './google/gapi.service';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
-import { FireService } from './services/fire.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -52,7 +51,6 @@ import {
   MdTooltipModule
 } from '@angular/material';
 import { EventPipe } from './pipes/event.pipe';
-import { InlineEditComponent } from './inline-edit/inline-edit.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
@@ -96,7 +94,6 @@ export const MaterialModules = [
     EmailObjectComponent,
     NavbarComponent,
     EventPipe,
-    InlineEditComponent,
     TruncatePipe,
     CalendarDialogComponent,
   ],
@@ -116,13 +113,12 @@ export const MaterialModules = [
   providers: [
     WeatherService,
     AuthService,
-    FireService,
     GapiService,
     GoogleCalendarService,
     GmailService,
     ],
   entryComponents: [
-    CalendarDialogComponent
+    CalendarDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
