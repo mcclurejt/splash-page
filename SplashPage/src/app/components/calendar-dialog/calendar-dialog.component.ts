@@ -1,5 +1,5 @@
 import { CalendarService } from './../../services/calendar.service';
-import { CalendarComponent } from './../calendar.component';
+import { CalendarComponent } from '../calendar/calendar.component';
 import { CalendarEvent } from './../../models/calendar-event';
 import { Component, Inject } from '@angular/core';
 import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material'

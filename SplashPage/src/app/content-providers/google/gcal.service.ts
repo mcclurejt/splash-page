@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { CalendarEvent } from './../models/calendar-event';
+import { CalendarEvent } from '../../models/calendar-event';
 import { Subscription } from 'rxjs/Rx';
 import { GapiService } from './gapi.service';
 import { Observable } from 'rxjs/Observable';
@@ -9,7 +9,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
 
 @Injectable()
-export class GoogleCalendarService implements OnDestroy {
+export class GcalService implements OnDestroy {
 
   private gapiSignedInSubscription: Subscription
   public eventStream: Observable<CalendarEvent[]>;

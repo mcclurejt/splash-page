@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Injectable } from '@angular/core';
-import { GapiService } from "app/google/gapi.service";
-import { GoogleCalendarService } from "app/google/google-calendar.service";
+import { GapiService } from "app/content-providers/google/gapi.service";
+import { GcalService } from "app/content-providers/google/gcal.service";
 import { CalendarEvent } from "app/models/calendar-event";
-import { CalendarDialogComponent } from "app/calendar/calendar-dialog/calendar-dialog.component";
+import { CalendarDialogComponent } from "app/components/calendar-dialog/calendar-dialog.component";
 
 @Injectable()
 export class CalendarService {
@@ -12,7 +12,7 @@ export class CalendarService {
   public eventStream: Observable<CalendarEvent[]>;
   public todaysDate: string;
 
-  constructor(private gapiService: GapiService, public googleCalendarService: GoogleCalendarService, public dialog: MdDialog) {
+  constructor(private gapiService: GapiService, public gcalService: GcalService, public dialog: MdDialog) {
     this._buildEventStream();
     this._setTodaysDate();
   }
@@ -37,7 +37,7 @@ export class CalendarService {
   }
 
   private _buildEventStream() {
-    this.eventStream = this.googleCalendarService.eventStream;
+    this.eventStream = this.gcalService.eventStream;
   }
 
   private _setTodaysDate() {

@@ -1,11 +1,12 @@
-import { CalendarService } from './../services/calendar.service';
-import { CalendarDialogComponent } from './calendar-dialog/calendar-dialog.component';
-import { GoogleCalendarService } from './../google/google-calendar.service';
+
+import { CalendarService } from '../../services/calendar.service';
+import { CalendarDialogComponent } from '../calendar-dialog/calendar-dialog.component';
+import { GcalService} from '../../content-providers/google/gcal.service';
 import { Observable } from 'rxjs/Observable';
-import { CalendarEvent } from './../models/calendar-event';
-import { GapiService } from './../google/gapi.service';
+import { CalendarEvent } from '../../models/calendar-event';
+import { GapiService } from '../../content-providers/google/gapi.service';
 import { Subscription } from 'rxjs/Rx';
-import { AuthService } from './../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Component } from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import 'rxjs/add/operator/mergeMap';

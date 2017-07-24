@@ -1,4 +1,4 @@
-import { GapiService } from './../google/gapi.service';
+import { GapiService } from '../content-providers/google/gapi.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';

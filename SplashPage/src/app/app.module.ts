@@ -1,8 +1,8 @@
+import { CalendarDialogComponent } from './components/calendar-dialog/calendar-dialog.component';
 import { CalendarService } from './services/calendar.service';
-import { CalendarDialogComponent } from './calendar/calendar-dialog/calendar-dialog.component';
-import { GmailService } from './google/gmail.service';
-import { GoogleCalendarService } from './google/google-calendar.service';
-import { GapiService } from './google/gapi.service';
+import { GmailService } from './content-providers/google/gmail.service';
+import { GcalService } from './content-providers/google/gcal.service';
+import { GapiService } from './content-providers/google/gapi.service';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,13 +16,13 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './+home/home.component';
-import { TimeComponent } from './time/time.component';
-import { WeatherComponent } from './weather/weather.component';
+import { TimeComponent } from './components/time/time.component';
+import { WeatherComponent } from './components/weather/weather.component';
 import { HttpModule } from '@angular/http';
-import { CalendarComponent} from './calendar/calendar.component';
-import { MailComponent } from './mail/mail.component';
+import { CalendarComponent} from './components/calendar/calendar.component';
+import { MailComponent } from './components/mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { DatePipe } from '@angular/common'
 import {
   MdAutocompleteModule,
@@ -115,7 +115,7 @@ export const MaterialModules = [
     WeatherService,
     AuthService,
     GapiService,
-    GoogleCalendarService,
+    GcalService,
     GmailService,
     CalendarService,
     ],
