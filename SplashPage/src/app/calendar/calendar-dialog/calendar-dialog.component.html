@@ -1,1 +1,16 @@
-{{mode}}
+<h1 fxFlex fxLayoutAlign='center center' md-dialog-title>Edit Event</h1>
+
+<md-dialog-content>
+  <form fxFlex fxLayout='column' (ngSubmit)='closeDialog()'>
+    <md-input-container fxFlex dividerColor='warn'>
+      <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='event.summary' type='text' placeholder='Summary' name='summary'>
+    </md-input-container>
+    <md-input-container fxFlex dividerColor='warn'>
+      <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='event.startDate' type='text' placeholder='Start Date' name='startDate'>
+    </md-input-container>
+    <md-input-container fxFlex dividerColor='warn'>
+      <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='event.endDate' type='text' placeholder='End Date' name='endDate'>
+    </md-input-container>
+    <button md-button type='submit'>Submit</button>
+  </form>
+</md-dialog-content>

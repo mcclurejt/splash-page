@@ -1,3 +1,4 @@
+import { CalendarService } from './services/calendar.service';
 import { CalendarDialogComponent } from './calendar/calendar-dialog/calendar-dialog.component';
 import { GmailService } from './google/gmail.service';
 import { GoogleCalendarService } from './google/google-calendar.service';
@@ -53,8 +54,7 @@ import {
 import { EventPipe } from './pipes/event.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
-
+import { FormsModule } from "@angular/forms";
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -109,6 +109,7 @@ export const MaterialModules = [
     FlexLayoutModule,
     HttpModule,
     InfiniteScrollModule,
+    FormsModule,
   ],
   providers: [
     WeatherService,
@@ -116,6 +117,7 @@ export const MaterialModules = [
     GapiService,
     GoogleCalendarService,
     GmailService,
+    CalendarService,
     ],
   entryComponents: [
     CalendarDialogComponent,
