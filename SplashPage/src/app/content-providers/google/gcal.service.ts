@@ -54,7 +54,6 @@ export class GcalService implements OnDestroy {
       body: gcalEvent,
     }).then(
       (onFulfilled) => {
-        console.log('Event Added OnSuccess', onFulfilled);
         this.updateEventStream();
       },
       (onRejected) => {
@@ -83,7 +82,6 @@ export class GcalService implements OnDestroy {
       method: 'DELETE',
     }).then(
       (onFulfilled) => {
-        console.log('Event Deleted OnSuccess', onFulfilled);
         this.updateEventStream();
       },
       (onRejected) => {
@@ -108,7 +106,6 @@ export class GcalService implements OnDestroy {
     this.eventSubject.next([]);
     this.requestEvents().subscribe((events: CalendarEvent[]) => {
       if(events != this.eventSubject.getValue()){
-        console.log('Stream Updated', events);
         this.eventSubject.next(events);
       }
     });
@@ -146,7 +143,6 @@ export class GcalService implements OnDestroy {
       body: gcalEvent,
     }).then(
       (onFulfilled) => {
-        console.log('Event Updated OnSuccess', onFulfilled);
         this.updateEventStream();
       },
       (onRejected) => {

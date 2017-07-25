@@ -18,6 +18,26 @@ export class CalendarService{
     this._setTodaysDate();
   }
 
+  addEvent(event: CalendarEvent): void {
+    this.gcalService.addEvent(event);
+  }
+
+  editEvent(event: CalendarEvent): void {
+    this.gcalService.editEvent(event);
+  }
+
+  deleteEvent(event: CalendarEvent): void {
+    this.gcalService.deleteEvent(event);
+  }
+
+  onScrollDown() {
+    console.log('Scrolled Down');
+  }
+
+  updateCalendars(){
+    this.gcalService.updateEventStream();
+  }
+
   openDialog(mode: string, event: CalendarEvent) {
     let height;
     let width;
@@ -38,7 +58,6 @@ export class CalendarService{
         break;
       }
     }
-
     let dialogRef = this.dialog.open(CalendarDialogComponent, {
       data: {
         mode: mode,
@@ -65,31 +84,6 @@ export class CalendarService{
         console.log('Unrecognized Mode', mode);
       }
     });
-  }
-
-  addEvent(event: CalendarEvent) {
-    this.gcalService.addEvent(event);
-  }
-
-  editEvent(event: CalendarEvent) {
-    this.gcalService.editEvent(event);
-
-  }
-
-  deleteEvent(event: CalendarEvent) {
-    this.gcalService.deleteEvent(event);
-  }
-
-  onScrollDown() {
-    console.log('Scrolled Down');
-  }
-
-  getCalendarInfo() {
-
-  }
-
-  updateCalendars(){
-    this.gcalService.updateEventStream();
   }
 
   private _buildEventStream() {
