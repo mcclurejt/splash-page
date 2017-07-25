@@ -1,3 +1,4 @@
+import { Calendar } from './../../models/calendar';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { CalendarEvent } from '../../models/calendar-event';
@@ -7,37 +8,148 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
+import { GoogleCalendarEvent } from "app/models/google-calendar-event";
 
 @Injectable()
 export class GcalService implements OnDestroy {
 
   private gapiSignedInSubscription: Subscription
-  public eventStream: Observable<CalendarEvent[]>;
+  private eventMap = new Map<string, GoogleCalendarEvent>();
+  private eventSubject : BehaviorSubject<CalendarEvent[]>;
+  private calendars: Array<Calendar> = [];
   private nextSyncToken: string = '';
-  private calendarIds: Array<string> = [];
-
-
+  public eventStream: Observable<CalendarEvent[]>;
+  
   constructor(private gapiService: GapiService) {
-    // Build the streams once gapi is done loading
-    this.gapiSignedInSubscription = this.gapiService.getIsSignedInStream()
-      .subscribe((isSignedIn: boolean) => {
-        this.buildStream();
-      });
+    // Initialize the stream of events
+    this.eventSubject = new BehaviorSubject([]);
+    this.eventStream = this.eventSubject
+      .asObservable()
+      .filter( (events: CalendarEvent[]) => {
+        return events != null;
+      })
+      .distinctUntilChanged()
+      .share();
+    this.updateEventStream();
   }
 
-  buildStream() {
-    this.eventStream = this.getEvents().share();
+  getCalendars(){
+    return this.calendars;
+  }
+
+  updateEventStream() {
+    this.requestEvents().subscribe((events: CalendarEvent[]) => {
+      this.eventSubject.next(events);
+    });
   }
 
   addEvent(event: CalendarEvent) {
-    console.log('addEvent()');
+    let gcalEvent = new GoogleCalendarEvent();
+    // handle dates
+    if(event.allDayEvent){
+      gcalEvent.start = {
+        date: event.startDate,
+      }
+      gcalEvent.end = {
+        date: event.endDate,
+      }
+    } else {
+      gcalEvent.start = {
+        dateTime: event.startDate + 'T' + event.startTime + ':00',
+        timeZone: event.timeZone,
+      }
+      gcalEvent.end = {
+        dateTime: event.endDate + 'T' + event.endTime + ':00',
+        timeZone: event.timeZone,
+      }
+    }
+    gcalEvent.summary = event.summary;
+    // send request to add event
+    gapi.client.request({
+      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events',
+      method: 'POST',
+      body: gcalEvent,
+    }).then(
+      (onFulfilled) => {
+        console.log('Event Added OnSuccess', onFulfilled);
+        this.updateEventStream();
+      },
+      (onRejected) => {
+        console.log('Event Added OnFailure',onRejected);
+      },
+    (context) => {
+      console.log('Event Added Context',context);
+    });
+    
+  }
+
+  editEvent(event: CalendarEvent) {
+    this.updateGoogleCalendarEvent(event);
+  }
+
+  deleteEvent(event: CalendarEvent) {
+    gapi.client.request({
+      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
+      method: 'DELETE',
+    }).then(
+      (onFulfilled) => {
+        console.log('Event Deleted OnSuccess', onFulfilled);
+        this.updateEventStream();
+      },
+      (onRejected) => {
+        console.log('Event Deleted OnFailure',onRejected);
+      },
+    (context) => {
+      console.log('Event Deleted Context',context);
+    });
+  }
+
+  updateGoogleCalendarEvent(event: CalendarEvent) {
+    let gcalEvent = this.eventMap.get(event.id);
+    console.log('GoogleCalendarEvent');
+    console.log('CalendarEvent', event);
+    // Set start and end based on whether it's an all day event
+    if (event.allDayEvent) {
+      gcalEvent.start = {
+        date: event.startDate,
+      }
+      gcalEvent.end = {
+        date: event.endDate,
+      }
+    } else {
+      gcalEvent.start = {
+        dateTime: event.startDate + 'T' + event.startTime + ':00',
+        timeZone: event.timeZone,
+      }
+      gcalEvent.end = {
+        dateTime: event.endDate + 'T' + event.endTime + ':00',
+        timeZone: event.timeZone,
+      }
+    }
+    // Update event summary
+    gcalEvent.summary = event.summary;
+    gapi.client.request({
+      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
+      method: 'PUT',
+      body: gcalEvent,
+    }).then(
+      (onFulfilled) => {
+        console.log('Event Updated OnSuccess', onFulfilled);
+        this.updateEventStream();
+      },
+      (onRejected) => {
+        console.log('Event Updated OnFailure',onRejected);
+      },
+    (context) => {
+      console.log('Event Updated Context',context);
+    });
   }
 
   /**
    * Returns an observable of CalendarEvents
    */
-  getEvents(): Observable<any> {
-    return this.getCalendars()
+  requestEvents(): Observable<any> {
+    return this.requestCalendars()
       .map((response) => { return response.result })
       .flatMap((calList) => this.getEventsFromCalendars(calList))
       .map((calArray) => this.mapEvents(calArray))
@@ -48,7 +160,7 @@ export class GcalService implements OnDestroy {
    * Same as CalendarList.list() from Google Calendar Api
    * https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list
    */
-  getCalendars(): Observable<any> {
+  requestCalendars(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
@@ -69,6 +181,7 @@ export class GcalService implements OnDestroy {
    * @param cals The calendarList obtained from getCalendars()
    */
   getEventsFromCalendars(cals): Observable<any> {
+    console.log('Cals', cals);
     this.nextSyncToken = cals.nextSyncToken;
     cals = cals.items;
     let gapi = window['gapi'];
@@ -81,15 +194,22 @@ export class GcalService implements OnDestroy {
     }
     // Iterate through all the calendars to get dates for each
     for (let i = 0; i < cals.length; i++) {
-      let calId = cals[i].id;
-      this.calendarIds.push(calId);
-      let url = 'https://www.googleapis.com/calendar/v3/calendars/' + calId + '/events'
+      // Add the calendar to the list
+      let calendar = new Calendar();
+      calendar.id = cals[i].id;
+      calendar.provider = 'google';
+      calendar.summary = cals[i].summary;
+      calendar.foregroundColor = cals[i].foregroundColor;
+      calendar.backgroundColor = cals[i].backgroundColor;
+      this.calendars.push(calendar);
+      // Add the request to the batch
+      let url = 'https://www.googleapis.com/calendar/v3/calendars/' + cals[i].id + '/events'
       let req = gapi.client.request({
         path: url,
         method: 'GET',
         params: params,
       });
-      batch.add(req, { 'id': calId });
+      batch.add(req, { 'id': cals[i].id });
     }
     // Execute the request and return the events along with calendar data
     return Observable.fromPromise(new Promise((resolve) => {
@@ -122,10 +242,14 @@ export class GcalService implements OnDestroy {
         if (eventCal.result != 'Not Found' && eventCal.result.items != null) {
           for (let event of eventCal.result.items) {
             let calEvent = new CalendarEvent();
+            // Add the event to the map
+            let gCalEvent = Object.setPrototypeOf(event, GoogleCalendarEvent.prototype);
+            this.eventMap.set(event.id, gCalEvent);
             calEvent.calendarId = id;
             calEvent.id = event.id;
             calEvent.calendarSummary = summary;
             calEvent.summary = event.summary;
+            calEvent.timeZone = timeZone;
             calEvent.calendarForegroundColor = foregroundColor;
             calEvent.calendarBackgroundColor = backgroundColor;
             if (event.start.date != null) {

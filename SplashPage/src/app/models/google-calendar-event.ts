@@ -23,14 +23,14 @@ export class GoogleCalendarEvent {
     self: boolean
   }
   start: {
-    date: string,
-    dateTime: string,
-    timeZone: string,
+    date?: string,
+    dateTime?: string,
+    timeZone?: string,
   }
   end: {
-    date: string,
-    dateTime: string
-    timeZone: string
+    date?: string,
+    dateTime?: string
+    timeZone?: string
   }
   endTimeUnspecified: boolean
   recurrence: [
@@ -38,9 +38,9 @@ export class GoogleCalendarEvent {
   ]
   recurringEventId: string
   originalStartTime: {
-    date: string,
-    dateTime: string,
-    timeZone: string
+    date?: string,
+    dateTime?: string,
+    timeZone?: string
   }
   transparency: string
   visibility: string
@@ -110,5 +110,7 @@ export class GoogleCalendarEvent {
       fileId: string
     }
   ]
+
+  constructor(){}
 
 }

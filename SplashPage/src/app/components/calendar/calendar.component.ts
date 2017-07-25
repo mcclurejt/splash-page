@@ -20,7 +20,6 @@ import 'rxjs/add/operator/map';
 export class CalendarComponent {
   eventStream: Observable<CalendarEvent[]>;
   todaysDate: string;
-  isScrollLoading: boolean = false;
 
   constructor(public calendarService: CalendarService) {
     this.eventStream = calendarService.eventStream;
@@ -28,8 +27,7 @@ export class CalendarComponent {
   }
 
   onScrollDown() {
-    console.log('Scrolled Down');
-    this.isScrollLoading = true;
+    this.calendarService.onScrollDown();
   }
   
   openDialog(mode:string, event:CalendarEvent){
