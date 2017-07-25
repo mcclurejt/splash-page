@@ -1,12 +1,15 @@
 <div class='container' fxLayoutAlign='center center'>
-  <md-card class='.mat-elevation-z0'>
+  <md-card class='.mat-elevation-z0' *ngIf="!(weatherService.isLoadingSubject | async)">
     <div id='weather' fxLayoutAlign='center end'>
-      <i id='icon' [class]="(weatherService.weatherStream | async)?.icon"></i>
-      <h3 id='temp'>{{(weatherService.weatherStream | async)?.temp}}</h3>
+      <i id='icon' [class]="weather?.icon"></i>
+      <h3 id='temp'>{{weather?.temp}}</h3>
       <i id='units' class='wi wi-fahrenheit'></i>
     </div>
     <h3 id='location' fxLayoutAlign='center center'>
-      {{(weatherService.weatherStream | async)?.city}}, {{(weatherService.weatherStream | async)?.region}}
+      {{weather?.city}}, {{weather?.region}}
     </h3>
   </md-card>
+ <md-card class='.mat-elevation-z0' *ngIf="(weatherService.isLoadingSubject | async)">
+  <md-spinner></md-spinner>
+ </md-card>
 </div>

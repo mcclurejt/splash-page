@@ -7,7 +7,7 @@ import { CalendarDialogComponent } from "app/components/calendar-dialog/calendar
 import { Calendar } from "app/models/calendar";
 
 @Injectable()
-export class CalendarService {
+export class CalendarService{
 
   public eventStream: Observable<CalendarEvent[]>;
   public calendars: Calendar[];
@@ -88,8 +88,12 @@ export class CalendarService {
 
   }
 
+  updateCalendars(){
+    this.gcalService.updateEventStream();
+  }
+
   private _buildEventStream() {
-    this.eventStream = this.gcalService.eventStream;
+    this.eventStream = this.gcalService.getEventStream();
     this.calendars = this.gcalService.getCalendars();
   }
 

@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class AuthService {
 
-  public isLoadingSubject = new BehaviorSubject<boolean>(false);
+  public isLoadingSubject = new BehaviorSubject<boolean>(true);
   public isSignedInStream: Observable<boolean>;
   public displayNameStream: Observable<string>;
   public photoUrlStream: Observable<string>;
@@ -42,16 +42,19 @@ export class AuthService {
   signInWithGoogle() {
     this.isLoadingSubject.next(true);
     this.gapiService.signIn()
-      .then((user: gapi.auth2.GoogleUser) => {
+      .then(
+      (user: gapi.auth2.GoogleUser) => {
         let idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
         let access_token = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token;
         let timeInSeconds = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().expires_in;
         this.gapiService.startTokenTimer(access_token, timeInSeconds);
         let cred = firebase.auth.GoogleAuthProvider.credential(idToken, access_token);
-        this.afAuth.auth.signInWithCredential(cred).then((user) => {
-          this.isLoadingSubject.next(false);
-        });
-      }, (error) => {
+        this.afAuth.auth.signInWithCredential(cred).then(
+          (user) => {
+            this.isLoadingSubject.next(false);
+          });
+      },
+      (error) => {
         this.handleFailedLogin(error);
       });
   }
