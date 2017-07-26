@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GmailService } from "app/google/gmail.service";
 
 @Component({
   selector: 'app-mail',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private gmailService: GmailService) {
+    
+   }
 
   ngOnInit() {
+
   }
 
 }
