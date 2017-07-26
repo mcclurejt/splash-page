@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
-import { GapiService } from "app/google/gapi.service";
+import { GapiService } from "app/content-providers/google/gapi.service";
 import { Subscription } from "rxjs/Rx";
 
 @Injectable()

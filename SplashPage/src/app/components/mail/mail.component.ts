@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GmailService } from "app/google/gmail.service";
+import { GmailService } from "app/content-providers/google/gmail.service";
 
 @Component({
   selector: 'app-mail',
