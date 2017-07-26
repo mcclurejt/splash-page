@@ -15,7 +15,11 @@ export class CalendarEvent {
     constructor(obj? : any){
         this.id = obj && obj.id || '';
         this.summary = obj && obj.summary || '';
-        this.allDayEvent = obj && obj.allDayEvent || true;
+        if((obj != null) && (obj.allDayEvent != null)){
+            this.allDayEvent = obj.allDayEvent;
+        } else {
+            this.allDayEvent = true;
+        }
         this.startDate = obj && obj.startDate || '';
         this.startTime = obj && obj.startTime || '00:00';
         this.endDate = obj && obj.endDate  || '';
