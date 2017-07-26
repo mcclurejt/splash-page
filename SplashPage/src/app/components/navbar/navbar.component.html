@@ -1,6 +1,6 @@
-<md-toolbar color='primary'>
+<md-toolbar>
   <!-- Expand buttons on desktop -->
-  <div fxShow='false' fxShow.gt-xs fxFlex fxLayoutAlign='start center' class='navigationButtons'>
+  <div fxShow='false' fxShow.gt-xs fxFlex='40%' fxLayoutAlign='start center' class='navigationButtons'>
     <button md-button [routerLink]="['/']">
       <md-icon>home</md-icon>
     </button>
@@ -15,7 +15,7 @@
     </button>
   </div>
   <!-- Condense buttons on mobile -->
-  <div fxShow='false' fxShow.xs fxFlex fxLayoutAlign='start center' class='navigationButtons'>
+  <div fxShow='false' fxShow.xs fxFlex='40%' fxLayoutAlign='start center' class='navigationButtons'>
     <button md-icon-button [mdMenuTriggerFor]='buttonMenu'>
       <md-icon>menu</md-icon>
     </button>
@@ -34,10 +34,10 @@
       <md-icon>settings</md-icon>
     </button>
   </md-menu>
-  <div fxFlex fxLayoutAlign='center center' class='timeContainer'>
+  <div fxFlex='20%' fxLayoutAlign='center end' class='timeContainer'>
     <app-time></app-time>
   </div>
-  <div fxFlex fxLayoutAlign='end center' class='userInfo'>
+  <div fxFlex='40%' fxLayoutAlign='end center' class='userInfo'>
     <span id='displayName' fxHide.xs>{{authService.displayNameStream | async}}</span>
     <button md-icon-button [mdMenuTriggerFor]='signOutMenu'>
       <md-icon>account_circle</md-icon>
@@ -49,5 +49,4 @@
       </button>
     </md-menu>
   </div>
-
 </md-toolbar>

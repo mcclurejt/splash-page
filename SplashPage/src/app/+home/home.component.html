@@ -1,12 +1,3 @@
-<!-- <div *ngIf="(authService.isSignedInStream | async);else signInTemplate">
-  <app-navbar></app-navbar>
-  <app-weather></app-weather>
-  <div class='container' fxLayout='row' fxLayoutAlign='center start'>
-    <app-calendar fxFlex='50%' ></app-calendar>
-    <app-mail fxFlex='50%' ></app-mail>
-  </div>
-</div> -->
-
 <div class='navbarContainer' *ngIf="(authService.isSignedInStream | async)">
   <app-navbar></app-navbar>
 </div>

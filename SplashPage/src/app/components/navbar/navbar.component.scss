@@ -1,0 +1,29 @@
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 0.9);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+
+@mixin md-icon-size($size: 24px) {
+  font-size: $size;
+  height: $size;
+  width: $size;
+}
+
+.material-icons.mat-icon {
+  @include md-icon-size(32px);
+}
+
+md-toolbar {
+  font-family: 'Comfortaa', cursive !important;
+  background-color:$light-background;
+  color:$dark-text;
+  .timeContainer {
+    height: 100%;
+    margin-bottom: 30px;
+  }
+  md-menu {}
+  #displayName {
+    padding: 20px;
+  }
+}

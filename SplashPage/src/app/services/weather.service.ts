@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -12,19 +13,17 @@ export interface Weather {
 
 @Injectable()
 export class WeatherService {
-
-  static weatherBaseUrl = 'https://crossorigin.me/https://api.darksky.net/forecast/ffd941872a25813256d6d849d37140cf/'
-  static ipLocationUrl = 'https://ipinfo.io/json'
+  private weatherBaseUrl = 'https://crossorigin.me/https://api.darksky.net/forecast/ffd941872a25813256d6d849d37140cf/'
+  private ipLocationUrl = 'https://ipinfo.io/json'
   private city;
   private region;
   private weather: Weather;
-  public weatherStream: Observable<Weather>;
+  public isLoadingSubject = new BehaviorSubject<boolean>(true);
 
-  constructor(private http: Http) {
-    if(this.weather != null){
-      this.weatherStream = Observable.of(this.weather);
-    }
-    this.weatherStream = this.requestIpLocation()
+  constructor(private http: Http) {}
+
+  getWeatherStream(): Observable<Weather>{
+    return this.requestIpLocation()
       .map((resp) => this.mapLocation(resp))
       .switchMap((coords) => this.requestWeather(coords))
       .map((resp) => this.mapWeather(resp))
@@ -32,7 +31,7 @@ export class WeatherService {
   }
 
   requestIpLocation(): Observable<Response> {
-    return this.http.get(WeatherService.ipLocationUrl);
+    return this.http.get(this.ipLocationUrl);
   }
 
   requestWeather(coords): Observable<Response> {
@@ -56,10 +55,11 @@ export class WeatherService {
       icon: 'wi wi-forecast-io-' + body.currently.icon,
     }
     this.weather = weather;
+    this.isLoadingSubject.next(false);
     return weather;
   }
 
   private _getUrl(coords): string {
-    return WeatherService.weatherBaseUrl + coords + '/?exclude=minutely,hourly,daily,alerts,flags';
+    return this.weatherBaseUrl + coords + '/?exclude=minutely,hourly,daily,alerts,flags';
   }
 }

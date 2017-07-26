@@ -1,0 +1,34 @@
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 0.9);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+// font-family: 'Comfortaa', cursive !important;
+.dialogContainer {
+  font-family: 'Comfortaa', cursive !important;
+  background-color: $transparent-background;
+  h1 {
+    font-family: 'Comfortaa', cursive !important;
+    background-color: $transparent-background;
+  }
+  md-dialog-content {
+    font-family: 'Comfortaa', cursive !important;
+    background-color: $transparent-background;
+    form {
+      font-family: 'Comfortaa', cursive !important;
+      background-color: $transparent-background;
+      md-checkbox {
+        font-family: 'Comfortaa', cursive !important;
+        background-color: $transparent-background;
+      }
+      md-select {
+        font-family: 'Comfortaa', cursive !important;
+        background-color: $transparent-background;
+      }
+      md-input-container {
+        font-family: 'Comfortaa', cursive !important;
+        background-color: $transparent-background;
+      }
+    }
+  }
+}

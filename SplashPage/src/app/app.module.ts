@@ -1,10 +1,10 @@
-import { CalendarDialogComponent } from './calendar/calendar-dialog/calendar-dialog.component';
-import { GmailService } from './google/gmail.service';
-import { GoogleCalendarService } from './google/google-calendar.service';
-import { GapiService } from './google/gapi.service';
+import { CalendarDialogComponent } from './components/calendar-dialog/calendar-dialog.component';
+import { CalendarService } from './services/calendar.service';
+import { GmailService } from './content-providers/google/gmail.service';
+import { GcalService } from './content-providers/google/gcal.service';
+import { GapiService } from './content-providers/google/gapi.service';
 import { AuthService } from './services/auth.service';
 import { WeatherService } from './services/weather.service';
-import { FireService } from './services/fire.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,13 +16,13 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HomeComponent } from './+home/home.component';
-import { TimeComponent } from './time/time.component';
-import { WeatherComponent } from './weather/weather.component';
+import { TimeComponent } from './components/time/time.component';
+import { WeatherComponent } from './components/weather/weather.component';
 import { HttpModule } from '@angular/http';
-import { CalendarComponent} from './calendar/calendar.component';
-import { MailComponent } from './mail/mail.component';
+import { CalendarComponent} from './components/calendar/calendar.component';
+import { MailComponent } from './components/mail/mail.component';
 import { EmailObjectComponent } from './email-object/email-object.component';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { DatePipe } from '@angular/common'
 import {
   MdAutocompleteModule,
@@ -52,11 +52,10 @@ import {
   MdTooltipModule
 } from '@angular/material';
 import { EventPipe } from './pipes/event.pipe';
-import { InlineEditComponent } from './inline-edit/inline-edit.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-
-
+import { FormsModule } from "@angular/forms";
+import { TimePipe } from './pipes/time.pipe';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -96,9 +95,9 @@ export const MaterialModules = [
     EmailObjectComponent,
     NavbarComponent,
     EventPipe,
-    InlineEditComponent,
     TruncatePipe,
     CalendarDialogComponent,
+    TimePipe,
   ],
   imports: [
     BrowserModule,
@@ -112,17 +111,18 @@ export const MaterialModules = [
     FlexLayoutModule,
     HttpModule,
     InfiniteScrollModule,
+    FormsModule,
   ],
   providers: [
     WeatherService,
     AuthService,
-    FireService,
     GapiService,
-    GoogleCalendarService,
+    GcalService,
     GmailService,
+    CalendarService,
     ],
   entryComponents: [
-    CalendarDialogComponent
+    CalendarDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,77 @@
+<div class='dialogContainer' *ngIf='mode == "Add"'>
+  <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Add New Event</h1>
+  <md-dialog-content>
+    <form fxFlex fxLayout='column' #addEventForm='ngForm' (ngSubmit)='closeDialog()'>
+      <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding-bottom:20px'>All Day Event</md-checkbox>
+      <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
+        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars" [value]="calendar.id">
+          <md-icon [style.background-color]='calendar.backgroundColor'></md-icon>
+          <span>{{ calendar.summary }}</span>
+        </md-option>
+      </md-select>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startDate' type='text' placeholder='Start Date' name='startDate'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endDate' type='text' placeholder='End Date' name='endDate'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input [disabled]='event.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
+          placeholder='Start Time' name='startTime'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endTime' type='text'
+          placeholder='End Time' name='endTime'>
+      </md-input-container>
+    </form>
+  </md-dialog-content>
+  <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center'>
+    <button md-raised-button (click)='dialogRef.close()'>Cancel</button>
+    <button md-raised-button color='primary' (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid' type='submit'>Submit</button>
+  </md-dialog-actions>
+</div>
+
+<div class='dialogContainer' *ngIf='mode == "Edit"'>
+  <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Edit "{{event.summary}}"</h1>
+  <md-dialog-content>
+    <form fxFlex fxLayout='column' #editEventForm='ngForm' (ngSubmit)='closeDialog()'>
+      <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding-bottom:20px'>All Day Event</md-checkbox>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startDate' type='text' placeholder='Start Date' name='startDate'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endDate' type='text' placeholder='End Date' name='endDate'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
+          placeholder='Start Time' name='startTime'>
+      </md-input-container>
+      <md-input-container fxFlex dividerColor='warn'>
+        <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endTime' type='text'
+          placeholder='End Time' name='endTime'>
+      </md-input-container>
+    </form>
+  </md-dialog-content>
+  <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around end'>
+    <button md-raised-button (click)='dialogRef.close()'>Cancel</button>
+    <button md-raised-button color='primary' (click)='editEventForm.ngSubmit.emit()' type='submit'>Submit</button>
+  </md-dialog-actions>
+</div>
+
+
+<div class='dialogContainer' *ngIf='mode == "Delete"'>
+  <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>"{{event.summary}}"</h1>
+  <md-dialog-content fxFlex fxLayout fxLayoutAlign='space-around center'>
+    <div>Are you sure you want to delete this event?</div>
+  </md-dialog-content>
+  <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center' style='padding-top:20px'>
+    <button md-raised-button (click)='dialogRef.close()'>Cancel</button>
+    <button md-raised-button color='warn' (click)='closeDialog()'>Delete</button>
+  </md-dialog-actions>
+</div>
