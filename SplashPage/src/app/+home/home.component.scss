@@ -1,18 +1,18 @@
-.navbarContainer {}
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 0.9);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
 
-.contentContainer {
-  .weatherContainer {}
-  .calendarContainer {
-    padding: 10px;
-  }
-  .mailContainer {
-    padding: 10px
-  }
+.calendarContainer {
+  padding: 10px;
 }
 
 #signIn {
   padding: 30px 20px;
   margin: 20px 40px;
+  font-family: 'Comfortaa',cursive !important;
+  
   #google-button {
     background-color: transparent;
     background-image: url('/assets/images/google_signin_dark.png');

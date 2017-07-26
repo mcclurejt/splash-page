@@ -55,6 +55,7 @@ import { EventPipe } from './pipes/event.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FormsModule } from "@angular/forms";
+import { TimePipe } from './pipes/time.pipe';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -96,6 +97,7 @@ export const MaterialModules = [
     EventPipe,
     TruncatePipe,
     CalendarDialogComponent,
+    TimePipe,
   ],
   imports: [
     BrowserModule,

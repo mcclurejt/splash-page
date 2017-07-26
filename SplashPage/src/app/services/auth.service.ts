@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class AuthService {
 
-  public isLoadingSubject = new BehaviorSubject<boolean>(true);
+  public isLoadingSubject = new BehaviorSubject<boolean>(false);
   public isSignedInStream: Observable<boolean>;
   public displayNameStream: Observable<string>;
   public photoUrlStream: Observable<string>;
