@@ -20,7 +20,7 @@ $transparent-background: rgba(245, 245, 245, 0);
   color: $dark-text;
   .button-row {
     height: 100%;
-    button{
+    button {
       height: 100%;
     }
   }
@@ -29,14 +29,17 @@ $transparent-background: rgba(245, 245, 245, 0);
   }
   .userInfo {
     height: 100%;
-    md-button{
+    button {
       height: 100%;
     }
     #displayName {
-
+      font-size: 24px;
     }
   }
-  .navigationButtons{
+  .navigationButtons {
     height: 100%;
+    button{
+      height: 100%;
+    }
   }
 }

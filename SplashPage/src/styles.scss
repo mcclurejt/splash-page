@@ -26,3 +26,20 @@ textarea {
 .mat-dialog-container {
   background-color: rgba(245, 245, 245, 0.95) !important;
 }
+.mat-menu-item {
+  font-family: 'Comfortaa', cursive !important;
+  background-color: $transparent-background !important;
+  color: $dark-text !important;
+}
+.mat-menu-content, {
+  font-family: 'Comfortaa', cursive !important;
+  background-color: $transparent-background !important;
+  color: $dark-text !important;
+}
+
+.mat-menu-panel{
+  font-family: 'Comfortaa', cursive !important;
+  background-color: rgba(245, 245, 245, .9) !important;
+  color: $dark-text !important;
+}
+
