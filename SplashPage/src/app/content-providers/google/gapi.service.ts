@@ -56,7 +56,9 @@ export class GapiService implements OnDestroy {
   }
 
   signIn(): Promise<gapi.auth2.GoogleUser>{
-    return gapi.auth2.getAuthInstance().signIn();
+    return gapi.auth2.getAuthInstance().signIn({
+      prompt: 'select_account',
+    });
   }
 
   signOut(){

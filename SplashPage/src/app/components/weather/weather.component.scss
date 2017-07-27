@@ -3,47 +3,49 @@ $dark-text: rgba(66, 66, 66, 1);
 $light-background:rgba(245, 245, 245, 0.9);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
-// font-family: 'Comfortaa', cursive !important;
 
 .container {
-  padding: 0px;
   font-family: 'Comfortaa', cursive !important;
-  md-card {
-    background-color: rgba(0, 0, 0, 0);
-    padding: 20px 0px 0px 0px;
-    #weather {
-      padding: 0px;
-      margin: 0px;
-      // background-color: red;
-      #icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px 0px;
+  .iconContainer {
+    align-self: flex-end;
+    #weatherIcon {
+      color: $light-background;
+      font-size: 96px;
+      margin-bottom: -10px;
+      padding-right: 15px;
+    }
+  }
+  .infoContainer {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    .tempContainer {
+      display: inline-flex;
+      flex-direction: row;
+      .weatherTemp {
         color: $light-background;
-        padding: 10px;
-        font-size: 96px;
-        font-weight: normal;
+        align-self: flex-start;
+        font-family: 'Comfortaa', cursive !important;
+        font-size: 80px; 
+        line-height: 80px;
+        margin-bottom: -10px;
       }
-      #temp {
+      .wi {
         color: $light-background;
-        padding: 0px;
-        margin: 0px;
+        align-self: flex-end;
         font-size: 96px;
-        font-weight: normal;
-      }
-      #units {
-        color: $light-background;
-        padding: 0px;
-        margin: 0px;
-        font-size: 96px;
-        font-weight: normal;
+        line-height: 60px;
+        margin-bottom:-10px;
       }
     }
-    #location {
-      color: $light-text;
-      padding: 0px;
-      margin: 0px; // background-color: rgba(20, 100, 255, 1.0)
-      text-align: right;
-      font-size: 20px;
-      font-weight: 700;
-      // background-color: blue;
+    .locationContainer {
+      color: $light-background;
+      align-self: flex-start;
+      padding-bottom: 2px;
     }
   }
 }

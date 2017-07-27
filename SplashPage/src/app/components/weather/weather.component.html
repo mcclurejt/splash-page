@@ -1,15 +1,30 @@
-<div class='container' fxLayoutAlign='center center'>
-  <md-card class='.mat-elevation-z0' *ngIf="!(weatherService.isLoadingSubject | async)">
-    <span id='weather' fxFlex fxLayout fxLayoutAlign='start start'>
-      <i id='icon' [class]="weather?.icon"></i>
-      <h3 id='temp'>{{weather?.temp}}</h3>
-      <i id='units' class='wi wi-fahrenheit'></i>
-    </span>
-    <h3 id='location' fxLayoutAlign='center center'>
-      {{weather?.city}}, {{weather?.region}}
-    </h3>
-  </md-card>
- <md-card class='.mat-elevation-z0' *ngIf="(weatherService.isLoadingSubject | async)">
-  <md-spinner></md-spinner>
- </md-card>
+<div *ngIf="!(weatherService.isLoadingSubject | async);else loadingTemplate">
+  <div class='container'>
+
+    <div class='iconContainer'>
+      <i id='weatherIcon' [class]="(weatherService.weatherStream | async)?.icon"></i>
+    </div>
+
+    <div class='infoContainer'>
+
+      <div class='tempContainer'>
+        <span class='weatherTemp'>{{(weatherService.weatherStream | async)?.temp}}</span>
+        <i class='wi wi-fahrenheit'></i>
+      </div>
+
+      <div class='locationContainer'>
+        <span>
+            {{(weatherService.weatherStream | async)?.city}}, {{(weatherService.weatherStream | async)?.region}}
+          </span>
+      </div>
+
+    </div>
+
+  </div>
 </div>
+
+<ng-template #loadingTemplate>
+  <div *ngIf="(weatherService.isLoadingSubject | async)">
+    <md-spinner></md-spinner>
+  </div>
+</ng-template>

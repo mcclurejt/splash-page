@@ -1,52 +1,65 @@
-<md-toolbar>
-  <!-- Expand buttons on desktop -->
-  <div fxShow='false' fxShow.gt-xs fxFlex='40%' fxLayoutAlign='start center' class='navigationButtons'>
-    <button md-button [routerLink]="['/']">
-      <md-icon>home</md-icon>
-    </button>
-    <button md-button [routerLink]="['/']">
-      <md-icon>perm_contact_cal</md-icon>
-    </button>
-    <button md-button [routerLink]="['/']">
-      <md-icon>email</md-icon>
-    </button>
-    <button md-button [routerLink]="['/']">
-      <md-icon>settings</md-icon>
-    </button>
-  </div>
-  <!-- Condense buttons on mobile -->
-  <div fxShow='false' fxShow.xs fxFlex='40%' fxLayoutAlign='start center' class='navigationButtons'>
-    <button md-icon-button [mdMenuTriggerFor]='buttonMenu'>
-      <md-icon>menu</md-icon>
-    </button>
-  </div>
-  <md-menu [overlapTrigger]='false' #buttonMenu='mdMenu'>
-    <button md-menu-item [routerLink]="['/']">
-      <md-icon>home</md-icon>
-    </button>
-    <button md-menu-item [routerLink]="['/']">
-      <md-icon>perm_contact_cal</md-icon>
-    </button>
-    <button md-menu-item [routerLink]="['/']">
-      <md-icon>email</md-icon>
-    </button>
-    <button md-menu-item [routerLink]="['/']">
-      <md-icon>settings</md-icon>
-    </button>
-  </md-menu>
-  <div fxFlex='20%' fxLayoutAlign='center end' class='timeContainer'>
-    <app-time></app-time>
-  </div>
-  <div fxFlex='40%' fxLayoutAlign='end center' class='userInfo'>
-    <span id='displayName' fxHide.xs>{{authService.displayNameStream | async}}</span>
-    <button md-icon-button [mdMenuTriggerFor]='signOutMenu'>
-      <md-icon>account_circle</md-icon>
-    </button>
-    <md-menu [overlapTrigger]='false' #signOutMenu='mdMenu'>
-      <button md-menu-item color='primary' *ngIf="authService.isSignedInStream | async" (click)='authService.signOut()'>
-        <md-icon>exit_to_app</md-icon>
-        <span>Sign Out</span>
+<div class='container' fxFlex fxLayout='row' fxLayoutAlign='center center'>
+    <!-- Expand buttons on desktop -->
+    <div class='button-row' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.xs>
+
+      <button md-button [routerLink]="['/']">
+        <i fa [name]="'home'" [size]=2 [fw]=true></i>
+      </button>
+
+      <button md-button [routerLink]="['/']">
+        <i fa [name]="'calendar'" [size]=2 [fw]=true></i>
+      </button>
+
+      <button md-button [routerLink]="['/']">
+        <i fa [name]="'envelope'" [size]=2 [fw]=true></i>
+      </button>
+
+      <button md-button [routerLink]="['/']">
+        <i fa [name]="'cog'" [size]=2 [fw]=true></i>
+      </button>
+
+    </div>
+
+    <!-- Condense buttons on mobile -->
+    <div class='navigationButtons' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.gt-xs>
+       <button md-button [mdMenuTriggerFor]='buttonMenu'>
+        <i fa [name]="'bars'" [size]=2 [fw]=true></i>
+      </button>
+    </div>
+
+    <md-menu [overlapTrigger]='false' #buttonMenu='mdMenu'>
+      <button md-menu-item [routerLink]="['/']">
+        <i fa [name]="'home'" [size]=1 [fw]=true></i>
+        <span>Home</span>
+      </button>
+      <button md-menu-item [routerLink]="['/']">
+        <i fa [name]="'calendar'" [size]=1 [fw]=true></i>
+        <span>Calendar</span>
+      </button>
+      <button md-menu-item [routerLink]="['/']">
+        <i fa [name]="'envelope'" [size]=1 [fw]=true></i>
+        <span>Mail</span>
+      </button>
+      <button md-menu-item [routerLink]="['/']">
+        <i fa [name]="'cog'" [size]=1 [fw]=true></i>
+        <span>Settings</span>
       </button>
     </md-menu>
-  </div>
-</md-toolbar>
+
+    <div class='timeContainer' fxFlex='40%' fxLayout fxLayoutAlign='center center'>
+      <app-time></app-time>
+    </div>
+
+    <div class='userInfo' fxFlex='30%' fxLayout fxLayoutAlign='end center'>
+      <span id='displayName' fxHide.xs>{{authService.displayNameStream | async}}</span>
+      <button md-button [mdMenuTriggerFor]='signOutMenu'>
+        <i fa [name]="'user-circle'" [size]=2></i>
+      </button>
+      <md-menu [overlapTrigger]='false' #signOutMenu='mdMenu'>
+        <button md-menu-item (click)='authService.signOut()'>
+        <i fa [name]="'sign-out'" [size]=1 [fw]=true></i>
+        <span>Sign Out</span>
+      </button>
+      </md-menu>
+    </div>
+</div>

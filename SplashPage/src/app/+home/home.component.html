@@ -1,34 +1,56 @@
-<div class='navbarContainer' *ngIf="(authService.isSignedInStream | async)">
-  <app-navbar></app-navbar>
-</div>
-<div class='contentContainer' *ngIf="(authService.isSignedInStream | async);else signInTemplate">
+<div class='container'
+     *ngIf="(authService.isSignedInStream | async);else signInTemplate"
+     fxLayout='column'
+     fxLayoutAlign='start'>
+
+  <div class='navbarContainer'
+       fxFlexAlign='center'>
+    <app-navbar></app-navbar>
+  </div>
+
   <div class='weatherContainer'>
     <app-weather></app-weather>
   </div>
-  <div fxFlex fxLayout='row' fxLayoutAlign='space-around start' >
-    <div fxFlex class='calendarContainer'>
+
+  <div class='contentContainer'
+       fxLayout.xs='column'
+       fxLayoutAlign.xs='start'
+       fxLayout.gt-xs='row'
+       fxLayoutAlign.gt-xs='center'
+       fxFlex='1 1 auto'
+       ngStyle.gt-xs='height:100%'>
+
+    <div class='calendarContainer'
+         fxFlex='50%'>
       <app-calendar></app-calendar>
     </div>
-    <div fxFlex class='mailContainer'>
+
+     <div class='mailContainer'
+         fxFlex='50%'>
       <app-mail></app-mail>
-    </div>
+    </div> 
+
   </div>
+
 </div>
 
 <ng-template #signInTemplate>
-  <div fxLayoutAlign='center center' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
-    <md-card id='signIn' fxLayout='column' fxLayoutAlign='none center'>
+
+  <div fxLayoutAlign='center center' class='signInContainer' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
+    <md-card id='signIn' fxLayout='column' fxLayoutAlign='center center'>
       <md-card-title>
         <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
-        <span fxShow='false' fxShow.xs>You must be signed in</span>
+        <span fxShow='false' fxShow.xs style='font-size: 20px;'>You must be signed in</span>
       </md-card-title>
       <button id='google-button' md-button (click)='authService.signInWithGoogle();'></button>
     </md-card>
   </div>
+
   <ng-template #loadingTemplate>
-    <div fxLayoutAlign='center center'>
+    <div class='loadingContainer'>
       <md-progress-bar color="primary" mode="indeterminate">
       </md-progress-bar>
     </div>
   </ng-template>
+
 </ng-template>

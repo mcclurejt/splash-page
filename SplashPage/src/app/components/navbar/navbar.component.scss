@@ -3,7 +3,6 @@ $dark-text: rgba(66, 66, 66, 1);
 $light-background:rgba(245, 245, 245, 0.9);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
-
 @mixin md-icon-size($size: 24px) {
   font-size: $size;
   height: $size;
@@ -14,16 +13,33 @@ $transparent-background: rgba(245, 245, 245, 0);
   @include md-icon-size(32px);
 }
 
-md-toolbar {
+.container {
+  height: 50px;
   font-family: 'Comfortaa', cursive !important;
-  background-color:$light-background;
-  color:$dark-text;
+  background-color: $light-background;
+  color: $dark-text;
+  .button-row {
+    height: 100%;
+    button {
+      height: 100%;
+    }
+  }
   .timeContainer {
     height: 100%;
-    margin-bottom: 30px;
   }
-  md-menu {}
-  #displayName {
-    padding: 20px;
+  .userInfo {
+    height: 100%;
+    button {
+      height: 100%;
+    }
+    #displayName {
+      font-size: 24px;
+    }
+  }
+  .navigationButtons {
+    height: 100%;
+    button{
+      height: 100%;
+    }
   }
 }

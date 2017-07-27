@@ -4,6 +4,12 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/switchMap';
+import { Store } from "@ngrx/store";
+
+interface WeatherState {
+  weather: Weather,
+}
+
 export interface Weather {
   city: string;
   region: string;
@@ -17,17 +23,20 @@ export class WeatherService {
   private ipLocationUrl = 'https://ipinfo.io/json'
   private city;
   private region;
-  private weather: Weather;
   public isLoadingSubject = new BehaviorSubject<boolean>(true);
+  public weatherStream: Observable<Weather>;
 
-  constructor(private http: Http) {}
+  constructor(private http: Http, private store: Store<WeatherState>) {
+    this.weatherStream = store.select('weather');
+  }
 
-  getWeatherStream(): Observable<Weather>{
-    return this.requestIpLocation()
+  loadWeatherStream(){
+    this.requestIpLocation()
       .map((resp) => this.mapLocation(resp))
       .switchMap((coords) => this.requestWeather(coords))
       .map((resp) => this.mapWeather(resp))
-      .share();
+      .map((weather) => ({type: 'ADD_WEATHER',payload: weather}))
+      .subscribe(action => this.store.dispatch(action));
   }
 
   requestIpLocation(): Observable<Response> {
@@ -47,16 +56,14 @@ export class WeatherService {
   }
 
   private mapWeather(res: Response): Weather {
+    this.isLoadingSubject.next(false);
     let body = res.json();
-    let weather: Weather = {
+    return {
       city: this.city,
       region: this.region,
       temp: String(body.currently.temperature).split('.')[0],
       icon: 'wi wi-forecast-io-' + body.currently.icon,
     }
-    this.weather = weather;
-    this.isLoadingSubject.next(false);
-    return weather;
   }
 
   private _getUrl(coords): string {

@@ -30,7 +30,7 @@
   </md-dialog-content>
   <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center'>
     <button md-raised-button (click)='dialogRef.close()'>Cancel</button>
-    <button md-raised-button color='primary' (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid' type='submit'>Submit</button>
+    <button md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid' type='submit'>Submit</button>
   </md-dialog-actions>
 </div>
 
