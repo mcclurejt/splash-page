@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GmailService } from "app/content-providers/google/gmail.service";
 
 @Component({
   selector: 'app-mail',
@@ -7,15 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MailComponent implements OnInit {
 
-  isScrollLoading=false;
-
-  constructor() { }
+  constructor(private gmailService: GmailService) {
+    
+   }
 
   ngOnInit() {
-  }
 
-  onScrollDown(){
-    console.log('Scrolled Down!');
   }
 
 }

@@ -21,7 +21,6 @@ import { WeatherComponent } from './components/weather/weather.component';
 import { HttpModule } from '@angular/http';
 import { CalendarComponent} from './components/calendar/calendar.component';
 import { MailComponent } from './components/mail/mail.component';
-import { EmailObjectComponent } from './email-object/email-object.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DatePipe } from '@angular/common'
 import {
@@ -94,7 +93,6 @@ export const MaterialModules = [
     WeatherComponent,
     CalendarComponent,
     MailComponent,
-    EmailObjectComponent,
     NavbarComponent,
     EventPipe,
     TruncatePipe,
