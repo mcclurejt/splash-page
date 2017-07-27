@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MailComponent implements OnInit {
 
+  isScrollLoading=false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onScrollDown(){
+    console.log('Scrolled Down!');
   }
 
 }

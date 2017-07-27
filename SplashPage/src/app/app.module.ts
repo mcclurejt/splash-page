@@ -56,6 +56,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FormsModule } from "@angular/forms";
 import { TimePipe } from './pipes/time.pipe';
+import { StoreModule } from '@ngrx/store';
+import { weatherReducer } from './stores/weather.store';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -112,6 +114,7 @@ export const MaterialModules = [
     HttpModule,
     InfiniteScrollModule,
     FormsModule,
+    StoreModule.forRoot({weather: weatherReducer})
   ],
   providers: [
     WeatherService,

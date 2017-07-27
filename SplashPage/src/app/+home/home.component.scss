@@ -3,16 +3,10 @@ $dark-text: rgba(66, 66, 66, 1);
 $light-background:rgba(245, 245, 245, 0.9);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
-
-.calendarContainer {
-  padding: 10px;
-}
-
 #signIn {
   padding: 30px 20px;
   margin: 20px 40px;
-  font-family: 'Comfortaa',cursive !important;
-  
+  font-family: 'Comfortaa', cursive !important;
   #google-button {
     background-color: transparent;
     background-image: url('/assets/images/google_signin_dark.png');
@@ -25,3 +19,31 @@ $transparent-background: rgba(245, 245, 245, 0);
     }
   }
 }
+
+.container {
+  height:100%;
+  .navbarContainer {
+    width: 100%;
+  }
+  .weatherContainer {
+    padding-top: 20px;
+  }
+  .contentContainer {
+    // height: 100%;
+    padding: 0px 20px;
+    .calendarContainer {
+      padding: 20px;
+    }
+    .mailContainer {
+      padding: 20px;
+      // flex: 1 1 50%;
+      // align-self: flex-start;
+      // padding: 0px 20px; // max-width: 80%;
+    }
+  }
+}
+
+.signInContainer {}
+
+.loadingContainer {}
+

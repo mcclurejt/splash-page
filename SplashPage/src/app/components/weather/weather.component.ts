@@ -11,15 +11,8 @@ import { Subscription } from 'rxjs/Rx';
 })
 
 export class WeatherComponent {
-  public weather: Weather;
-  public isLoadingStream: Observable<boolean>;
   constructor(public weatherService: WeatherService) {
-    this.weatherService.getWeatherStream().subscribe( (weather: Weather) => {
-      this.weather = weather;
-    });
-    this.weatherService.isLoadingSubject.subscribe( (isLoading) => {
-      console.log('WeatherComponent isLoading',isLoading);
-    });
+    this.weatherService.loadWeatherStream();
   }
 
 }

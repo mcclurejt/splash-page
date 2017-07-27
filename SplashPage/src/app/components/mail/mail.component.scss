@@ -1,4 +1,33 @@
-.container{
-    // width: 50%;
-    // padding: 10px;
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 0.9);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+
+.mailContainer {
+  height: inherit;
+  width: inherit;
+  md-card {
+    padding: 0px;
+    border-radius: 5px;
+    background-color: $dark-background;
+    md-toolbar {
+      padding: 0px;
+      border-radius: 5px 5px 0px 0px;
+      background-color: $light-background;
+      span{
+          color: $dark-text;
+          font-weight: 300;
+          font-size: 30px;
+      }
+    }
+    #emailContainer {
+      // height: 450px;
+      overflow: scroll;
+      md-list {
+        padding: 0px;
+        background-color: $transparent-background;
+      }
+    }
+  }
 }

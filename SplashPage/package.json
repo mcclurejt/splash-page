@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^4.3.1",
     "@angular/platform-browser-dynamic": "^4.3.1",
     "@angular/router": "^4.3.1",
+    "@ngrx/store": "^4.0.0",
     "@swimlane/ngx-datatable": "^9.3.1",
     "@types/gapi.auth2": "0.0.40",
     "@types/gapi.calendar": "^3.0.1",
