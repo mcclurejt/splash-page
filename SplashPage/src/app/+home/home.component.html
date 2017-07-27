@@ -36,11 +36,11 @@
 
 <ng-template #signInTemplate>
 
-  <div class='signInContainer' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
-    <md-card id='signIn'>
+  <div fxLayoutAlign='center center' class='signInContainer' *ngIf='!(authService.isLoadingSubject | async);else loadingTemplate'>
+    <md-card id='signIn' fxLayout='column' fxLayoutAlign='center center'>
       <md-card-title>
         <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
-        <span fxShow='false' fxShow.xs>You must be signed in</span>
+        <span fxShow='false' fxShow.xs style='font-size: 20px;'>You must be signed in</span>
       </md-card-title>
       <button id='google-button' md-button (click)='authService.signInWithGoogle();'></button>
     </md-card>
