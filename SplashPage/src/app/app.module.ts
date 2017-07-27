@@ -57,6 +57,7 @@ import { FormsModule } from "@angular/forms";
 import { TimePipe } from './pipes/time.pipe';
 import { StoreModule } from '@ngrx/store';
 import { weatherReducer } from './stores/weather.store';
+import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -112,7 +113,8 @@ export const MaterialModules = [
     HttpModule,
     InfiniteScrollModule,
     FormsModule,
-    StoreModule.forRoot({weather: weatherReducer})
+    StoreModule.forRoot({weather: weatherReducer}),
+    Angular2FontawesomeModule,
   ],
   providers: [
     WeatherService,

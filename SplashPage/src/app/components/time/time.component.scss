@@ -4,9 +4,10 @@ $light-background:rgba(245, 245, 245, 0.9);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 
-span{
+div{
     color:$dark-text;
     font-family: 'Comfortaa', cursive !important;
     font-size: 42px;
     font-weight: 400;
+    height:40px;
 }
