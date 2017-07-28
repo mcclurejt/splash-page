@@ -8,12 +8,18 @@ import { GmailService } from "app/content-providers/google/gmail.service";
 })
 export class MailComponent implements OnInit {
 
+  isScrollLoading = false;
+
   constructor(private gmailService: GmailService) {
     
    }
 
   ngOnInit() {
 
+  }
+
+  onScrollDown(){
+    console.log('Scrolled down');
   }
 
 }
