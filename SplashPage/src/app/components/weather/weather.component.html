@@ -1,20 +1,20 @@
-<div *ngIf="!(weatherService.isLoadingSubject | async);else loadingTemplate">
+<div *ngIf="!(loading | async);else loadingTemplate">
   <div class='container'>
 
     <div class='iconContainer'>
-      <i id='weatherIcon' [class]="(weatherService.weatherStream | async)?.icon"></i>
+      <i id='weatherIcon' [class]="(icon | async)"></i>
     </div>
 
     <div class='infoContainer'>
 
       <div class='tempContainer'>
-        <span class='weatherTemp'>{{(weatherService.weatherStream | async)?.temp}}</span>
+        <span class='weatherTemp'>{{(temp | async)}}</span>
         <i class='wi wi-fahrenheit'></i>
       </div>
 
       <div class='locationContainer'>
         <span>
-            {{(weatherService.weatherStream | async)?.city}}, {{(weatherService.weatherStream | async)?.region}}
+            {{(city | async)}}, {{(region | async)}}
           </span>
       </div>
 
@@ -24,7 +24,7 @@
 </div>
 
 <ng-template #loadingTemplate>
-  <div *ngIf="(weatherService.isLoadingSubject | async)">
+  <div fxLayoutAlign='center center'>
     <md-spinner></md-spinner>
   </div>
 </ng-template>
