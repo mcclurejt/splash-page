@@ -29,16 +29,11 @@ $transparent-background: rgba(245, 245, 245, 0);
     padding-top: 20px;
   }
   .contentContainer {
-    // height: 100%;
-    padding: 0px 20px;
     .calendarContainer {
       padding: 20px;
     }
     .mailContainer {
       padding: 20px;
-      // flex: 1 1 50%;
-      // align-self: flex-start;
-      // padding: 0px 20px; // max-width: 80%;
     }
   }
 }

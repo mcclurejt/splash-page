@@ -21,10 +21,13 @@ export class MailComponent implements OnInit {
           console.log("Loading messages");
           gmailService.getEmails().subscribe((emails) => {
             console.log('We got Emails',emails);
-            
+            for(let email of emails){
+              // console.log('Email body',email.result);
+            }
           })
         }
-      })
+      });
+     
   }
 
   ngOnInit() {

@@ -40,7 +40,7 @@ export class GmailService {
   }
 
   getEmailsFromList(messageList): Observable<any> {
-    console.log("getEmailsFromList()");
+    console.log("getEmailsFromList()",messageList);
     this.nextPageToken = messageList.nextPageToken;
     const messages = messageList.messages;
     let gapi = window['gapi'];
@@ -48,7 +48,6 @@ export class GmailService {
     let params = {
       format: "full"
     };
-
     for (let i = 0; i < messages.length; i++) {
       // console.log("message id:", messages[i].id);
       let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + messages[i].id;
@@ -68,6 +67,7 @@ export class GmailService {
   }
 
   mapMessages(any): string {
+
     return any;
   }
 }
