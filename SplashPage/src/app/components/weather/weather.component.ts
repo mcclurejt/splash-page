@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { WeatherService, Weather } from '../../services/weather.service';
+import { WeatherService } from '../../services/weather.service';
 import { Component} from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 

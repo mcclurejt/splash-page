@@ -1,3 +1,5 @@
+import { Action } from './../models/action';
+import { ADD } from './../stores/weather.store';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
@@ -5,17 +7,8 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/switchMap';
 import { Store } from "@ngrx/store";
+import { Weather } from "app/models/weather";
 
-interface WeatherState {
-  weather: Weather,
-}
-
-export interface Weather {
-  city: string;
-  region: string;
-  temp: string;
-  icon: string;
-}
 
 @Injectable()
 export class WeatherService {
@@ -26,28 +19,28 @@ export class WeatherService {
   public isLoadingSubject = new BehaviorSubject<boolean>(true);
   public weatherStream: Observable<Weather>;
 
-  constructor(private http: Http, private store: Store<WeatherState>) {
+  constructor(private http: Http, private store: Store<any>) {
     this.weatherStream = store.select('weather');
   }
 
-  loadWeatherStream(){
+  public loadWeatherStream(): void{
     this.requestIpLocation()
       .map((resp) => this.mapLocation(resp))
       .switchMap((coords) => this.requestWeather(coords))
       .map((resp) => this.mapWeather(resp))
-      .map((weather) => ({type: 'ADD_WEATHER',payload: weather}))
+      .map((weather) => {return new Action({type: ADD, payload: weather})})
       .subscribe(action => this.store.dispatch(action));
   }
 
-  requestIpLocation(): Observable<Response> {
+  private requestIpLocation(): Observable<Response> {
     return this.http.get(this.ipLocationUrl);
   }
 
-  requestWeather(coords): Observable<Response> {
+  private requestWeather(coords): Observable<Response> {
     return this.http.get(this._getUrl(coords));
   }
 
-  private mapLocation(res: Response) {
+  private mapLocation(res: Response): any {
     let body = res.json();
     this.city = body.city;
     this.region = body.region;
