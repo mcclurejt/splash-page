@@ -8,7 +8,7 @@ export interface State {
     loading: boolean,
 }
 
-const initialWeatherState: State = {
+const initialState: State = {
     city: '',
     region: '',
     temp: '',
@@ -16,7 +16,7 @@ const initialWeatherState: State = {
     loading: false,
 }
 
-export function reducer(state = initialWeatherState, action: WeatherActions.All): State {
+export function reducer(state = initialState, action: WeatherActions.All): State {
     switch (action.type) {
         case WeatherActions.UPDATE: {
             return Object.assign(
@@ -27,11 +27,11 @@ export function reducer(state = initialWeatherState, action: WeatherActions.All)
         }
 
         case WeatherActions.TOGGLE_LOADING: {
-            if (action.isLoading != null) {
+            if (action.payload != null) {
                 return Object.assign(
                     {},
                     state,
-                    { loading: action.isLoading }
+                    { loading: action.payload }
                 );
             }
             return Object.assign(

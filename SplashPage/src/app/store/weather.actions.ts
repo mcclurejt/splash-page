@@ -12,9 +12,7 @@ export class Update implements Action {
 
 export class ToggleLoading implements Action{
     readonly type = TOGGLE_LOADING;
-    constructor(public isLoading?: boolean){}
+    constructor(public payload?: boolean){}
 }
-
-
 
 export type All = Update | ToggleLoading;

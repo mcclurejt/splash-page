@@ -4,7 +4,7 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/switchMap';
-
+import 'rxjs/add/operator/map';
 import { Store } from "@ngrx/store";
 import * as WeatherActions from '../store/weather.actions';
 import * as fromRoot from '../store/reducers';

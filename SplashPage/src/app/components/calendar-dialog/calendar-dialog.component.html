@@ -4,25 +4,25 @@
     <form fxFlex fxLayout='column' #addEventForm='ngForm' (ngSubmit)='closeDialog()'>
       <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding-bottom:20px'>All Day Event</md-checkbox>
       <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
-        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars" [value]="calendar.id">
+        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
           <md-icon [style.background-color]='calendar.backgroundColor'></md-icon>
           <span>{{ calendar.summary }}</span>
         </md-option>
       </md-select>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startDate' type='text' placeholder='Start Date' name='startDate'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endDate' type='text' placeholder='End Date' name='endDate'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input [disabled]='event.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
           placeholder='Start Time' name='startTime'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endTime' type='text'
           placeholder='End Time' name='endTime'>
       </md-input-container>
@@ -39,20 +39,26 @@
   <md-dialog-content>
     <form fxFlex fxLayout='column' #editEventForm='ngForm' (ngSubmit)='closeDialog()'>
       <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding-bottom:20px'>All Day Event</md-checkbox>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
+        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
+          <md-icon [style.background-color]='calendar.backgroundColor'></md-icon>
+          <span>{{ calendar.summary }}</span>
+        </md-option>
+      </md-select>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startDate' type='text' placeholder='Start Date' name='startDate'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endDate' type='text' placeholder='End Date' name='endDate'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
           placeholder='Start Time' name='startTime'>
       </md-input-container>
-      <md-input-container fxFlex dividerColor='warn'>
+      <md-input-container fxFlex>
         <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endTime' type='text'
           placeholder='End Time' name='endTime'>
       </md-input-container>

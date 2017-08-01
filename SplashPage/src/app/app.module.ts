@@ -58,6 +58,7 @@ import { TimePipe } from './pipes/time.pipe';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/reducers';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { AgendaViewComponent } from './components/calendar/agenda-view/agenda-view.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -99,6 +100,7 @@ export const MaterialModules = [
     TruncatePipe,
     CalendarDialogComponent,
     TimePipe,
+    AgendaViewComponent,
   ],
   imports: [
     BrowserModule,

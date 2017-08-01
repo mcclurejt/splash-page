@@ -38,11 +38,11 @@ export class WeatherComponent implements OnInit {
   }
 
   updateWeather() {
-    this.store.dispatch(new WeatherActions.ToggleLoading());
+    this.store.dispatch(new WeatherActions.ToggleLoading(false));
 
     this.weatherService.getWeatherStream()
       .subscribe((results) => {
-        this.store.dispatch(new WeatherActions.ToggleLoading());
+        this.store.dispatch(new WeatherActions.ToggleLoading(false));
         this.store.dispatch(new WeatherActions.Update(results));
       });
   }
