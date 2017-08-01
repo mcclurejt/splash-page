@@ -3,12 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Injectable, OnInit } from '@angular/core';
 import { GcalService } from "app/content-providers/google/gcal.service";
-import { CalendarEvent } from "app/models/calendar-event";
+import { CalendarEvent } from "app/store/calendar/calendar-event";
 import { CalendarDialogComponent } from "app/components/calendar-dialog/calendar-dialog.component";
-import { Calendar } from "app/models/calendar";
+import { Calendar } from "app/store/calendar/calendar";
 
 import { Store } from "@ngrx/store";
-import * as CalendarActions from 'app/store/calendar.actions';
+import * as CalendarActions from 'app/store/calendar/calendar.actions';
 import * as fromRoot from 'app/store/reducers';
 
 import 'rxjs/add/operator/withLatestFrom';

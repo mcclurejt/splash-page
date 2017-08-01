@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import { CalendarService } from './../../services/calendar.service';
 import { CalendarComponent } from '../calendar/calendar.component';
-import { CalendarEvent } from './../../models/calendar-event';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material'
-import { Calendar } from "app/models/calendar";
+import { Calendar } from "app/store/calendar/calendar";
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',

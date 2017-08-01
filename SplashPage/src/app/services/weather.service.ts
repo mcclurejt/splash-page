@@ -6,7 +6,7 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/map';
 import { Store } from "@ngrx/store";
-import * as WeatherActions from '../store/weather.actions';
+import * as WeatherActions from '../store/weather/weather.actions';
 import * as fromRoot from '../store/reducers';
 
 

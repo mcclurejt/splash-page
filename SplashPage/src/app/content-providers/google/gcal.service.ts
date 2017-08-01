@@ -1,10 +1,10 @@
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/store/reducers';
-import * as CalendarActions from 'app/store/calendar.actions';
-import { Calendar } from 'app/models/calendar';
+import * as CalendarActions from 'app/store/calendar/calendar.actions';
+import { Calendar } from 'app/store/calendar/calendar';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import { CalendarEvent } from '../../models/calendar-event';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Subscription } from 'rxjs/Rx';
 import { GapiService } from './gapi.service';
 import { Observable } from 'rxjs/Observable';
@@ -18,10 +18,6 @@ export class GcalService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  /**
-   * Adds the CalendarEvent to Google Calendar
-   * @param event 
-   */
   addEvent(event: CalendarEvent, calendars: Calendar[]) {
     let googleEvent = this._mapCalendarEventToGoogleEvent(event);
     // send request to add event
@@ -38,10 +34,6 @@ export class GcalService {
       (context) => { console.log('Event Added Context', context) });
   }
 
-  /**
-   * Updates the changed event on Google Calendar
-   * @param event 
-   */
   editEvent(event: CalendarEvent, newEvent: CalendarEvent, calendars: Calendar[]) {
     if (event.calendarId != newEvent.calendarId) {
       newEvent.backgroundColor = event.backgroundColor;
@@ -66,10 +58,6 @@ export class GcalService {
       (context) => { console.log('Event Updated Context', context) });
   }
 
-  /**
-   * Deletes the event from Google Calendar
-   * @param event 
-   */
   deleteEvent(event: CalendarEvent) {
     gapi.client.request({
       path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
@@ -96,10 +84,6 @@ export class GcalService {
       })
   }
 
-  /**
-   * Same as CalendarList.list() from Google Calendar Api
-   * https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list
-   */
   private _requestCalendars(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {

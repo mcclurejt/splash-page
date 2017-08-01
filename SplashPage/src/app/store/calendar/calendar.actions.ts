@@ -1,5 +1,5 @@
-import { CalendarEvent } from 'app/models/calendar-event';
-import { Calendar } from 'app/models/calendar';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
+import { Calendar } from 'app/store/calendar/calendar';
 import { Action } from "@ngrx/store";
 
 export const CALENDAR_ADD = 'CALENDAR_ADD';

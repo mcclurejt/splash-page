@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 
 import { Store } from "@ngrx/store";
-import * as WeatherActions from 'app/store/weather.actions';
+import * as WeatherActions from 'app/store/weather/weather.actions';
 import * as fromRoot from 'app/store/reducers';
 
 @Component({
@@ -38,12 +38,12 @@ export class WeatherComponent implements OnInit {
   }
 
   updateWeather() {
-    this.store.dispatch(new WeatherActions.ToggleLoading(false));
+    this.store.dispatch(new WeatherActions.StartLoading());
 
     this.weatherService.getWeatherStream()
       .subscribe((results) => {
-        this.store.dispatch(new WeatherActions.ToggleLoading(false));
         this.store.dispatch(new WeatherActions.Update(results));
+        this.store.dispatch(new WeatherActions.EndLoading());
       });
   }
 

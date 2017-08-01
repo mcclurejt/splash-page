@@ -1,7 +1,7 @@
 import { CalendarService } from './../../../services/calendar.service';
 import { CalendarComponent } from './../calendar.component';
 import { Observable } from 'rxjs/Observable';
-import { CalendarEvent } from './../../../models/calendar-event';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -90,29 +90,6 @@ export class AgendaViewComponent implements OnInit {
     this.todaysDate = year + '-' + month + '-' + date;
   }
 
-  /**
-   * Returns the provided date in RFC3339 format to be used in requests to Google's Apis
-   * @param d Date object representing the desired date
-   */
-  private getRFC3339Date(d: Date): string {
-    let pad = (n) => { return n < 10 ? "0" + n : n; };
-    let timezoneOffset = (offset) => {
-      let sign;
-      if (offset === 0) {
-        return 'Z';
-      }
-      sign = (offset > 0) ? '-' : '+';
-      offset = Math.abs(offset);
-      return sign + pad(Math.floor(offset / 60)) + ':' + pad(offset % 60);
-    }
-    return d.getFullYear() + "-" +
-      pad(d.getMonth() + 1) + "-" +
-      pad(d.getDate()) + "T" +
-      pad(d.getHours()) + ":" +
-      pad(d.getMinutes()) + ":" +
-      pad(d.getSeconds()) +
-      timezoneOffset(d.getTimezoneOffset());
-  }
   /**
    * Returns the Date object representing the first day of the week
    */

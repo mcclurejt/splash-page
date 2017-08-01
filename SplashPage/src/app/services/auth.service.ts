@@ -10,7 +10,7 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class AuthService {
 
-  public isLoadingSubject = new BehaviorSubject<boolean>(false);
+  public isLoadingSubject = new BehaviorSubject<boolean>(true);
   public isSignedInStream: Observable<boolean>;
   public displayNameStream: Observable<string>;
   public photoUrlStream: Observable<string>;
@@ -19,6 +19,9 @@ export class AuthService {
 
     this.isSignedInStream = this.afAuth.authState
       .map<firebase.User, boolean>((user: firebase.User) => {
+        if(user == null){
+          this.isLoadingSubject.next(false);
+        }
         return user != null;
       });
 

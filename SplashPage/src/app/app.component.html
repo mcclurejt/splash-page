@@ -1,3 +1,6 @@
 <div class='container'>
-    <router-outlet></router-outlet>
+  <div class='navbarContainer' fxFlexAlign='center' *ngIf="(authService.isSignedInStream | async)">
+    <app-navbar></app-navbar>
+  </div>
+  <router-outlet></router-outlet>
 </div>

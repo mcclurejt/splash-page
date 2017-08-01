@@ -1,5 +1,5 @@
-import { CalendarEvent } from 'app/models/calendar-event';
-import { Calendar } from 'app/models/calendar';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
+import { Calendar } from 'app/store/calendar/calendar';
 import * as CalendarActions from './calendar.actions'
 
 export interface State {

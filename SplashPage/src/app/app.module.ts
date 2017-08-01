@@ -50,7 +50,6 @@ import {
   MdToolbarModule,
   MdTooltipModule
 } from '@angular/material';
-import { EventPipe } from './pipes/event.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FormsModule } from "@angular/forms";
@@ -59,6 +58,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/reducers';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
 import { AgendaViewComponent } from './components/calendar/agenda-view/agenda-view.component';
+import { CalendarTabComponent } from './+calendar-tab/calendar-tab.component';
+import { WeekViewComponent } from './components/calendar/week-view/week-view.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -96,11 +97,12 @@ export const MaterialModules = [
     CalendarComponent,
     MailComponent,
     NavbarComponent,
-    EventPipe,
     TruncatePipe,
     CalendarDialogComponent,
     TimePipe,
     AgendaViewComponent,
+    CalendarTabComponent,
+    WeekViewComponent,
   ],
   imports: [
     BrowserModule,
