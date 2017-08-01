@@ -1,4 +1,3 @@
-
 export class CalendarEvent {
   id: string;
   summary: string;

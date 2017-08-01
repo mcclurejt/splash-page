@@ -1,4 +1,4 @@
-import { CalendarEvent } from 'app/models/calendar-event';
+import { CalendarEvent } from 'app/store/calendar/calendar-event';
 export class Calendar {
     id: string;
     provider: string;
