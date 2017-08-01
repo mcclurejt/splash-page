@@ -5,14 +5,18 @@ export class Calendar {
     summary: string;
     foregroundColor: string;
     backgroundColor: string;
-    events: CalendarEvent[];
-    
+    syncToken?: string;
+    pageToken?: string;
+    timeZone: string;
     constructor(obj?:any){
         this.id = obj && obj.id || '';
         this.provider = obj && obj.provider || '';
         this.summary = obj && obj.summary || '';
         this.foregroundColor = obj && obj.foregroundColor || '';
         this.backgroundColor = obj && obj.backgroundColor || '';
-        this.events = obj && obj.events || [];
+        this.syncToken = obj && obj.syncToken || '';
+        this.pageToken = obj && obj.pageToken || '';
+        this.timeZone = obj && obj.timeZone || '';
     }
 }
+

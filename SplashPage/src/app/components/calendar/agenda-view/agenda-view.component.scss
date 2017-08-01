@@ -1,0 +1,38 @@
+  $light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 0.9);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+ #agendaContainer {
+    border-radius: 0px 0px 5px 5px;
+    md-list {
+      width: 100%;
+      height: 100%;
+      padding: 0px;
+      margin: 0px;
+      background-color: $transparent-background;
+      border-radius: 0px 0px 5px 5px;
+      #dateRow {
+        padding: 0px;
+        margin: 0px;
+        border-radius: 5px;
+        color: $light-text;
+        h3 {
+          font-size: 20px;
+          font-weight: 300;
+        }
+        h4 {
+          font-size: 24px;
+          font-weight: 300;
+        }
+      }
+      #eventRow {
+        padding: 0px;
+        margin: 0px;
+        border-radius: 5px;
+        color: $light-text;
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+  }

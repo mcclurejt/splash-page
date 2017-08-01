@@ -1,29 +1,42 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { GcalService } from "app/content-providers/google/gcal.service";
 import { CalendarEvent } from "app/models/calendar-event";
 import { CalendarDialogComponent } from "app/components/calendar-dialog/calendar-dialog.component";
 import { Calendar } from "app/models/calendar";
 
+import { Store } from "@ngrx/store";
+import * as CalendarActions from 'app/store/calendar.actions';
+import * as fromRoot from 'app/store/reducers';
+
+import 'rxjs/add/operator/withLatestFrom';
+
 @Injectable()
-export class CalendarService{
+export class CalendarService {
 
-  public eventStream: Observable<CalendarEvent[]>;
-  public calendars: Calendar[];
-  public todaysDate: string;
+  public calendars: Observable<Calendar[]>;
+  public events: Observable<CalendarEvent[]>;
 
-  constructor(public gcalService: GcalService, public dialog: MdDialog) {
-    this._buildEventStream();
-    this._setTodaysDate();
+  constructor(public gcalService: GcalService, public dialog: MdDialog, private store: Store<fromRoot.State>) {
+    this.calendars = this.store.select(state => state.calendar.calendars);
+    this.events = this.store.select(state => state.calendar.events);
+    this.loadAllCalendars();
   }
 
-  addEvent(event: CalendarEvent): void {
-    this.gcalService.addEvent(event);
+  loadAllCalendars() {
+    // Todo: add in check for calendar providers
+    console.log('Load All Calendars');
+    this.gcalService.loadCalendars();
   }
 
-  editEvent(event: CalendarEvent): void {
-    this.gcalService.editEvent(event);
+  addEvent(event: CalendarEvent, calendars: Calendar[]): void {
+    this.gcalService.addEvent(event, calendars);
+  }
+
+  editEvent(event: CalendarEvent, newEvent: CalendarEvent, calendars: Calendar[]): void {
+    this.gcalService.editEvent(event, newEvent, calendars);
   }
 
   deleteEvent(event: CalendarEvent): void {
@@ -34,70 +47,55 @@ export class CalendarService{
     console.log('Scrolled Down');
   }
 
-  updateCalendars(){
-    this.gcalService.updateEventStream();
-  }
-
   openDialog(mode: string, event: CalendarEvent) {
     let height;
     let width;
-    switch(mode){
-      case('Add'):{
+    switch (mode) {
+      case ('Add'): {
         height = '550px';
         width = '400px';
         break;
       }
-      case('Edit'):{
-        height = '525px';
+      case ('Edit'): {
+        height = '550px';
         width = '400px';
         break;
       }
-      case('Delete'):{
+      case ('Delete'): {
         height = '170px';
         width = '400px';
         break;
       }
     }
+
     let dialogRef = this.dialog.open(CalendarDialogComponent, {
       data: {
         mode: mode,
         event: event,
-        calendars: this.calendars,
       },
       height: height,
       width: width,
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == null) {
-        console.log('Dialog closed, no changes made.', result);
-        return;
-      }
-      let mode = result[0];
-      let event = result[1];
-      if (mode == 'Add') {
-        this.addEvent(event);
-      } else if (mode == 'Edit') {
-        this.editEvent(event);
-      } else if (mode == 'Delete') {
-        this.deleteEvent(event);
-      } else {
-        console.log('Unrecognized Mode', mode);
-      }
-    });
-  }
-
-  private _buildEventStream() {
-    this.eventStream = this.gcalService.getEventStream();
-    this.calendars = this.gcalService.getCalendars();
-  }
-
-  private _setTodaysDate() {
-    let d = new Date();
-    let year = String(d.getFullYear());
-    let month = String(d.getMonth() + 1);
-    month = month.length > 1 ? month : '0' + month;
-    let date = String(d.getDate())
-    date = date.length > 1 ? date : '0' + date;
-    this.todaysDate = year + '-' + month + '-' + date;
+    dialogRef.afterClosed()
+      .withLatestFrom(this.calendars)
+      .subscribe((result) => {
+        if (result[0] == null) {
+          console.log('Dialog closed, no changes made.', Object.keys(result[1]));
+          return;
+        }
+        let mode = result[0][0];
+        let event = result[0][1];
+        let newEvent = result[0][2];
+        let calendars = result[1];
+        if (mode == 'Add') {
+          this.addEvent(newEvent, calendars);
+        } else if (mode == 'Edit') {
+          this.editEvent(event, newEvent, calendars);
+        } else if (mode == 'Delete') {
+          this.deleteEvent(event);
+        } else {
+          console.log('Unrecognized Mode', mode);
+        }
+      });
   }
 }

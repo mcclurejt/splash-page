@@ -1,75 +1,69 @@
-import { Calendar } from './../../models/calendar';
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/store/reducers';
+import * as CalendarActions from 'app/store/calendar.actions';
+import { Calendar } from 'app/models/calendar';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { CalendarEvent } from '../../models/calendar-event';
 import { Subscription } from 'rxjs/Rx';
 import { GapiService } from './gapi.service';
 import { Observable } from 'rxjs/Observable';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
-import { GoogleCalendarEvent } from "app/models/google-calendar-event";
+import * as _ from "lodash";
 
 @Injectable()
-export class GcalService implements OnDestroy {
+export class GcalService {
 
-  private gapiSignedInSubscription: Subscription
-  private eventMap = new Map<string, GoogleCalendarEvent>();
-  private eventSubject : BehaviorSubject<CalendarEvent[]> = new BehaviorSubject([]);
-  private calendars: Array<Calendar> = [];
-  private nextSyncToken: string = '';
-  public eventStream: Observable<CalendarEvent[]>;
-  
-  constructor(private gapiService: GapiService) {}
+  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
   /**
    * Adds the CalendarEvent to Google Calendar
    * @param event 
    */
-  addEvent(event: CalendarEvent) {
-    let gcalEvent = new GoogleCalendarEvent();
-    // handle dates
-    if(event.allDayEvent){
-      gcalEvent.start = {
-        date: event.startDate,
-      }
-      gcalEvent.end = {
-        date: event.endDate,
-      }
-    } else {
-      gcalEvent.start = {
-        dateTime: event.startDate + 'T' + event.startTime + ':00',
-        timeZone: event.timeZone,
-      }
-      gcalEvent.end = {
-        dateTime: event.endDate + 'T' + event.endTime + ':00',
-        timeZone: event.timeZone,
-      }
-    }
-    gcalEvent.summary = event.summary;
+  addEvent(event: CalendarEvent, calendars: Calendar[]) {
+    let googleEvent = this._mapCalendarEventToGoogleEvent(event);
     // send request to add event
     gapi.client.request({
       path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events',
       method: 'POST',
-      body: gcalEvent,
+      body: googleEvent,
     }).then(
-      (onFulfilled) => {
-        this.updateEventStream();
+      (response) => {
+        let calendarEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == event.calendarId));
+        this.store.dispatch(new CalendarActions.EventAdd(calendarEvent));
       },
-      (onRejected) => {
-        console.log('Event Added OnFailure',onRejected);
-      },
-    (context) => {
-      console.log('Event Added Context',context);
-    });
+      (onRejected) => { console.log('Event Added OnFailure', onRejected) },
+      (context) => { console.log('Event Added Context', context) });
   }
 
   /**
    * Updates the changed event on Google Calendar
    * @param event 
    */
-  editEvent(event: CalendarEvent) {
-    this.updateGoogleCalendarEvent(event);
+  editEvent(event: CalendarEvent, newEvent: CalendarEvent, calendars: Calendar[]) {
+    if (event.calendarId != newEvent.calendarId) {
+      newEvent.backgroundColor = event.backgroundColor;
+      newEvent.foregroundColor = event.foregroundColor;
+      this.deleteEvent(event);
+      this.addEvent(newEvent,calendars);
+      return;
+    }
+    let googleEvent = this._mapCalendarEventToGoogleEvent(newEvent);
+    gapi.client.request({
+      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
+      method: 'PUT',
+      body: googleEvent,
+    }).then(
+      (response) => {
+        console.log('NewGoogleEvent', response);
+        newEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == newEvent.calendarId));
+        this.store.dispatch(new CalendarActions.EventDelete(event));
+        this.store.dispatch(new CalendarActions.EventAdd(newEvent));
+      },
+      (onRejected) => { console.log('Event Updated OnFailure', onRejected) },
+      (context) => { console.log('Event Updated Context', context) });
   }
 
   /**
@@ -82,211 +76,169 @@ export class GcalService implements OnDestroy {
       method: 'DELETE',
     }).then(
       (onFulfilled) => {
-        this.updateEventStream();
+        this.store.dispatch(new CalendarActions.EventDelete(event));
+        // this.store.dispatch(new CalendarActions.ClearCalendars());
       },
-      (onRejected) => {
-        console.log('Event Deleted OnFailure',onRejected);
-      },
-    (context) => {
-      console.log('Event Deleted Context',context);
-    });
+      (onRejected) => { console.log('Event Deleted OnFailure', onRejected) },
+      (context) => { console.log('Event Deleted Context', context) });
   }
 
-  /**
-   * Returns the list of known Google Calendars
-   */
-  getCalendars(){
-    return this.calendars;
-  }
-
-  /**
-   * Runs through the chain of requests to google api and updates the eventSubject based on those results
-   */
-  updateEventStream() {
-    this.eventSubject.next([]);
-    this.requestEvents().subscribe((events: CalendarEvent[]) => {
-      if(events != this.eventSubject.getValue()){
-        this.eventSubject.next(events);
-      }
-    });
-  }
-
-  getEventStream(){
-    return this.eventSubject.asObservable().distinctUntilChanged().share();
-  }
-
-  updateGoogleCalendarEvent(event: CalendarEvent) {
-    let gcalEvent = this.eventMap.get(event.id);
-    // Set start and end based on whether it's an all day event
-    if (event.allDayEvent) {
-      gcalEvent.start = {
-        date: event.startDate,
-      }
-      gcalEvent.end = {
-        date: event.endDate,
-      }
-    } else {
-      gcalEvent.start = {
-        dateTime: event.startDate + 'T' + event.startTime + ':00',
-        timeZone: event.timeZone,
-      }
-      gcalEvent.end = {
-        dateTime: event.endDate + 'T' + event.endTime + ':00',
-        timeZone: event.timeZone,
-      }
-    }
-    // Update event summary
-    gcalEvent.summary = event.summary;
-    gapi.client.request({
-      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
-      method: 'PUT',
-      body: gcalEvent,
-    }).then(
-      (onFulfilled) => {
-        this.updateEventStream();
-      },
-      (onRejected) => {
-        console.log('Event Updated OnFailure',onRejected);
-      },
-    (context) => {
-      console.log('Event Updated Context',context);
-    });
-  }
-
-  /**
-   * Returns an observable of CalendarEvents
-   */
-  requestEvents(): Observable<any> {
-    return this.requestCalendars()
-      .map((response) => { return response.result })
-      .flatMap((calList) => this.getEventsFromCalendars(calList))
-      .map((calArray) => this.mapEvents(calArray))
-      .share();
+  loadCalendars(startDate?: Date) {
+    this._requestCalendars()
+      .map(response => this._mapCalendars(response.result))
+      .flatMap((calendars) => this._requestEvents(calendars, startDate))
+      .map((respCalArray) => this._mapEvents(respCalArray))
+      .subscribe((calEventArray) => {
+        let events = calEventArray[0];
+        let calendars = calEventArray[1];
+        this.store.dispatch(new CalendarActions.EventAdd(events));
+        this.store.dispatch(new CalendarActions.CalendarAdd(calendars));
+      })
   }
 
   /**
    * Same as CalendarList.list() from Google Calendar Api
    * https://developers.google.com/google-apps/calendar/v3/reference/calendarList/list
    */
-  requestCalendars(): Observable<any> {
+  private _requestCalendars(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
           gapi.client.request({
             path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
             method: 'GET',
-          }).then((response) => {
-            resolve(response);
-          });
+          }).then((response) => { resolve(response); });
         }
       });
     }));
   }
 
-  /**
-   * Same as Events.list() from Google Calendar Api
-   * https://developers.google.com/google-apps/calendar/v3/reference/events/list
-   * @param cals The calendarList obtained from getCalendars()
-   */
-  getEventsFromCalendars(cals): Observable<any> {
-    this.nextSyncToken = cals.nextSyncToken;
-    cals = cals.items;
+  private _mapCalendars(calendarListResp: any): Calendar[] {
+    let syncToken = calendarListResp.nextSyncToken;
+    // First make list of objects with necessary Calendar Data
+    let calArray = new Array<Calendar>();
+    for (let cal of calendarListResp.items) {
+      let calendar = new Calendar({
+        id: cal.id,
+        provider: 'google',
+        summary: cal.summary,
+        foregroundColor: cal.foregroundColor,
+        backgroundColor: cal.backgroundColor,
+        syncToken: syncToken,
+        timeZone: cal.timeZone,
+      });
+      calArray.push(calendar);
+    }
+    return calArray;
+  }
+
+  private _requestEvents(calendars, startDate?: Date): Observable<any> {
     let gapi = window['gapi'];
     let batch = gapi.client.newBatch();
-    let d = this.getFirstDayOfWeek();
+    let d = startDate || this.getFirstDayOfWeek();
     let params = {
       orderBy: 'startTime',
       singleEvents: 'True',
-      timeMin: this.getRFC3339Date(d),
-    }
-    // Iterate through all the calendars to get dates for each
-    for (let i = 0; i < cals.length; i++) {
-      // Add the calendar to the list
-      let calendar = new Calendar();
-      calendar.id = cals[i].id;
-      calendar.provider = 'google';
-      calendar.summary = cals[i].summary;
-      calendar.foregroundColor = cals[i].foregroundColor;
-      calendar.backgroundColor = cals[i].backgroundColor;
-      this.calendars.push(calendar);
-      // Add the request to the batch
-      let url = 'https://www.googleapis.com/calendar/v3/calendars/' + cals[i].id + '/events'
+      timeMin: this._getRFC3339Date(d),
+    };
+    // Fill the Batch Request
+    for (let calendar of calendars) {
+      let id = calendar.id;
+      let url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(id) + '/events'
       let req = gapi.client.request({
         path: url,
         method: 'GET',
         params: params,
       });
-      batch.add(req, { 'id': cals[i].id });
+      batch.add(req, { 'id': id });
     }
-    // Execute the request and return the events along with calendar data
     return Observable.fromPromise(new Promise((resolve) => {
-      batch.execute((response, other) => resolve([response, cals]));
+      batch.execute((response, other) => resolve([response, calendars]));
     }));
   }
 
-  /**
-   * Takes in a calendarList.list() and array of events.list() and converts
-   * it to an array of calendarEvents
-   * @param calEventArray 
-   */
-  mapEvents(calEventArray): CalendarEvent[] {
-    // Pull out the goodies from calArray
-    let eventArray = calEventArray[0];
-    let calArray = calEventArray[1];
-    // Initialize what we'll eventually return
-    let eventList: CalendarEvent[] = []
-    for (let cal of calArray) {
-      // Add the background and foreground colors of the cals to the event arrays
-      eventArray[cal.id].backgroundColor = cal.backgroundColor;
-      eventArray[cal.id].foregroundColor = cal.foregroundColor;
-      let eventCal = eventArray[cal.id];
-      if (eventCal.result && !(eventCal.result.error)) {
-        let id = eventCal.id;
-        let summary = eventCal.result.summary;
-        let timeZone = eventCal.result.timeZone;
-        let foregroundColor = eventCal.foregroundColor;
-        let backgroundColor = eventCal.backgroundColor;
-        if (eventCal.result != 'Not Found' && eventCal.result.items != null) {
-          for (let event of eventCal.result.items) {
-            let calEvent = new CalendarEvent();
-            // Add the event to the map
-            let gCalEvent = Object.setPrototypeOf(event, GoogleCalendarEvent.prototype);
-            this.eventMap.set(event.id, gCalEvent);
-            calEvent.calendarId = id;
-            calEvent.id = event.id;
-            calEvent.calendarSummary = summary;
-            calEvent.summary = event.summary;
-            calEvent.timeZone = timeZone;
-            calEvent.calendarForegroundColor = foregroundColor;
-            calEvent.calendarBackgroundColor = backgroundColor;
-            if (event.start.date != null) {
-              calEvent.startDate = event.start.date;
-              calEvent.startTime = '00:00';
-              calEvent.endDate = event.end.date;
-              calEvent.endTime = '00:00';
-              calEvent.allDayEvent = true;
-            } else {
-              let startDateTime = event.start.dateTime.split('T');
-              let endDateTime = event.end.dateTime.split('T');
-              calEvent.startDate = startDateTime[0];
-              calEvent.startTime = startDateTime[1].split('-')[0].substr(0, 5);
-              calEvent.endDate = endDateTime[0];
-              calEvent.endTime = endDateTime[1].split('-')[0].substr(0, 5);
-              calEvent.allDayEvent = false;
-            }
-            eventList.push(calEvent);
-          }
-        }
+  private _mapEvents(respCalArray): Array<any> {
+    // Split apart the passed in structure
+    let eventResp = respCalArray[0];
+    let calendars = respCalArray[1];
+    let calendarEvents = [];
+    for (let calendar of calendars) {
+      // Get array of events from response 
+      let events = eventResp[calendar.id].result.items
+      if (events == undefined) {
+        events = [];
+      }
+
+      for (let event of events) {
+        let calendarEvent = this._mapGoogleEventToCalendarEvent(event, calendar);
+        calendarEvents.push(calendarEvent);
       }
     }
-    return eventList;
+    return [calendarEvents, calendars];
   }
+
+  /**
+   * Maps a google calendar event to a CalendarEvent
+   */
+  private _mapGoogleEventToCalendarEvent(googleEvent, calendar: Calendar): CalendarEvent {
+    let calendarEvent = new CalendarEvent({
+      id: googleEvent.id,
+      summary: googleEvent.summary,
+      foregroundColor: calendar.foregroundColor,
+      backgroundColor: calendar.backgroundColor,
+      calendarId: calendar.id,
+      timeZone: calendar.timeZone,
+    });
+    // Apply the correct fields based on whether the event is all day
+    if (googleEvent.start.date != null) {
+      calendarEvent.startDate = googleEvent.start.date;
+      calendarEvent.endDate = googleEvent.end.date;
+      calendarEvent.allDayEvent = true;
+    } else {
+      let startDateTime = googleEvent.start.dateTime.split('T');
+      let endDateTime = googleEvent.end.dateTime.split('T');
+      calendarEvent.startDate = startDateTime[0];
+      calendarEvent.startTime = startDateTime[1].split('-')[0].substr(0, 5);
+      calendarEvent.endDate = endDateTime[0];
+      calendarEvent.endTime = endDateTime[1].split('-')[0].substr(0, 5);
+      calendarEvent.allDayEvent = false;
+    }
+    return calendarEvent;
+  }
+
+  private _mapCalendarEventToGoogleEvent(event: CalendarEvent) {
+    let googleEvent = {
+      start: {},
+      end: {},
+      summary: event.summary,
+    }
+    // handle dates
+    if (event.allDayEvent) {
+      googleEvent.start = {
+        date: event.startDate,
+      }
+      googleEvent.end = {
+        date: event.endDate,
+      }
+    } else {
+      googleEvent.start = {
+        dateTime: event.startDate + 'T' + event.startTime + ':00',
+        timeZone: event.timeZone,
+      }
+      googleEvent.end = {
+        dateTime: event.endDate + 'T' + event.endTime + ':00',
+        timeZone: event.timeZone,
+      }
+    }
+    return googleEvent;
+  }
+
 
   /**
    * Returns the provided date in RFC3339 format to be used in requests to Google's Apis
    * @param d Date object representing the desired date
    */
-  private getRFC3339Date(d: Date): string {
+  private _getRFC3339Date(d: Date): string {
     let pad = (n) => { return n < 10 ? "0" + n : n; };
     let timezoneOffset = (offset) => {
       let sign;
@@ -313,12 +265,6 @@ export class GcalService implements OnDestroy {
     let day = d.getDay();
     let diff = d.getDate() - day;
     return new Date(d.setDate(diff));
-  }
-
-  ngOnDestroy() {
-    if (this.gapiSignedInSubscription) {
-      this.gapiSignedInSubscription.unsubscribe();
-    }
   }
 
 }

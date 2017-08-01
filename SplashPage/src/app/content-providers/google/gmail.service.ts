@@ -42,7 +42,7 @@ export class GmailService {
   }
 
   getEmailsFromList(messageList): Observable<any> {
-    console.log("getEmailsFromList()");
+    console.log("getEmailsFromList()",messageList);
     this.nextPageToken = messageList.nextPageToken;
     const messages = messageList.messages;
     let gapi = window['gapi'];

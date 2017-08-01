@@ -56,8 +56,9 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { FormsModule } from "@angular/forms";
 import { TimePipe } from './pipes/time.pipe';
 import { StoreModule } from '@ngrx/store';
-import { weatherReducer } from './stores/weather.store';
+import { reducers } from './store/reducers';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
+import { AgendaViewComponent } from './components/calendar/agenda-view/agenda-view.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -99,6 +100,7 @@ export const MaterialModules = [
     TruncatePipe,
     CalendarDialogComponent,
     TimePipe,
+    AgendaViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -113,7 +115,7 @@ export const MaterialModules = [
     HttpModule,
     InfiniteScrollModule,
     FormsModule,
-    StoreModule.forRoot({weather: weatherReducer}),
+    StoreModule.forRoot(reducers),
     Angular2FontawesomeModule,
   ],
   providers: [
