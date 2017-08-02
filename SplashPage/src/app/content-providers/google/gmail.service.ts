@@ -20,24 +20,31 @@ export class GmailService {
     
   }
 
-  getEmails(): Observable<any> {
+  //TODO: consider adding a query parameter
+  getEmails(): void {
     console.log("getEmails()");
-    return this.requestEmailIds()
+    this.requestEmailIds()
     .map((response) => {
       return response.result })
     .flatMap((messageList) => this.getEmailsFromList(messageList))
-    .map((response) => this.mapMessages(response)).share();
+    .map((response) => this.mapMessages(response)).subscribe((messageMap) => { 
+      console.log("Emails: ", messageMap);
+     });
   }
 
   requestEmailIds(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
+      this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
+        if (isSignedIn) {
           gapi.client.request({
             path: 'https://www.googleapis.com/gmail/v1/users/me/messages',
             method: 'GET',
           }).then((response) => {
             resolve(response);
           });
-        }));
+        }
+      });
+    }));
   }
 
   getEmailsFromList(messageList): Observable<any> {
@@ -83,7 +90,8 @@ export class GmailService {
     let result: any = {
       id: gMessage.id,
       threadId: gMessage.threadId,
-      labelIds: gMessage.labelIds
+      labelIds: gMessage.labelIds,
+      snippet: gMessage.snippet
     };
     if (gMessage.internalDate) {
       result.internalDate = parseInt(gMessage.internalDate);

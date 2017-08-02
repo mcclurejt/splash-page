@@ -1,6 +1,7 @@
 export class EmailMessage {
     id: string;
     threadId: string;
+    snippet?: string;
     labelIds: [
         string
     ];
@@ -21,5 +22,8 @@ export class EmailMessage {
         this.headers = obj && obj.headers || {};
         this.textPlain = obj && obj.textPlain || '';
         this.textHtml = obj && obj.textHtml || '';
+        if (obj && obj.snippet) {
+            this.snippet = obj.snippet;
+        }
     }
 }
