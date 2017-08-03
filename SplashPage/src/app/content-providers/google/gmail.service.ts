@@ -2,10 +2,9 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { GapiService } from "app/content-providers/google/gapi.service";
 import { Subscription } from "rxjs/Rx";
-import { GoogleMessageList } from "app/models/google-message-list";
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
-import { EmailMessage } from "app/models/emailMessage";
+import { MailMessage } from "app/store/mail/mail-message";
 import * as _ from "lodash";
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/store/reducers';
@@ -91,7 +90,7 @@ export class GmailService {
 
     console.log("full", response);
 
-    let messageList: EmailMessage[] = [];
+    let messageList: MailMessage[] = [];
     for (let i = 0; i<messageIds.length; i++) {
       let message = response[messageIds[i].id].result;
       let email = this.mapGoogleMessageToEmailMessage(message);
@@ -100,7 +99,7 @@ export class GmailService {
     return messageList;
   }
 
-  mapGoogleMessageToEmailMessage(gMessage: any): EmailMessage {
+  mapGoogleMessageToEmailMessage(gMessage: any): MailMessage {
     let result: any = {
       id: gMessage.id,
       threadId: gMessage.threadId,
@@ -112,7 +111,7 @@ export class GmailService {
     }
 
     if (!gMessage.payload) {
-      return new EmailMessage(result);
+      return new MailMessage(result);
     }
 
     let headers = this.indexHeaders(gMessage.payload.headers);
@@ -155,7 +154,7 @@ export class GmailService {
       firstPartProcessed = true;
     }
 
-    return new EmailMessage(result);
+    return new MailMessage(result);
   }
 
   indexHeaders(headers: any): any {

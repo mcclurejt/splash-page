@@ -1,13 +1,13 @@
 import * as MailActions from './mail.actions';
-import { EmailMessage } from "app/models/emailMessage";
+import { MailMessage } from "app/store/mail/mail-message";
 import * as _ from "lodash";
 
 export interface MailThread {
-    [key:string]:EmailMessage[]
+    [key:string]:MailMessage[]
 }
 
 export interface State {
-    messages: EmailMessage[],
+    messages: MailMessage[],
     threads: MailThread
 }
 

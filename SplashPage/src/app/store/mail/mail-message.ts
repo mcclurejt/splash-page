@@ -1,4 +1,4 @@
-export class EmailMessage {
+export class MailMessage {
     id: string;
     threadId: string;
     snippet?: string;
