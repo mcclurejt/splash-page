@@ -1,7 +1,42 @@
-<div class='container'>
-  <md-grid-list cols='7' rowHeight='2:1'>
-    <md-grid-tile *ngFor='let day of days'>
-      <h3>{{day}}</h3>
-    </md-grid-tile>
-  </md-grid-list>
+<div fxLayoutAlign='center center' class='container'>
+  <div class='viewContainer' fxLayout='column'>
+
+    <div class='weekHeader' fxLayout='row' fxLayoutAlign='center center'>
+      <div class='dayHeader' fxFlex *ngFor='let date of dates'>
+        <div class='monthAndDate'>{{date | date:'MMM d'}}</div>
+        <div class='dayOfWeek'>{{date | date:'EEEE'}}</div>
+      </div>
+    </div>
+
+    <div class='allDayRow' fxLayout='row' fxLayoutAlign='center start'>
+      <div fxFlex *ngFor='let date of dates'>
+        <div class='eventListContainer' fxLayout='column' fxLayoutAlign='start center'>
+          <div *ngFor='let event of (allDayEvents | async)[date]' [style.background-color]='event.backgroundColor' [style.color]='event.foregroundColor'
+            class='eventContainer'>
+            <div class='summaryContainer'>
+              {{event.summary | truncate:30}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class='timedEventContainer' fxLayout='column' fxLayoutAlign='start center'>
+      <div class='timedEventRow' style='width:100%;' fxLayout='row' fxLayoutAlign='center center' *ngFor='let time of times'>
+        <div fxFlex *ngFor='let date of dates; first as isFirst'>
+          <div class='timeContainer'>
+            <div class='startTime' fxLayoutAlign='start center' *ngIf='isFirst'>
+              {{time}}
+            </div>
+            <div *ngFor='let event of (timedEvents | async)[date]' [style.background-color]='event.backgroundColor' [style.color]='event.foregroundColor'>
+              <div class='timedEvent' *ngIf='(event.startTime | time) == time'>
+                {{event.summary | truncate:30}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

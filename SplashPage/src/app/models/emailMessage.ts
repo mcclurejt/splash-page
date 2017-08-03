@@ -6,5 +6,4 @@ export class EmailMessage {
     ];
     internalDate: number;
     bodyData: string;
-    
 }

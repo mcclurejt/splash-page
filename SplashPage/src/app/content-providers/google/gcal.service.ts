@@ -85,6 +85,7 @@ export class GcalService {
   }
 
   private _requestCalendars(): Observable<any> {
+    console.log('Requesting Calendars');
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
@@ -117,6 +118,7 @@ export class GcalService {
   }
 
   private _requestEvents(calendars, startDate?: Date): Observable<any> {
+    console.log('Requesting Events');
     let gapi = window['gapi'];
     let batch = gapi.client.newBatch();
     let d = startDate || this.getFirstDayOfWeek();
@@ -172,6 +174,7 @@ export class GcalService {
       backgroundColor: calendar.backgroundColor,
       calendarId: calendar.id,
       timeZone: calendar.timeZone,
+      provider: 'google',
     });
     // Apply the correct fields based on whether the event is all day
     if (googleEvent.start.date != null) {

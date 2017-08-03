@@ -5,13 +5,67 @@ $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 .container {
   padding: 20px;
-  md-grid-list {
+  height: 100%;
+  .viewContainer {
+    height: 100%;
+    width: 100%;
     background-color: $light-background;
-    md-grid-tile {
-      color: $dark-text;
-      border: 1px solid $dark-text;
-      md-list{
-        height:100%;
+    border-radius: 5px;
+    .weekHeader {
+      height: 50px !important;
+      border-bottom: 1px solid $dark-background;
+      .dayHeader {
+        color: $dark-text;
+        text-align: center;
+        .monthAndDate {
+          font-weight: 300;
+          font-size: 12px;
+        }
+        .dayOfWeek {
+          font-weight: 400;
+          font-size: 18px;
+        }
+      }
+    }
+    .allDayRow {
+      max-height: 110px !important;
+      overflow: scroll;
+      border-bottom: 1px solid $dark-background;
+      .eventListContainer {
+        .eventContainer {
+          opacity: 10%;
+          width: 99%;
+          margin: 1px;
+          .summaryContainer {
+            margin: 5px 10px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 400;
+          }
+        }
+      }
+    }
+    .timedEventContainer {
+      height: 100%;
+      width: 100%;
+      padding-top: 20px;
+      overflow: scroll;
+      .timedEventRow {
+        border-bottom: 1px solid $dark-background;
+        min-height: 20px;
+        .timeContainer {
+          width: 100%;
+          .startTime {
+            font-size: 11px;
+          }
+          .timedEvent {
+            padding: 5px 0px;
+            margin: 0px 10px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 400;
+          }
+        }
       }
     }
   }
