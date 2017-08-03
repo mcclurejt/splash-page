@@ -35,7 +35,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
                     {[action.payload.threadId] : [...state.threads[action.payload.threadId],action.payload] }
                 )
             }
-            console.log("MailAdd newState: ", newState);
+            // console.log("MailAdd newState: ", newState);
             return newState;
         }
 

@@ -1,7 +1,8 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 $light-text: rgba(245, 245, 245, 1);
 $dark-text: rgba(66, 66, 66, 1);
-$light-background:rgba(245, 245, 245, 0.9);
+$light-background:rgba(245, 245, 245, 1);
+$accent-background: rgba(210, 210, 210, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 html,
@@ -39,7 +40,7 @@ textarea {
 
 .mat-menu-panel{
   font-family: 'Comfortaa', cursive !important;
-  background-color: rgba(245, 245, 245, 1) !important;
+  background-color: $light-background !important;
   color: $dark-text !important;
 }
 

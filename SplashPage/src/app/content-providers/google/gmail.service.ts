@@ -21,10 +21,10 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) {
     this.store.select(store => store.mail.messages).subscribe((messages) => {
-      console.log("gmail-service messages", messages); 
+      // console.log("gmail-service messages", messages); 
     });
     this.store.select(store => store.mail.threads).subscribe((threads) => {
-      console.log("gmail-service threads", threads); 
+      // console.log("gmail-service threads", threads); 
     });
 
   }
@@ -88,7 +88,7 @@ export class GmailService {
     let response = any[0];
     let messageIds = any[1];
 
-    console.log("full", response);
+    // console.log("full", response);
 
     let messageList: MailMessage[] = [];
     for (let i = 0; i<messageIds.length; i++) {
