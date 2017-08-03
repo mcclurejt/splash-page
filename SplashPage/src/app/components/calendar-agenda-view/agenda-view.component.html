@@ -3,27 +3,28 @@
     [scrollWindow]='false' (scrolled)='onScrollDown()'>
     <div *ngFor="let eventArray of (events | async)">
       <md-list-item id='dateRow'>
-        <span fxFlex='5%' fxHide.xs></span>
-        <h3 *ngIf="todaysDate==eventArray[0]?.startDate;else blankTemplate" fxFlex='15%' fxLayoutAlign='start center' fxHide.xs>Today</h3>
+        <!-- <span fxFlex='20%' fxHide.xs></span> -->
+        <!-- <h3 *ngIf="todaysDate==eventArray[0]?.startDate;else blankTemplate" fxFlex='15%' fxLayoutAlign='start center' fxHide.xs>Today</h3> -->
         <ng-template #blankTemplate>
           <div fxFlex='15%' fxHide.xs></div>
         </ng-template>
-        <span fxFlex='5%' fxHide.xs></span>
+        <!-- <span fxFlex='5%' fxHide.xs></span> -->
         <h4 fxFlex fxLayoutAlign='start center' fxHide.xs>{{eventArray[0]?.startDate | date:'EEEE, MMMM d'}}</h4>
         <h4 fxFlex fxLayoutAlign='start center' fxHide.gt-xs>{{eventArray[0]?.startDate | date:'EEE, MMM d'}}</h4>
         <button md-icon-button (click)='openDialog("Add",eventArray[0])'><md-icon style='color: #f5f5f5'>add_circle</md-icon></button>
       </md-list-item>
       <div *ngFor="let event of eventArray">
-        <md-list-item id='eventRow' md-line
-          [style.background-color]='event.backgroundColor'
-          [style.color]='event.foregroundColor'
-          style='border-radius: 10px;'>
+        <md-list-item id='eventRow' md-line>
           <span fxFlex='5%' fxHide.xs></span>
           <span id='eventTime' fxFlex='15%' [style.xs]='{"font-size.px" : 12}'>{{event.allDayEvent ? 'All Day' : (event.startTime | time) + '\n' + (event.endTime | time)}}</span>
-          <span fxFlex='5%'></span>
+          <span fxFlex='2%'></span>
+          <div style='height: 70%;width: 4px;border-radius: 2px;' [style.background-color]='event.backgroundColor'>
+
+          </div>
+          <span fxFlex='2%'></span>
           <span fxFlex fxLayoutAlign='start center' [style.xs]='{"font-size.px" : 12}'>{{event.summary | truncate : 60}}</span>
-          <button md-icon-button (click)='openDialog("Edit",event)'><md-icon>mode_edit</md-icon></button>
-          <button md-icon-button (click)='openDialog("Delete",event)'><md-icon>delete</md-icon></button>
+          <button md-icon-button (click)='openDialog("Edit",event)' style='color: #f5f5f5'><md-icon>mode_edit</md-icon></button>
+          <button md-icon-button (click)='openDialog("Delete",event)' style='color: #f5f5f5'><md-icon>delete</md-icon></button>
         </md-list-item>
       </div>
     </div>
