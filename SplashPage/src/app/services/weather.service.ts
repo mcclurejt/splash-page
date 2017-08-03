@@ -12,7 +12,7 @@ import * as fromRoot from '../store/reducers';
 
 @Injectable()
 export class WeatherService {
-  private weatherBaseUrl = 'http://cors-proxy.htmldriven.com/?url=https://api.darksky.net/forecast/ffd941872a25813256d6d849d37140cf/'
+  private weatherBaseUrl = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/ffd941872a25813256d6d849d37140cf/'
   private ipLocationUrl = 'https://ipinfo.io/json'
   private city;
   private region;
@@ -43,11 +43,7 @@ export class WeatherService {
   }
 
   private requestWeather(coords): any {
-    // this.http.options(this._getUrl(coords)).subscribe((resp) => {
-    //     console.log('weather options',resp);
-    //   });
-    // return this.http.get(this._getUrl(coords));
-    return this.http.get('https://us-central1-mcclurjt-splash-page.cloudfunctions.net/helloWorld')
+    return this.http.get(this._getUrl(coords));
   }
 
   private _getUrl(coords): string {
