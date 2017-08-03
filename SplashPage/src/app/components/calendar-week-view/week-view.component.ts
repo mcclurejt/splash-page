@@ -27,19 +27,12 @@ export class WeekViewComponent {
 
   getTimedEvents(events: CalendarEvent[]){
     let timedEvents = _.filter(events, {'allDayEvent':false});
-    console.log('timedEvents',timedEvents);
     return this._filterEvents(timedEvents);
   }
 
   getAllDayEvents(events: CalendarEvent[]){
     let allDayEvents = _.filter(events, {'allDayEvent':true});
     return this._filterEvents(allDayEvents);
-  }
-
-  getEventFromTime(events: CalendarEvent[], time: string){
-    console.log('time',time);
-    console.log('events',events);
-    return events.find((event:CalendarEvent) => event.startTime == time);
   }
 
   private _filterEvents(events: CalendarEvent[]): any{

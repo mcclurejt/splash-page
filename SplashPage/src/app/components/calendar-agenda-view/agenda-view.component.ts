@@ -1,5 +1,5 @@
-import { CalendarService } from './../../../services/calendar.service';
-import { CalendarComponent } from './../calendar.component';
+import { CalendarService } from 'app/services/calendar.service';
+import { CalendarComponent } from 'app/components/calendar/calendar.component';
 import { Observable } from 'rxjs/Observable';
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Component, OnInit } from '@angular/core';

@@ -33,7 +33,7 @@ import {
   MdDialogModule,
   MD_DIALOG_DATA,
   MdGridListModule,
-  MdIconModule,
+  MdIconModule, 
   MdInputModule,
   MdListModule,
   MdMenuModule,
@@ -57,9 +57,9 @@ import { TimePipe } from './pipes/time.pipe';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './store/reducers';
 import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawesome';
-import { AgendaViewComponent } from './components/calendar/agenda-view/agenda-view.component';
+import { AgendaViewComponent } from './components/calendar-agenda-view/agenda-view.component';
 import { CalendarTabComponent } from './+calendar-tab/calendar-tab.component';
-import { WeekViewComponent } from './components/calendar/week-view/week-view.component';
+import { WeekViewComponent } from './components/calendar-week-view/week-view.component';
 import { MailService } from "app/services/mail.service";
 
 export const MaterialModules = [

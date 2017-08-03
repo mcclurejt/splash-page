@@ -6,3 +6,9 @@ $transparent-background: rgba(245, 245, 245, 0);
 .container {
   height:100%;
 }
+.mobileContainer{
+  height: calc(100% - 40px);
+  padding: 20px;
+  background-color: $dark-background;
+  overflow-y: scroll;
+}
