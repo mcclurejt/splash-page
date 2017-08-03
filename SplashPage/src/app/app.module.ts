@@ -60,6 +60,7 @@ import { Angular2FontawesomeModule } from 'angular2-fontawesome/angular2-fontawe
 import { AgendaViewComponent } from './components/calendar/agenda-view/agenda-view.component';
 import { CalendarTabComponent } from './+calendar-tab/calendar-tab.component';
 import { WeekViewComponent } from './components/calendar/week-view/week-view.component';
+import { MailService } from "app/services/mail.service";
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -127,6 +128,7 @@ export const MaterialModules = [
     GcalService,
     GmailService,
     CalendarService,
+    MailService
     ],
   entryComponents: [
     CalendarDialogComponent,

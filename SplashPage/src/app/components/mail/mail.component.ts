@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { GapiService } from 'app/content-providers/google/gapi.service';
 import { Component, OnInit } from '@angular/core';
 import { GmailService } from "app/content-providers/google/gmail.service";
+import { MailService } from "app/services/mail.service";
 
 @Component({
   selector: 'app-mail',
@@ -14,19 +15,19 @@ export class MailComponent implements OnInit {
   mailStream : Observable<any>;
 
 
-  constructor(private gmailService: GmailService, private gapiService: GapiService) {
-    this.gapiService.getIsSignedInStream()
-      .subscribe((isSignedIn: boolean) => {
-        if (isSignedIn) {
-          console.log("Loading messages");
-          gmailService.getEmails().subscribe((emails) => {
-            console.log('We got Emails',emails);
-            for(let email of emails){
-              // console.log('Email body',email.result);
-            }
-          })
-        }
-      });
+  constructor(private mailService: MailService) {
+    // this.gapiService.getIsSignedInStream()
+    //   .subscribe((isSignedIn: boolean) => {
+    //     if (isSignedIn) {
+    //       console.log("Loading messages");
+    //       gmailService.getEmails().subscribe((emails) => {
+    //         console.log('We got Emails',emails);
+    //         for(let email of emails){
+    //           // console.log('Email body',email.result);
+    //         }
+    //       })
+    //     }
+    //   });
      
   }
 
