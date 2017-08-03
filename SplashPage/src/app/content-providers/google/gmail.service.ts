@@ -7,6 +7,10 @@ import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
 import { EmailMessage } from "app/models/emailMessage";
 import * as _ from "lodash";
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/store/reducers';
+import * as MailActions from 'app/store/mail/mail.actions';
+
 
 
 @Injectable()
@@ -16,8 +20,14 @@ export class GmailService {
   private nextPageToken: string;
 
 
-  constructor(private gapiService: GapiService) {
-    
+  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) {
+    this.store.select(store => store.mail.messages).subscribe((messages) => {
+      console.log("gmail-service messages", messages); 
+    });
+    this.store.select(store => store.mail.threads).subscribe((threads) => {
+      console.log("gmail-service threads", threads); 
+    });
+
   }
 
   //TODO: consider adding a query parameter
@@ -27,8 +37,10 @@ export class GmailService {
     .map((response) => {
       return response.result })
     .flatMap((messageList) => this.getEmailsFromList(messageList))
-    .map((response) => this.mapMessages(response)).subscribe((messageMap) => { 
-      console.log("Emails: ", messageMap);
+    .map((response) => this.mapMessages(response))
+    .subscribe((messageMap) => {
+      this.store.dispatch(new MailActions.MailAdd(messageMap));
+      // console.log("Emails: ", messageMap);
      });
   }
 
@@ -77,13 +89,15 @@ export class GmailService {
     let response = any[0];
     let messageIds = any[1];
 
+    console.log("full", response);
+
     let messageList: EmailMessage[] = [];
     for (let i = 0; i<messageIds.length; i++) {
       let message = response[messageIds[i].id].result;
       let email = this.mapGoogleMessageToEmailMessage(message);
       messageList.push(email);
     }
-    return _.keyBy(messageList, 'id');
+    return messageList;
   }
 
   mapGoogleMessageToEmailMessage(gMessage: any): EmailMessage {
