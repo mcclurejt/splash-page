@@ -121,9 +121,11 @@ export class GmailService {
       let isAttachment = headers['content-disposition'] && headers['content-disposition'].indexOf('attachment') !== -1;
 
       if (isHtml && !isAttachment) {
-        result.textHtml = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/') );
+        // result.textHtml = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/') );
+        result.textHtml = this.b64DecodeUnicode(part.body.data);
       } else if (isPlain && !isAttachment) {
-        result.textPlain = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+        // result.textPlain = atob(part.body.data.replace(/-/g, '+').replace(/_/g, '/'));
+        result.textPlain = this.b64DecodeUnicode(part.body.data);
       } else if (isAttachment) {
         var body = part.body;
         if (!result.attachments) {
@@ -151,5 +153,11 @@ export class GmailService {
         return result; 
        }, {});
     }
+  }
+
+  b64DecodeUnicode(str: any) {
+    return decodeURIComponent(Array.prototype.map.call(atob(str.replace(/-/g, '+').replace(/_/g, '/')), (c) => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
   }
 }
