@@ -39,49 +39,54 @@ export class GapiService implements OnDestroy {
     gapi.client.init({
       'apiKey': this.API_KEY,
       'discoveryDocs': this.DISCOVERY_DOCS,
-      'clientId' : this.CLIENT_ID,
-      'scope' : this.SCOPES,
-    }).then( () => {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSignInStatus.bind(this));
-      this.updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    });
+      'clientId': this.CLIENT_ID,
+      'scope': this.SCOPES,
+    }).then(
+      // Fulfilled
+      () => {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSignInStatus.bind(this));
+        this.updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      },
+      (error) => {
+        console.log('Error in gapi.client.init() : ',error);
+      });
   }
 
-  updateSignInStatus(isSignedIn){
-    if(isSignedIn){
+  updateSignInStatus(isSignedIn) {
+    if (isSignedIn) {
       this.isSignedInSubject.next(true);
     } else {
       this.isSignedInSubject.next(false);
     }
   }
 
-  signIn(): Promise<gapi.auth2.GoogleUser>{
+  signIn(): Promise<gapi.auth2.GoogleUser> {
     return gapi.auth2.getAuthInstance().signIn({
       prompt: 'select_account',
     });
   }
 
-  signOut(){
+  signOut() {
     gapi.auth2.getAuthInstance().signOut();
   }
 
-  startTokenTimer(access_token: string, timeInSeconds: number){
-    let dueTimeInMs = (timeInSeconds - 60)*1000;
+  startTokenTimer(access_token: string, timeInSeconds: number) {
+    let dueTimeInMs = (timeInSeconds - 60) * 1000;
     console.log('Start token timer for: ' + timeInSeconds + 'ms');
     this.tokenSubscription = Observable.timer(dueTimeInMs)
-      .subscribe( (num: number) => {
+      .subscribe((num: number) => {
         gapi.auth2.getAuthInstance()
-        .currentUser.get()
-        .reloadAuthResponse()
-        .then( (authResponse: gapi.auth2.AuthResponse) => {
-          console.log('Auth Response Reloaded');
-          this.startTokenTimer(authResponse.access_token, authResponse.expires_in);
-        })
+          .currentUser.get()
+          .reloadAuthResponse()
+          .then((authResponse: gapi.auth2.AuthResponse) => {
+            console.log('Auth Response Reloaded');
+            this.startTokenTimer(authResponse.access_token, authResponse.expires_in);
+          })
       })
   }
 
-  ngOnDestroy(){
-    if(this.tokenSubscription){
+  ngOnDestroy() {
+    if (this.tokenSubscription) {
       this.tokenSubscription.unsubscribe();
     }
   }

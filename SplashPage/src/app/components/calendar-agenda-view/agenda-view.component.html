@@ -1,32 +1,51 @@
-<div fxLayout id='agendaContainer' [style.xs]='{"max-height.px" : 300}'>
-  <md-list fxFlex infinite-scroll [infiniteScrollDistance]='2' [infiniteScrollThrottle]='500' [infiniteScrollDisabled]='isScrollLoading'
-    [scrollWindow]='false' (scrolled)='onScrollDown()'>
-    <div *ngFor="let eventArray of (events | async)">
-      <md-list-item id='dateRow'>
-        <!-- <span fxFlex='20%' fxHide.xs></span> -->
-        <!-- <h3 *ngIf="todaysDate==eventArray[0]?.startDate;else blankTemplate" fxFlex='15%' fxLayoutAlign='start center' fxHide.xs>Today</h3> -->
-        <ng-template #blankTemplate>
-          <div fxFlex='15%' fxHide.xs></div>
-        </ng-template>
-        <!-- <span fxFlex='5%' fxHide.xs></span> -->
-        <h4 fxFlex fxLayoutAlign='start center' fxHide.xs>{{eventArray[0]?.startDate | date:'EEEE, MMMM d'}}</h4>
-        <h4 fxFlex fxLayoutAlign='start center' fxHide.gt-xs>{{eventArray[0]?.startDate | date:'EEE, MMM d'}}</h4>
-        <button md-icon-button (click)='openDialog("Add",eventArray[0])'><md-icon style='color: #f5f5f5'>add_circle</md-icon></button>
-      </md-list-item>
-      <div *ngFor="let event of eventArray">
-        <md-list-item id='eventRow' md-line>
-          <span fxFlex='5%' fxHide.xs></span>
-          <span id='eventTime' fxFlex='15%' [style.xs]='{"font-size.px" : 12}'>{{event.allDayEvent ? 'All Day' : (event.startTime | time) + '\n' + (event.endTime | time)}}</span>
-          <span fxFlex='2%'></span>
-          <div style='height: 70%;width: 4px;border-radius: 2px;' [style.background-color]='event.backgroundColor'>
+<div fxLayout='column' fxLayoutAlign='start center' class='container'>
 
-          </div>
-          <span fxFlex='2%'></span>
-          <span fxFlex fxLayoutAlign='start center' [style.xs]='{"font-size.px" : 12}'>{{event.summary | truncate : 60}}</span>
-          <button md-icon-button (click)='openDialog("Edit",event)' style='color: #f5f5f5'><md-icon>mode_edit</md-icon></button>
-          <button md-icon-button (click)='openDialog("Delete",event)' style='color: #f5f5f5'><md-icon>delete</md-icon></button>
-        </md-list-item>
-      </div>
+  <div *ngFor="let eventArray of (events | async)" style='border-radius: 5px;width:100%;'>
+
+    <div fxLayout fxLayoutAlign='center center' class='date-row'>
+      <span fxHide.sm fxHide.xs>
+        {{eventArray[0]?.startDate | date:'EEEE, MMMM d'}}
+      </span>
+      <span fxHide.gt-sm>
+        {{eventArray[0]?.startDate | date:'EEE, MMM d'}}
+      </span>
+      <span fxFlex></span>
+      <button md-icon-button style='color:green' (click)='openDialog("Add",eventArray[0])'>
+        <i fa [name]="'plus-square-o'" [size]=1 [fw]=true></i>
+      </button>
     </div>
-  </md-list>
+
+    <div *ngFor="let event of eventArray" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px'>
+      <span *ngIf='event.allDayEvent;else timedEvent' [style.xs]='{"font-size.px" : 12}'>
+        All Day
+      </span>
+      <ng-template #timedEvent>
+        <div fxLayout='column'>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12}'>
+            {{(event.startTime | time)}}
+          </div>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12}'>
+            {{(event.endTime | time)}}
+          </div>
+        </div>
+      </ng-template>
+
+
+      <div class='calendar-color' style='height: 70%;width: 4px;border-radius: 2px' [style.background-color]='event.backgroundColor'>&nbsp;</div>
+
+      <span fxFlex [style.xs]='{"font-size.px" : 12}'>
+        {{event.summary | truncate : 60}}
+      </span>
+
+      <button md-icon-button (click)='openDialog("Edit",event)'>
+        <i fa [name]="'pencil-square-o'" [size]=1 [fw]=true></i>
+      </button>
+
+      <button md-icon-button color='warn' (click)='openDialog("Delete",event)'>
+        <i fa [name]="'minus-square-o'" [size]=1 [fw]=true></i>
+      </button>
+    </div>
+
+  </div>
+
 </div>

@@ -4,13 +4,13 @@ import { Store } from "@ngrx/store";
 import * as fromRoot from 'app/store/reducers';
 import * as MailActions from 'app/store/mail/mail.actions';
 import { Observable } from "rxjs/Observable";
-import { EmailMessage } from "app/models/emailMessage";
+import { MailMessage } from "app/store/mail/mail-message";
 import { MailThread } from "app/store/mail/mail.reducer";
 
 @Injectable()
 export class MailService {
 
-  public messages: Observable<EmailMessage[]>;
+  public messages: Observable<MailMessage[]>;
   public threads: Observable<MailThread>;
 
   constructor(public gmailService: GmailService, private store: Store<fromRoot.State>) {

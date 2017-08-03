@@ -1,0 +1,144 @@
+[debug] [2017-08-03T18:37:11.223Z] ----------------------------------------------------------------------
+[debug] [2017-08-03T18:37:11.225Z] Command:       /Users/johnmcclure/.nvm/versions/node/v8.1.0/bin/node /Users/johnmcclure/.nvm/versions/node/v8.1.0/bin/firebase init
+[debug] [2017-08-03T18:37:11.225Z] CLI Version:   3.9.2
+[debug] [2017-08-03T18:37:11.225Z] Platform:      darwin
+[debug] [2017-08-03T18:37:11.225Z] Node Version:  v8.1.0
+[debug] [2017-08-03T18:37:11.226Z] Time:          Thu Aug 03 2017 13:37:11 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:11.226Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-03T18:37:11.236Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2017-08-03T18:37:11.236Z] > authorizing via signed-in user
+[info] 
+     🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥     🔥🔥🔥     🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥     🔥🔥 🔥🔥       🔥🔥     🔥🔥  🔥🔥   🔥🔥  🔥🔥       🔥🔥
+     🔥🔥🔥🔥🔥🔥    🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥   🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥    🔥🔥  🔥🔥       🔥🔥     🔥🔥 🔥🔥     🔥🔥       🔥🔥 🔥🔥
+     🔥🔥       🔥🔥🔥🔥 🔥🔥     🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥     🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/johnmcclure/Github/splash-page/SplashPage
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2017-08-03T18:37:18.931Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-03T18:37:18.931Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/d4orMqs1yBl5BZgOiL_PKW50wFSFrPAfyTrnOGTtwj0',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Aug 03 2017 13:37:18 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:19.040Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:19.048Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ Thu Aug 03 2017 13:37:19 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:19.613Z] <<< HTTP RESPONSE 200
+[info] i  .firebaserc already has a default project, skipping
+[info] 
+=== Functions Setup
+[info] 
+[info] A functions directory will be created in your project with a Node.js
+[info] package pre-configured. Functions can be deployed with firebase deploy.
+[info] 
+[debug] [2017-08-03T18:37:19.616Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-03T18:37:19.616Z] > authorizing via signed-in user
+[debug] [2017-08-03T18:37:19.616Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-03T18:37:19.617Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/d4orMqs1yBl5BZgOiL_PKW50wFSFrPAfyTrnOGTtwj0',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Aug 03 2017 13:37:19 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:19.677Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:19.691Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/mcclurjt-splash-page  
+ Thu Aug 03 2017 13:37:19 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:20.587Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:20.588Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/mcclurjt-splash-page/tokens  
+ Thu Aug 03 2017 13:37:20 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:20.864Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:20.868Z] >>> HTTP REQUEST PATCH https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/mcclurjt-splash-page?updateMask=usageSettings { usageSettings: { consumerEnableStatus: 'ENABLED' } } 
+ Thu Aug 03 2017 13:37:20 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:20.869Z] >>> HTTP REQUEST PATCH https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/mcclurjt-splash-page?updateMask=usageSettings { usageSettings: { consumerEnableStatus: 'ENABLED' } } 
+ Thu Aug 03 2017 13:37:20 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:22.123Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:23.353Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:55.704Z] ----------------------------------------------------------------------
+[debug] [2017-08-03T18:37:55.706Z] Command:       /Users/johnmcclure/.nvm/versions/node/v8.1.0/bin/node /Users/johnmcclure/.nvm/versions/node/v8.1.0/bin/firebase init
+[debug] [2017-08-03T18:37:55.706Z] CLI Version:   3.9.2
+[debug] [2017-08-03T18:37:55.707Z] Platform:      darwin
+[debug] [2017-08-03T18:37:55.707Z] Node Version:  v8.1.0
+[debug] [2017-08-03T18:37:55.707Z] Time:          Thu Aug 03 2017 13:37:55 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:55.707Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2017-08-03T18:37:55.717Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2017-08-03T18:37:55.717Z] > authorizing via signed-in user
+[info] 
+     🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥     🔥🔥🔥     🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥     🔥🔥 🔥🔥       🔥🔥     🔥🔥  🔥🔥   🔥🔥  🔥🔥       🔥🔥
+     🔥🔥🔥🔥🔥🔥    🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥   🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥
+     🔥🔥        🔥🔥  🔥🔥    🔥🔥  🔥🔥       🔥🔥     🔥🔥 🔥🔥     🔥🔥       🔥🔥 🔥🔥
+     🔥🔥       🔥🔥🔥🔥 🔥🔥     🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥 🔥🔥🔥🔥🔥🔥🔥🔥  🔥🔥     🔥🔥  🔥🔥🔥🔥🔥🔥  🔥🔥🔥🔥🔥🔥🔥🔥
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/johnmcclure/Github/splash-page/SplashPage
+
+Before we get started, keep in mind:
+
+  * You are initializing in an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2017-08-03T18:37:58.440Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-03T18:37:58.440Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/d4orMqs1yBl5BZgOiL_PKW50wFSFrPAfyTrnOGTtwj0',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Aug 03 2017 13:37:58 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:58.556Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:58.568Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects  
+ Thu Aug 03 2017 13:37:58 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:59.261Z] <<< HTTP RESPONSE 200
+[info] i  .firebaserc already has a default project, skipping
+[info] 
+=== Functions Setup
+[info] 
+[info] A functions directory will be created in your project with a Node.js
+[info] package pre-configured. Functions can be deployed with firebase deploy.
+[info] 
+[debug] [2017-08-03T18:37:59.263Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2017-08-03T18:37:59.263Z] > authorizing via signed-in user
+[debug] [2017-08-03T18:37:59.264Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2017-08-03T18:37:59.264Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token { refresh_token: '1/d4orMqs1yBl5BZgOiL_PKW50wFSFrPAfyTrnOGTtwj0',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Thu Aug 03 2017 13:37:59 GMT-0500 (CDT)
+[debug] [2017-08-03T18:37:59.320Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:37:59.332Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/mcclurjt-splash-page  
+ Thu Aug 03 2017 13:37:59 GMT-0500 (CDT)
+[debug] [2017-08-03T18:38:00.232Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:38:00.233Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/mcclurjt-splash-page/tokens  
+ Thu Aug 03 2017 13:38:00 GMT-0500 (CDT)
+[debug] [2017-08-03T18:38:00.830Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:38:00.834Z] >>> HTTP REQUEST PATCH https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/mcclurjt-splash-page?updateMask=usageSettings { usageSettings: { consumerEnableStatus: 'ENABLED' } } 
+ Thu Aug 03 2017 13:38:00 GMT-0500 (CDT)
+[debug] [2017-08-03T18:38:00.836Z] >>> HTTP REQUEST PATCH https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/mcclurjt-splash-page?updateMask=usageSettings { usageSettings: { consumerEnableStatus: 'ENABLED' } } 
+ Thu Aug 03 2017 13:38:00 GMT-0500 (CDT)
+[debug] [2017-08-03T18:38:01.751Z] <<< HTTP RESPONSE 200
+[debug] [2017-08-03T18:38:02.004Z] <<< HTTP RESPONSE 200
