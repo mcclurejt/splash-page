@@ -20,10 +20,12 @@ export class MailService {
     this.loadAllEmails();
   }
 
-
-
   loadAllEmails() {
     console.log('Load All Emails');
     this.gmailService.getEmails();
+  }
+
+  onScrollDown() {
+    console.log('Scrolled down');
   }
 }

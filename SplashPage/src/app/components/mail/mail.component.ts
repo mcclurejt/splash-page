@@ -16,27 +16,15 @@ export class MailComponent implements OnInit {
 
 
   constructor(private mailService: MailService) {
-    // this.gapiService.getIsSignedInStream()
-    //   .subscribe((isSignedIn: boolean) => {
-    //     if (isSignedIn) {
-    //       console.log("Loading messages");
-    //       gmailService.getEmails().subscribe((emails) => {
-    //         console.log('We got Emails',emails);
-    //         for(let email of emails){
-    //           // console.log('Email body',email.result);
-    //         }
-    //       })
-    //     }
-    //   });
-     
+    mailService.threads.subscribe((messages) => {
+      console.log(messages); 
+     });
   }
 
   ngOnInit() {
 
   }
 
-  onScrollDown() {
-    console.log('Scrolled down');
-  }
+  
 
 }

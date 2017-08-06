@@ -1,0 +1,36 @@
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 1);
+$accent-background: rgba(210, 210, 210, 1);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+
+.container {
+  font-family: 'Comfortaa', cursive !important;
+  border-radius: 0px 0px 5px 5px;
+  background-color: $light-background;
+  .from-row {
+    color: $dark-text;
+    font-size: 20px;
+    font-weight: 500;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+    padding: 0 10px;
+  }
+  .subject-row {
+    color: $dark-text;
+    font-size: 16px;
+    font-weight: 400;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+    padding: 0 10px;
+  }
+  .snippet-row {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 200;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+    padding: 0 10px;
+  }
+}

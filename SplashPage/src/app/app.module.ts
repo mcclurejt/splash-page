@@ -61,6 +61,9 @@ import { AgendaViewComponent } from './components/calendar-agenda-view/agenda-vi
 import { CalendarTabComponent } from './+calendar-tab/calendar-tab.component';
 import { WeekViewComponent } from './components/calendar-week-view/week-view.component';
 import { MailService } from "app/services/mail.service";
+import { MailSimpleInboxViewComponent } from './components/mail-simple-inbox-view/mail-simple-inbox-view.component';
+import { FromPipe } from './pipes/from.pipe';
+import { DecodeHTMLPipe } from './pipes/decode-html.pipe';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -104,6 +107,9 @@ export const MaterialModules = [
     AgendaViewComponent,
     CalendarTabComponent,
     WeekViewComponent,
+    MailSimpleInboxViewComponent,
+    FromPipe,
+    DecodeHTMLPipe,
   ],
   imports: [
     BrowserModule,

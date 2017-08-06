@@ -1,0 +1,18 @@
+<div fxLayout='column' fxLayoutAlign='start center' class='container'>
+  
+  <div *ngFor='let thread of (threads | async)' style='border-radius: 5px;width:100%;'>
+
+    <div fxLayout='column' fxLayoutAlign='center start'>
+      <div class='from-row'>
+        {{thread.messages[0].headers.from | from}}
+      </div>
+      <div class='subject-row'>
+        {{thread.messages[0].headers.subject | decodeHTML}}
+      </div>
+      <div class='snippet-row'>
+        {{thread.messages[0].snippet | decodeHTML}}
+      </div>
+    </div>
+
+  </div>
+</div>
