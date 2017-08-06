@@ -6,6 +6,8 @@ $transparent-background: rgba(245, 245, 245, 0);
 
   md-card {
     padding: 0px;
+    margin: 0px;
+    height: 100%;
     border-radius: 5px;
     background-color: $dark-background;
     md-toolbar {
@@ -21,7 +23,7 @@ $transparent-background: rgba(245, 245, 245, 0);
     .viewContainer {
       width: 100%;
       height: 100%;
-      // overflow-y: auto;
+      overflow-y: auto;
     }
     
   }

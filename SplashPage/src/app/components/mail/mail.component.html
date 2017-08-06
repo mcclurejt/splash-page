@@ -1,10 +1,8 @@
-<div class='mailContainer'>
-  <md-card>
-    <md-toolbar>
-      <span fxFlex fxLayoutAlign='center center'>Mail</span>
-    </md-toolbar>
-    <div class='viewContainer' [style.xs]='{"max-height.px" : 300}'>
-      <app-mail-simple-inbox-view></app-mail-simple-inbox-view>
-    </div>
-  </md-card>
+<md-card fxLayout='column' fxLayoutAlign='start center'>
+  <md-toolbar>
+    <span fxFlex fxLayoutAlign='center center'>Mail</span>
+  </md-toolbar>
+  <div class='viewContainer' [style.xs]='{"max-height.px" : 300}'>
+    <app-mail-simple-inbox-view></app-mail-simple-inbox-view>
   </div>
+</md-card>

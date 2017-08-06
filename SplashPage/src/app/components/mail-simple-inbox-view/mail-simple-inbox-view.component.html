@@ -2,14 +2,14 @@
   
   <div *ngFor='let thread of (threads | async)' style='border-radius: 5px;width:100%;'>
 
-    <div fxLayout='column' fxLayoutAlign='center start'>
-      <div class='from-row'>
+    <div fxLayout='column' fxLayoutAlign='center start' class='message-container'>
+      <div class='from-row ellipsis'>
         {{thread.messages[0].headers.from | from}}
       </div>
-      <div class='subject-row'>
+      <div class='subject-row ellipsis'>
         {{thread.messages[0].headers.subject | decodeHTML}}
       </div>
-      <div class='snippet-row'>
+      <div class='snippet-row ellipsis'>
         {{thread.messages[0].snippet | decodeHTML}}
       </div>
     </div>
