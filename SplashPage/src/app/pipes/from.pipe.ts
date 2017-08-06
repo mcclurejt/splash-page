@@ -6,7 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FromPipe implements PipeTransform {
 
   transform(from: string, args?: any): string {
-    return from.replace(/<.*>/, "");
+    if (from) {
+      return from.replace(/<.*>/, "");
+    }
+    return "Unknown Sender";
   }
 
 }

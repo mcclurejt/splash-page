@@ -64,6 +64,8 @@ import { MailService } from "app/services/mail.service";
 import { MailSimpleInboxViewComponent } from './components/mail-simple-inbox-view/mail-simple-inbox-view.component';
 import { FromPipe } from './pipes/from.pipe';
 import { DecodeHTMLPipe } from './pipes/decode-html.pipe';
+import { MailDatePipe } from './pipes/mail-date.pipe';
+import { SubjectPipe } from './pipes/subject.pipe';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -110,6 +112,8 @@ export const MaterialModules = [
     MailSimpleInboxViewComponent,
     FromPipe,
     DecodeHTMLPipe,
+    MailDatePipe,
+    SubjectPipe,
   ],
   imports: [
     BrowserModule,

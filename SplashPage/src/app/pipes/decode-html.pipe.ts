@@ -6,9 +6,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DecodeHTMLPipe implements PipeTransform {
 
   transform(value: string, args?: any): string {
-    let text = document.createElement("textarea");
-    text.innerHTML = value;
-    return text.value;
+    if (value) {
+      let text = document.createElement("textarea");
+      text.innerHTML = value;
+      return text.value;
+    }
+    return "";
   }
 
 }

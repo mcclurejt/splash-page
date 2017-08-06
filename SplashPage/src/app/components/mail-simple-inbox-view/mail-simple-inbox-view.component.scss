@@ -9,14 +9,24 @@ $transparent-background: rgba(245, 245, 245, 0);
   font-family: 'Comfortaa', cursive !important;
   border-radius: 0px 0px 5px 5px;
   background-color: $light-background;
+
+  .message-group-container {
+    width: 100%;
+    padding-bottom: 5px;
+  }
+  .message-group-container:hover {
+    background-color: $dark-background;
+    cursor: pointer;
+  }
+
   .message-container {
-    width: 90%; //This keeps the ellipsis inside the container, otherwise horizontal scroll
+    overflow-x: hidden;
   }
   .ellipsis{
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: inherit;
-    overflow: hidden;
+    width: 97%;
+    overflow-x: hidden;
   }
   .from-row {
     color: $dark-text;
@@ -35,5 +45,15 @@ $transparent-background: rgba(245, 245, 245, 0);
     font-size: 12px;
     font-weight: 200;
     padding: 0 10px;
+  }
+
+
+  .date-and-buttons-container {
+    overflow-x: hidden;
+  }
+  .date-row {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 400;
   }
 }
