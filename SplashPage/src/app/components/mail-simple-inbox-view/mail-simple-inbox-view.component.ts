@@ -24,9 +24,6 @@ export class MailSimpleInboxViewComponent implements OnInit {
   ngOnInit() {
     this.threads = this.mailService.threads
     .map(threads => this.simpleInboxViewFilter(threads));
-    this.threads.subscribe((ts) => {
-      console.log(ts); 
-     });
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {

@@ -24,7 +24,7 @@ export class GmailService {
       // console.log("gmail-service messages", messages); 
     });
     this.store.select(store => store.mail.threads).subscribe((threads) => {
-      // console.log("gmail-service threads", threads); 
+      console.log("gmail-service threads", threads); 
     });
 
   }

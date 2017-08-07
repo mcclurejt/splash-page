@@ -3,7 +3,7 @@ import { MailMessage } from "app/store/mail/mail-message";
 import * as _ from "lodash";
 
 export interface MailThread {
-    [key:string]:MailMessage[]
+    [key: string]: MailMessage[]
 }
 
 export interface State {
@@ -12,7 +12,7 @@ export interface State {
 }
 
 const initialState: State = {
-    messages : [],
+    messages: [],
     threads: {}
 }
 
@@ -28,14 +28,16 @@ export function reducer(state = initialState, action: MailActions.All): State {
                     threads: Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId"))),
                 })
             } else {
-                if( !_.keys(state.threads).includes(action.payload.threadId)){
-                    state.threads[action.payload.threadId] = [];
+                let threadObj = {threads: Object.assign({},state.threads)}
+                if (!_.keys(threadObj.threads).includes(action.payload.threadId)) {
+                    threadObj.threads[action.payload.threadId] = [];
                 }
+                threadObj.threads[action.payload.threadId].push(action.payload);
                 newState = Object.assign(
                     {},
                     state,
-                    {messages: [action.payload, ...state.messages]},
-                    {[action.payload.threadId] : [...state.threads[action.payload.threadId],action.payload] }
+                    { messages: [action.payload, ...state.messages] },
+                    threadObj,
                 )
             }
             // console.log("MailAdd newState: ", newState);
