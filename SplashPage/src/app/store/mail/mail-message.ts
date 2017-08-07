@@ -22,8 +22,6 @@ export class MailMessage {
         this.headers = obj && obj.headers || {};
         this.textPlain = obj && obj.textPlain || '';
         this.textHtml = obj && obj.textHtml || '';
-        if (obj && obj.snippet) {
-            this.snippet = obj.snippet;
-        }
+        this.snippet = obj && obj.snippet || 'No Message Preview'
     }
 }

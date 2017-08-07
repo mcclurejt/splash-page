@@ -16,14 +16,15 @@ export class MailComponent implements OnInit {
 
 
   constructor(private mailService: MailService) {
+    mailService.threads.subscribe((messages) => {
+      console.log(messages); 
+     });
   }
 
   ngOnInit() {
     this.mailService.loadAllEmails();
   }
 
-  onScrollDown() {
-    console.log('Scrolled down');
-  }
+  
 
 }

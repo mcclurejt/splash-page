@@ -1,0 +1,26 @@
+<div fxLayout='column' fxLayoutAlign='start center' class='container'>
+
+  <div *ngFor='let thread of (threads | async)' style='border-radius: 5px;width:100%;'>
+
+    <div fxLayout='row' class='message-group-container'>
+
+      <div fxFlex='83%' fxLayout='column' fxLayoutAlign='center start' class='message-container'>
+        <div class='from-row ellipsis'>
+          {{thread.messages[0].headers.from | from}}
+        </div>
+        <div class='subject-row ellipsis'>
+          {{thread.messages[0].headers.subject | decodeHTML | subject}}
+        </div>
+        <div class='snippet-row ellipsis'>
+          {{thread.messages[0].snippet | decodeHTML}}
+        </div>
+      </div>
+      <div fxFlex='2%'></div>
+      <div fxFlex='15%' fxLayout='column' class='date-and-buttons-container'>
+        <div class='date-row'>
+          {{thread.messages[0].headers.date | mailDate}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

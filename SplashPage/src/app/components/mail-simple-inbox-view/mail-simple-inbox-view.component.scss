@@ -1,0 +1,59 @@
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 1);
+$accent-background: rgba(210, 210, 210, 1);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+
+.container {
+  font-family: 'Comfortaa', cursive !important;
+  border-radius: 0px 0px 5px 5px;
+  background-color: $light-background;
+
+  .message-group-container {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+  .message-group-container:hover {
+    background-color: $dark-background;
+    cursor: pointer;
+  }
+
+  .message-container {
+    overflow-x: hidden;
+  }
+  .ellipsis{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 97%;
+    overflow-x: hidden;
+  }
+  .from-row {
+    color: $dark-text;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0 10px;
+  }
+  .subject-row {
+    color: $dark-text;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0 10px;
+  }
+  .snippet-row {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 200;
+    padding: 0 10px;
+  }
+
+
+  .date-and-buttons-container {
+    overflow-x: hidden;
+  }
+  .date-row {
+    color: $dark-text;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}

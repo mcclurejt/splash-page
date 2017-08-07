@@ -18,8 +18,6 @@ export class MailService {
     this.threads = this.store.select(store => store.mail.threads);
   }
 
-
-
   loadAllEmails() {
     if(this.mailLoaded){
       console.log('TODO: Handle Updating Emails');
@@ -27,5 +25,9 @@ export class MailService {
       this.gmailService.loadEmails();
       this.mailLoaded = true;
     }
+  }
+
+  onScrollDown() {
+    console.log('Scrolled down');
   }
 }
