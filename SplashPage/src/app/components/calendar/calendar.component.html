@@ -1,9 +1,5 @@
-<md-card fxLayout='column' fxLayoutAlign='start center'>
-
-  <md-toolbar>
-    <span fxFlex fxLayoutAlign='center center'>Upcoming Events</span>
-  </md-toolbar>
-  <div id='viewContainer' [style.xs]='{"max-height.px" : 300}'>
-    <agenda-view></agenda-view>
-  </div>
-</md-card>
+<div id='viewContainer' [style.xs]='{"height.px" : 300}'>
+  <agenda-view *ngIf='view == "agenda"'></agenda-view>
+  <week-view *ngIf='view == "week"'></week-view>
+  <agenda-view></agenda-view>
+</div>

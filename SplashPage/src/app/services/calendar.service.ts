@@ -11,24 +11,30 @@ import { Store } from "@ngrx/store";
 import * as CalendarActions from 'app/store/calendar/calendar.actions';
 import * as fromRoot from 'app/store/reducers';
 
-import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/operator/debounce';
+import 'rxjs/add/operator/throttle';
+import 'rxjs/add/observable/interval';
 
 @Injectable()
 export class CalendarService {
 
+  private calendarsLoaded = false;
   public calendars: Observable<Calendar[]>;
   public events: Observable<CalendarEvent[]>;
 
   constructor(public gcalService: GcalService, public dialog: MdDialog, private store: Store<fromRoot.State>) {
     this.calendars = this.store.select(state => state.calendar.calendars);
     this.events = this.store.select(state => state.calendar.events);
-    this.loadAllCalendars();
   }
 
   loadAllCalendars() {
-    // Todo: add in check for calendar providers
-    console.log('Load All Calendars');
-    this.gcalService.loadCalendars();
+    if (this.calendarsLoaded) {
+      this.gcalService.updateCalendars();
+    } else {
+      console.log('Load All Calendars');
+      this.gcalService.loadCalendars();
+      this.calendarsLoaded = true;
+    }
   }
 
   addEvent(event: CalendarEvent, calendars: Calendar[]): void {

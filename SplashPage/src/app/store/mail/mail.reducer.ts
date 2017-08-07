@@ -28,6 +28,9 @@ export function reducer(state = initialState, action: MailActions.All): State {
                     threads: Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId"))),
                 })
             } else {
+                if( !_.keys(state.threads).includes(action.payload.threadId)){
+                    state.threads[action.payload.threadId] = [];
+                }
                 newState = Object.assign(
                     {},
                     state,

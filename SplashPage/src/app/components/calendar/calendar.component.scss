@@ -4,25 +4,10 @@ $light-background:rgba(245, 245, 245, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 
-md-card {
-  height: 100%;
-  padding: 0px;
-  margin: 0px;
-  border-radius: 5px;
-  background-color: $transparent-background;
-  md-toolbar {
-    padding: 0px;
-    border-radius: 5px 5px 0px 0px;
-    background-color: $light-background;
-    span {
-      color: $dark-text;
-      font-weight: 300;
-      font-size: 30px;
-    }
-  }
   #viewContainer{
+    background-color: $light-background;
     width:100%;
     height:100%;
     overflow-y: auto;
   }
-}
+

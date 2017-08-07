@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalendarTabComponent implements OnInit {
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
   }

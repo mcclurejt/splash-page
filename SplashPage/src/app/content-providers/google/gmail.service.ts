@@ -30,17 +30,15 @@ export class GmailService {
   }
 
   //TODO: consider adding a query parameter
-  getEmails(): void {
-    console.log("getEmails()");
+  loadEmails(): void {
+    console.log('Loading Emails');
     this.requestEmailIds()
-    .map((response) => {
-      return response.result })
-    .flatMap((messageList) => this.getEmailsFromList(messageList))
-    .map((response) => this.mapMessages(response))
-    .subscribe((messageMap) => {
-      this.store.dispatch(new MailActions.MailAdd(messageMap));
-      // console.log("Emails: ", messageMap);
-     });
+      .flatMap((response) => this.mapEmailIds(response.result))
+      .flatMap((messageId) => this.requestEmail(messageId))
+      .map((messageResp) => this.mapEmail(messageResp))
+      .subscribe((message) => {
+        this.store.dispatch(new MailActions.MailAdd(message));
+      });
   }
 
   requestEmailIds(): Observable<any> {
@@ -58,45 +56,29 @@ export class GmailService {
     }));
   }
 
-  getEmailsFromList(messageList): Observable<any> {
+  mapEmailIds(messageList): Array<any> {
     this.nextPageToken = messageList.nextPageToken;
     const messages = messageList.messages;
-    let gapi = window['gapi'];
-    let batch = gapi.client.newBatch();
+    return messages;
+  }
+
+  requestEmail(message): Observable<any> {
     let params = {
       format: "full"
     };
-    for (let i = 0; i < messages.length; i++) {
-      
-      let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + messages[i].id;
-      let req = gapi.client.request({
-        path: url,
-        method: 'GET',
-        params: params
-      });
-      batch.add(req, {id: messages[i].id});
-    }
-    
-    return Observable.fromPromise(new Promise((resolve) => {
-      batch.execute((response, other) => {
-        resolve([response, messages]); 
-      });
-    }));
+    let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id;
+    let req = gapi.client.request({
+      path: url,
+      method: 'GET',
+      params: params
+    });
+    return Observable.fromPromise(req);
   }
 
-  mapMessages(any): any {
-    let response = any[0];
-    let messageIds = any[1];
-
-    // console.log("full", response);
-
-    let messageList: MailMessage[] = [];
-    for (let i = 0; i<messageIds.length; i++) {
-      let message = response[messageIds[i].id].result;
-      let email = this.mapGoogleMessageToEmailMessage(message);
-      messageList.push(email);
-    }
-    return messageList;
+  mapEmail(mailResp): MailMessage {
+    let message = mailResp.result;
+    let email = this.mapGoogleMessageToEmailMessage(message);
+    return email;
   }
 
   mapGoogleMessageToEmailMessage(gMessage: any): MailMessage {
@@ -163,14 +145,14 @@ export class GmailService {
     } else {
       return headers.reduce((result, header) => {
         result[header.name.toLowerCase()] = header.value;
-        return result; 
-       }, {});
+        return result;
+      }, {});
     }
   }
 
   b64DecodeUnicode(str: any) {
     return decodeURIComponent(Array.prototype.map.call(atob(str.replace(/-/g, '+').replace(/_/g, '/')), (c) => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
   }
 }

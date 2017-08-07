@@ -51,7 +51,6 @@ export class WeatherService {
   }
 
   private mapWeather(resp): any {
-    console.log('Weather Response Body: ', resp);
     let body = resp.json();
     
     return {

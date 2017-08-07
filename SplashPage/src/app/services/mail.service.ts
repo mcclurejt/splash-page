@@ -9,21 +9,23 @@ import { MailThread } from "app/store/mail/mail.reducer";
 
 @Injectable()
 export class MailService {
-
+  private mailLoaded = false;
   public messages: Observable<MailMessage[]>;
   public threads: Observable<MailThread>;
 
   constructor(public gmailService: GmailService, private store: Store<fromRoot.State>) {
     this.messages = this.store.select(store => store.mail.messages);
     this.threads = this.store.select(store => store.mail.threads);
-
-    this.loadAllEmails();
   }
 
 
 
   loadAllEmails() {
-    console.log('Load All Emails');
-    this.gmailService.getEmails();
+    if(this.mailLoaded){
+      console.log('TODO: Handle Updating Emails');
+    } else {
+      this.gmailService.loadEmails();
+      this.mailLoaded = true;
+    }
   }
 }

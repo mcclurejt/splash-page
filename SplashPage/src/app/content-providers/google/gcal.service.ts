@@ -11,6 +11,9 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/combineAll';
 import * as _ from "lodash";
 
 @Injectable()
@@ -39,7 +42,7 @@ export class GcalService {
       newEvent.backgroundColor = event.backgroundColor;
       newEvent.foregroundColor = event.foregroundColor;
       this.deleteEvent(event);
-      this.addEvent(newEvent,calendars);
+      this.addEvent(newEvent, calendars);
       return;
     }
     let googleEvent = this._mapCalendarEventToGoogleEvent(newEvent);
@@ -71,17 +74,22 @@ export class GcalService {
       (context) => { console.log('Event Deleted Context', context) });
   }
 
+  updateCalendars(){
+    console.log('TODO: implement updating calendars with synctoken');
+  }
+
   loadCalendars(startDate?: Date) {
+    console.log('Loading Calendars');
     this._requestCalendars()
-      .map(response => this._mapCalendars(response.result))
-      .flatMap((calendars) => this._requestEvents(calendars, startDate))
+      .flatMap(response => Observable.from(this._mapCalendars(response.result)))
+      .flatMap(calendar => this._requestEvents(calendar))
       .map((respCalArray) => this._mapEvents(respCalArray))
-      .subscribe((calEventArray) => {
-        let events = calEventArray[0];
-        let calendars = calEventArray[1];
+      .subscribe((eventCalArray) => {
+        let events = eventCalArray[0];
+        let calendar = eventCalArray[1];
         this.store.dispatch(new CalendarActions.EventAdd(events));
-        this.store.dispatch(new CalendarActions.CalendarAdd(calendars));
-      })
+        this.store.dispatch(new CalendarActions.CalendarAdd(calendar));
+      });
   }
 
   private _requestCalendars(): Observable<any> {
@@ -117,50 +125,46 @@ export class GcalService {
     return calArray;
   }
 
-  private _requestEvents(calendars, startDate?: Date): Observable<any> {
-    console.log('Requesting Events');
-    let gapi = window['gapi'];
-    let batch = gapi.client.newBatch();
+  private _requestEvents(calendar, startDate?: Date): Observable<any> {
     let d = startDate || this.getFirstDayOfWeek();
     let params = {
       orderBy: 'startTime',
       singleEvents: 'True',
       timeMin: this._getRFC3339Date(d),
     };
-    // Fill the Batch Request
-    for (let calendar of calendars) {
-      let id = calendar.id;
-      let url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(id) + '/events'
-      let req = gapi.client.request({
-        path: url,
-        method: 'GET',
-        params: params,
-      });
-      batch.add(req, { 'id': id });
-    }
+    let id = calendar.id;
+    let url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(id) + '/events'
+    let req = gapi.client.request({
+      path: url,
+      method: 'GET',
+      params: params,
+    });
     return Observable.fromPromise(new Promise((resolve) => {
-      batch.execute((response, other) => resolve([response, calendars]));
+      req.then(
+        (onFulfilled) => {
+          resolve([onFulfilled, calendar]);
+        },
+        (onRejected) => {
+          resolve([onRejected, calendar]);
+        });
     }));
   }
 
   private _mapEvents(respCalArray): Array<any> {
     // Split apart the passed in structure
-    let eventResp = respCalArray[0];
-    let calendars = respCalArray[1];
-    let calendarEvents = [];
-    for (let calendar of calendars) {
-      // Get array of events from response 
-      let events = eventResp[calendar.id].result.items
-      if (events == undefined) {
-        events = [];
-      }
-
-      for (let event of events) {
-        let calendarEvent = this._mapGoogleEventToCalendarEvent(event, calendar);
-        calendarEvents.push(calendarEvent);
-      }
+    let eventResp = respCalArray[0].result;
+    let calendar = respCalArray[1];
+    // Get array of events from response 
+    let events = eventResp.items;
+    if (events == undefined) {
+      events = [];
     }
-    return [calendarEvents, calendars];
+    let calendarEvents = [];
+    for (let event of events) {
+      let calendarEvent = this._mapGoogleEventToCalendarEvent(event, calendar);
+      calendarEvents.push(calendarEvent);
+    }
+    return [calendarEvents, calendar];
   }
 
   /**

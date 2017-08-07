@@ -14,7 +14,7 @@ const initialState: State = {
 
 export function reducer(state = initialState, action: CalendarActions.All): State {
   switch (action.type) {
-
+    
     case CalendarActions.CALENDAR_ADD: {
       let newState;
       if (Array.isArray(action.payload)) {

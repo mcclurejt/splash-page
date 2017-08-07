@@ -6,7 +6,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from "angularfire2/auth";
 import * as firebase from 'firebase/app';
 import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/timeInterval';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/share';
 
