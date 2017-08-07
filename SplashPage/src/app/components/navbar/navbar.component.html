@@ -1,6 +1,6 @@
 <div class='container' fxFlex fxLayout='row' fxLayoutAlign='center center'>
     <!-- Expand buttons on desktop -->
-    <div class='button-row' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.xs>
+    <div class='button-row' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.xs fxHide.sm>
 
       <button md-button [routerLink]="['/']">
         <i fa [name]="'home'" [size]=2 [fw]=true></i>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Condense buttons on mobile -->
-    <div class='navigationButtons' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.gt-xs>
+    <div class='navigationButtons' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.gt-sm>
        <button md-button [mdMenuTriggerFor]='buttonMenu'>
         <i fa [name]="'bars'" [size]=2 [fw]=true></i>
       </button>

@@ -25,6 +25,9 @@ export class TimePipe implements PipeTransform {
       hourNumber = hourNumber - 12;
       minutes += 'pm'
       hours = hourNumber + '';
+      if(hours.length < 2){
+        hours = '0' + hours;
+      }
       return hours + ':' + minutes;
     }
 

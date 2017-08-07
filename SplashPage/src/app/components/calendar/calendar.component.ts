@@ -9,10 +9,13 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CalendarComponent implements OnInit{
   @Input() view: string;
   
-  constructor(private calendarService: CalendarService) {}
+  constructor(private calendarService: CalendarService) {
+    
+  }
 
   ngOnInit(): void {
     this.calendarService.loadAllCalendars();
+    console.log('view',this.view);
   }
 }
 

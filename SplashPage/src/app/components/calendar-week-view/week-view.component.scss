@@ -5,13 +5,11 @@ $accent-background: rgba(210, 210, 210, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 .container {
-  padding: 20px;
   height: 100%;
   .viewContainer {
     height: 100%;
     width: 100%;
     background-color: $light-background;
-    border-radius: 5px;
     .weekHeader {
       height: 50px !important;
       border-bottom: 1px solid $dark-background;

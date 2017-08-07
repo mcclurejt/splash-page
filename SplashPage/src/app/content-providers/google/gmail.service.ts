@@ -19,15 +19,7 @@ export class GmailService {
   private nextPageToken: string;
 
 
-  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) {
-    this.store.select(store => store.mail.messages).subscribe((messages) => {
-      // console.log("gmail-service messages", messages); 
-    });
-    this.store.select(store => store.mail.threads).subscribe((threads) => {
-      console.log("gmail-service threads", threads); 
-    });
-
-  }
+  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) {}
 
   //TODO: consider adding a query parameter
   loadEmails(): void {

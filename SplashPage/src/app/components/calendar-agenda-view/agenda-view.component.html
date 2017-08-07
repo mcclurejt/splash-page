@@ -16,15 +16,15 @@
     </div>
 
     <div *ngFor="let event of eventArray" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px'>
-      <span *ngIf='event.allDayEvent;else timedEvent' [style.xs]='{"font-size.px" : 12}'>
+      <span *ngIf='event.allDayEvent;else timedEvent' class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
         All Day
       </span>
       <ng-template #timedEvent>
         <div fxLayout='column'>
-          <div class='event-time' [style.xs]='{"font-size.px" : 12}'>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
             {{(event.startTime | time)}}
           </div>
-          <div class='event-time' [style.xs]='{"font-size.px" : 12}'>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
             {{(event.endTime | time)}}
           </div>
         </div>
@@ -32,20 +32,15 @@
 
 
       <div class='calendar-color' style='height: 70%;width: 4px;border-radius: 2px' [style.background-color]='event.backgroundColor'>&nbsp;</div>
-
-      <span fxFlex [style.xs]='{"font-size.px" : 12}'>
-        {{event.summary | truncate : 60}}
+      <span fxFlex='' [style.xs]='{"font-size.px" : 12}'>
+        {{event.summary | truncate:40}}
       </span>
-
       <button md-icon-button (click)='openDialog("Edit",event)'>
         <i fa [name]="'pencil-square-o'" [size]=1 [fw]=true></i>
       </button>
-
       <button md-icon-button color='warn' (click)='openDialog("Delete",event)'>
         <i fa [name]="'minus-square-o'" [size]=1 [fw]=true></i>
       </button>
     </div>
-
   </div>
-
 </div>

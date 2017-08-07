@@ -17,9 +17,9 @@ export class CalendarDialogComponent implements OnInit {
   newEvent: CalendarEvent;
   calendars: Observable<Calendar[]>;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>, private calendarService: CalendarService) {}
+  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>, private calendarService: CalendarService) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.mode = this.data.mode;
     this.calendars = this.calendarService.calendars;
 
@@ -30,8 +30,10 @@ export class CalendarDialogComponent implements OnInit {
       this.newEvent = new CalendarEvent();
       this.newEvent.startDate = this.data.event.startDate;
       this.newEvent.endDate = this.data.event.endDate;
+      this.newEvent.timeZone = this.data.event.timeZone;
     }
     else if (this.mode == 'Edit') {
+      console.log('Event',this.data.event);
       this.event = this.data.event;
       this.newEvent = new CalendarEvent(this.data.event);
     }
@@ -60,6 +62,10 @@ export class CalendarDialogComponent implements OnInit {
     } else {
       this.dialogRef.close([this.mode, this.event, this.newEvent]);
     }
+  }
+
+  printDate(obj?: any) {
+    console.log('Object: ', obj);
   }
 
 }

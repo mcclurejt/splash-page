@@ -11,7 +11,7 @@ import { Store } from "@ngrx/store";
 import * as CalendarActions from 'app/store/calendar/calendar.actions';
 import * as fromRoot from 'app/store/reducers';
 
-import 'rxjs/add/operator/debounce';
+import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/throttle';
 import 'rxjs/add/observable/interval';
 
@@ -54,39 +54,17 @@ export class CalendarService {
   }
 
   openDialog(mode: string, event: CalendarEvent) {
-    let height;
-    let width;
-    switch (mode) {
-      case ('Add'): {
-        height = '550px';
-        width = '400px';
-        break;
-      }
-      case ('Edit'): {
-        height = '550px';
-        width = '400px';
-        break;
-      }
-      case ('Delete'): {
-        height = '170px';
-        width = '400px';
-        break;
-      }
-    }
-
     let dialogRef = this.dialog.open(CalendarDialogComponent, {
       data: {
         mode: mode,
         event: event,
       },
-      height: height,
-      width: width,
     });
     dialogRef.afterClosed()
       .withLatestFrom(this.calendars)
       .subscribe((result) => {
         if (result[0] == null) {
-          console.log('Dialog closed, no changes made.', Object.keys(result[1]));
+          console.log('Dialog closed, no changes made.');
           return;
         }
         let mode = result[0][0];

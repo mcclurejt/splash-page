@@ -15,11 +15,7 @@ export class MailComponent implements OnInit {
   mailStream : Observable<any>;
 
 
-  constructor(private mailService: MailService) {
-    mailService.threads.subscribe((messages) => {
-      console.log(messages); 
-     });
-  }
+  constructor(private mailService: MailService) {}
 
   ngOnInit() {
     this.mailService.loadAllEmails();

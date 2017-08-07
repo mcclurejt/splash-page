@@ -4,7 +4,8 @@ $light-background:rgba(245, 245, 245, 0.9);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 .container {
-  height:100%;
+  height: calc(100% - 40px);
+  padding: 20px;
 }
 .mobileContainer{
   height: calc(100% - 40px);

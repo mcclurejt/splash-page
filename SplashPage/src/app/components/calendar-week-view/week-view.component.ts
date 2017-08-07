@@ -52,7 +52,7 @@ export class WeekViewComponent {
       let d = new Date();
       d.setDate(firstDayOfWeek.getDate() + i);
       let year = String(d.getFullYear());
-      let month = String(d.getMonth());
+      let month = String(d.getMonth() + 1);
       month = month.length > 1 ? month : '0' + month;
       let date = String(d.getDate())
       date = date.length > 1 ? date : '0' + date;

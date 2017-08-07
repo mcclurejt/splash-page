@@ -32,6 +32,7 @@ export class GcalService {
       (response) => {
         let calendarEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == event.calendarId));
         this.store.dispatch(new CalendarActions.EventAdd(calendarEvent));
+        console.log('GcalService Event Added');
       },
       (onRejected) => { console.log('Event Added OnFailure', onRejected) },
       (context) => { console.log('Event Added Context', context) });
@@ -52,7 +53,7 @@ export class GcalService {
       body: googleEvent,
     }).then(
       (response) => {
-        console.log('NewGoogleEvent', response);
+        console.log('Event Edited', response);
         newEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == newEvent.calendarId));
         this.store.dispatch(new CalendarActions.EventDelete(event));
         this.store.dispatch(new CalendarActions.EventAdd(newEvent));
@@ -68,7 +69,7 @@ export class GcalService {
     }).then(
       (onFulfilled) => {
         this.store.dispatch(new CalendarActions.EventDelete(event));
-        // this.store.dispatch(new CalendarActions.ClearCalendars());
+       console.log('Event Deleted');
       },
       (onRejected) => { console.log('Event Deleted OnFailure', onRejected) },
       (context) => { console.log('Event Deleted Context', context) });
