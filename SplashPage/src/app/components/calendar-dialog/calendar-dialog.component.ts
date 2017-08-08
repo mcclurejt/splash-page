@@ -26,11 +26,11 @@ export class CalendarDialogComponent implements OnInit {
 
   constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) {
     this._setTodaysDate();
-   }
+  }
 
   ngOnInit() {
     this.calendars = this.data.calendars;
-    if(this.data.event){
+    if (this.data.event) {
       this.event = this.data.event;
       this.newEvent = new CalendarEvent(this.event);
       this.mode = this.EDIT;
@@ -42,14 +42,14 @@ export class CalendarDialogComponent implements OnInit {
       this.event.endDate = this.todaysDate;
       this.newEvent = new CalendarEvent(this.event);
     }
-     // Convert dates
-     this.event = this.convertDates(this.event);
-     this.newEvent = this.convertDates(this.newEvent);
+    // Convert dates
+    // this.event = this.convertDates(this.event);
+    this.newEvent = this.convertDates(this.newEvent);
   }
 
   closeDialog(action: string = this.mode) {
-    console.log('Action: ',action);
-    if(action == this.CANCEL){
+    console.log('Action: ', action);
+    if (action == this.CANCEL) {
       this.dialogRef.close(null);
     }
     // If the event is unchanged, pass in null to not update anything
@@ -70,23 +70,27 @@ export class CalendarDialogComponent implements OnInit {
     }
   }
 
-  private convertDates(event: CalendarEvent){
-    if(event.startDate.includes('-')){
-      console.log('StartDate',event.startDate);
-      console.log('EndDate',event.endDate);
+  private convertDates(event: CalendarEvent) {
+    console.log('StartDate', event.startDate);
+    console.log('EndDate', event.endDate);
+    if (!event.startDate.toString().includes(' ')) {
+      // Normal Date Format -> Google Date Format
+      console.log('StartDate', event.startDate);
+      console.log('EndDate', event.endDate);
       let sd = new Date(event.startDate);
       sd.setDate(sd.getDate() + 1);
       event.startDate = sd.toDateString();
       let ed = new Date(event.endDate);
       ed.setDate(ed.getDate() + 1);
       event.endDate = ed.toDateString();
-      console.log('StartDate',event.startDate);
-      console.log('EndDate',event.endDate);
+      console.log('StartDate', event.startDate);
+      console.log('EndDate', event.endDate);
     } else {
+      // Google Date Format -> Normal Date Format
       let sd = new Date(event.startDate);
-      event.startDate = sd.getFullYear() + '-' + (sd.getMonth()+1) + '-' + sd.getDate();
+      event.startDate = sd.getFullYear() + '-' + (sd.getMonth() + 1) + '-' + sd.getDate();
       let ed = new Date(event.endDate);
-      event.endDate = ed.getFullYear() + '-' + (ed.getMonth()+1) + '-' + ed.getDate();
+      event.endDate = ed.getFullYear() + '-' + (ed.getMonth() + 1) + '-' + ed.getDate();
     }
     return event;
   }

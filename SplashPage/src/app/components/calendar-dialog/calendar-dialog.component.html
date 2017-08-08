@@ -17,16 +17,16 @@
       </md-input-container>
       
       <md-input-container>
-        <input mdInput [mdDatepicker]="picker" type='text' [(ngModel)]='newEvent.startDate' name='startDate' placeholder="Start Date">
-        <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
-      </md-input-container>
-      <md-datepicker #endDatePicker></md-datepicker>
-
-      <md-input-container>
-        <input mdInput [mdDatepicker]="picker" type='text' [(ngModel)]='newEvent.endDate' name='endDate' placeholder="End Date">
+        <input mdInput [mdDatepicker]="startDatePicker" type='text' [(ngModel)]='newEvent.startDate' name='startDate' placeholder="Start Date">
         <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
       </md-input-container>
       <md-datepicker #startDatePicker></md-datepicker>
+
+      <md-input-container>
+        <input mdInput [mdDatepicker]="endDatePicker" type='text' [(ngModel)]='newEvent.endDate' name='endDate' placeholder="End Date">
+        <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
+      </md-input-container>
+      <md-datepicker #endDatePicker></md-datepicker>
       
       <md-input-container fxFlex>
         <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
