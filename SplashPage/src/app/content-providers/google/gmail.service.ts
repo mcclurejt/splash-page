@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/store/reducers';
 import * as MailActions from 'app/store/mail/mail.actions';
 
-
+import 'rxjs/add/operator/bufferTime';
 
 @Injectable()
 export class GmailService {
@@ -28,8 +28,12 @@ export class GmailService {
       .flatMap((response) => this.mapEmailIds(response.result))
       .flatMap((messageId) => this.requestEmail(messageId))
       .map((messageResp) => this.mapEmail(messageResp))
-      .subscribe((message) => {
-        this.store.dispatch(new MailActions.MailAdd(message));
+      .bufferTime(100)
+      .subscribe((messages) => {
+        if(messages.length > 0){
+          console.log('Messages',messages);
+          this.store.dispatch(new MailActions.MailAdd(messages));
+        }
       });
   }
 

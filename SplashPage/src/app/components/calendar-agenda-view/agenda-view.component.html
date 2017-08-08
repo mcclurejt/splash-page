@@ -1,53 +1,6 @@
-<!-- <div fxLayout='column' fxLayoutAlign='start center' class='container'>
-
-  <div *ngFor="let eventArray of (events | async)" style='border-radius: 5px;width:100%;'>
-
-    <div fxLayout fxLayoutAlign='center center' class='date-row'>
-      <span fxHide.sm fxHide.xs>
-        {{eventArray[0]?.startDate | date:'EEEE, MMMM d'}}
-      </span>
-      <span fxHide.gt-sm>
-        {{eventArray[0]?.startDate | date:'EEE, MMM d'}}
-      </span>
-      <span fxFlex></span>
-      <button md-icon-button style='color:green' (click)='openDialog("Add",eventArray[0])'>
-        <i fa [name]="'plus-square-o'" [size]=1 [fw]=true></i>
-      </button>
-    </div>
-
-    <div *ngFor="let event of eventArray" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px'>
-      <span *ngIf='event.allDayEvent;else timedEvent' class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
-        All Day
-      </span>
-      <ng-template #timedEvent>
-        <div fxLayout='column'>
-          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
-            {{(event.startTime | time)}}
-          </div>
-          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
-            {{(event.endTime | time)}}
-          </div>
-        </div>
-      </ng-template>
-
-
-      <div class='calendar-color' style='height: 70%;width: 4px;border-radius: 2px' [style.background-color]='event.backgroundColor'>&nbsp;</div>
-      <span fxFlex='' [style.xs]='{"font-size.px" : 12}'>
-        {{event.summary | truncate:40}}
-      </span>
-      <button md-icon-button (click)='openDialog("Edit",event)'>
-        <i fa [name]="'pencil-square-o'" [size]=1 [fw]=true></i>
-      </button>
-      <button md-icon-button color='warn' (click)='openDialog("Delete",event)'>
-        <i fa [name]="'minus-square-o'" [size]=1 [fw]=true></i>
-      </button>
-    </div>
-  </div>
-</div>  -->
-<!--  -->
 <div fxLayout='column' fxLayoutAlign='start center' class='container'>
   <div *ngFor="let eventArray of (events | async);first as isFirstArray" style='border-radius: 5px;width:100%;'>
-    <div *ngFor="let event of eventArray;first as isFirst" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px'>
+    <div *ngFor="let event of eventArray;first as isFirst" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px' (click)='calendarService.openDialog(event)'>
 
       <div *ngIf='isFirst;else noDate' fxLayout='column' fxLayoutAlign='start center' fxFlex='15%'>
         <div [style.xs]='{"font-size.px" : 18}' [style.gt-xs]='{"font-size.px" : 20}'>{{event?.startDate | date:'EEE'}}</div>

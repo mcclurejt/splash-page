@@ -10,43 +10,47 @@ import { Calendar } from "app/store/calendar/calendar";
   templateUrl: './calendar-dialog.component.html',
   styleUrls: ['./calendar-dialog.component.scss']
 })
+
 export class CalendarDialogComponent implements OnInit {
+
+  readonly ADD = 'ADD';
+  readonly EDIT = 'EDIT';
+  readonly DELETE = 'DELETE';
+  readonly CANCEL = 'CANCEL';
 
   mode: string;
   event: CalendarEvent;
   newEvent: CalendarEvent;
   calendars: Observable<Calendar[]>;
+  todaysDate: string;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) { }
+  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) {
+    this._setTodaysDate();
+   }
 
   ngOnInit() {
-    this.mode = this.data.mode;
     this.calendars = this.data.calendars;
-
-    if (this.mode == 'Add') {
+    if(this.data.event){
+      this.event = this.data.event;
+      this.newEvent = new CalendarEvent(this.event);
+      this.mode = this.EDIT;
+    } else {
+      this.mode = this.ADD;
       this.event = new CalendarEvent();
-      this.event.startDate = this.data.event.startDate;
-      this.event.endDate = this.data.event.endDate;
-      this.newEvent = new CalendarEvent();
-      this.newEvent.startDate = this.data.event.startDate;
-      this.newEvent.endDate = this.data.event.endDate;
-      this.newEvent.timeZone = this.data.event.timeZone;
+      this.event.allDayEvent = true;
+      this.event.startDate = this.todaysDate;
+      this.event.endDate = this.todaysDate;
+      this.newEvent = new CalendarEvent(this.event);
     }
-    else if (this.mode == 'Edit') {
-      console.log('Event',this.data.event);
-      this.event = this.data.event;
-      this.newEvent = new CalendarEvent(this.data.event);
-    }
-    else if (this.mode == 'Delete') {
-      this.event = this.data.event;
-      this.newEvent = new CalendarEvent();
-    }
+     // Convert dates
+     this.event = this.convertDates(this.event);
+     this.newEvent = this.convertDates(this.newEvent);
   }
 
-  closeDialog() {
-    if (this.mode == 'Delete') {
-      this.dialogRef.close([this.mode, this.event, this.newEvent]);
-      return;
+  closeDialog(action: string = this.mode) {
+    console.log('Action: ',action);
+    if(action == this.CANCEL){
+      this.dialogRef.close(null);
     }
     // If the event is unchanged, pass in null to not update anything
     let isUnmodified = (this.event.allDayEvent == this.newEvent.allDayEvent)
@@ -57,15 +61,44 @@ export class CalendarDialogComponent implements OnInit {
       && (this.event.summary == this.newEvent.summary)
       && (this.event.calendarId == this.newEvent.calendarId);
 
-    if (isUnmodified) {
+    if (isUnmodified && action != this.DELETE) {
       this.dialogRef.close(null);
     } else {
-      this.dialogRef.close([this.mode, this.event, this.newEvent]);
+      this.event = this.convertDates(this.event);
+      this.newEvent = this.convertDates(this.newEvent);
+      this.dialogRef.close([action, this.event, this.newEvent]);
     }
   }
 
-  printDate(obj?: any) {
-    console.log('Object: ', obj);
+  private convertDates(event: CalendarEvent){
+    if(event.startDate.includes('-')){
+      console.log('StartDate',event.startDate);
+      console.log('EndDate',event.endDate);
+      let sd = new Date(event.startDate);
+      sd.setDate(sd.getDate() + 1);
+      event.startDate = sd.toDateString();
+      let ed = new Date(event.endDate);
+      ed.setDate(ed.getDate() + 1);
+      event.endDate = ed.toDateString();
+      console.log('StartDate',event.startDate);
+      console.log('EndDate',event.endDate);
+    } else {
+      let sd = new Date(event.startDate);
+      event.startDate = sd.getFullYear() + '-' + (sd.getMonth()+1) + '-' + sd.getDate();
+      let ed = new Date(event.endDate);
+      event.endDate = ed.getFullYear() + '-' + (ed.getMonth()+1) + '-' + ed.getDate();
+    }
+    return event;
+  }
+
+  private _setTodaysDate() {
+    let d = new Date();
+    let year = String(d.getFullYear());
+    let month = String(d.getMonth() + 1);
+    month = month.length > 1 ? month : '0' + month;
+    let date = String(d.getDate())
+    date = date.length > 1 ? date : '0' + date;
+    this.todaysDate = year + '-' + month + '-' + date;
   }
 
 }

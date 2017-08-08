@@ -1,6 +1,6 @@
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { CalendarService } from "app/services/calendar.service";
 import * as _ from 'lodash';
 
@@ -24,7 +24,6 @@ export class WeekViewComponent {
     this.allDayEvents = this.calendarService.events.map(events => this.getAllDayEvents(events));
     this.timedEvents = this.calendarService.events.map(events => this.getTimedEvents(events));
   }
-
   getTimedEvents(events: CalendarEvent[]){
     let timedEvents = _.filter(events, {'allDayEvent':false});
     return this._filterEvents(timedEvents);

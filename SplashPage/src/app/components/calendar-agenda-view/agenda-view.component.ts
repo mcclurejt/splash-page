@@ -24,7 +24,7 @@ export class AgendaViewComponent implements OnInit {
   }
 
   openDialog(mode: string, event: CalendarEvent) {
-    this.calendarService.openDialog(mode, event);
+    this.calendarService.openDialog(event);
   }
 
   onScrollDown() {
