@@ -14,7 +14,7 @@ import * as fromRoot from 'app/store/reducers';
   providers: [WeatherService],
 })
 
-export class WeatherComponent implements OnInit {
+export class WeatherComponent {
 
   city: Observable<string>;
   region: Observable<string>;
@@ -22,29 +22,12 @@ export class WeatherComponent implements OnInit {
   icon: Observable<string>;
   loading: Observable<boolean>;
 
-  constructor(
-    private weatherService: WeatherService,
-    private store: Store<fromRoot.State>
-  ) {
-    this.city = store.select(state => state.weather.city);
-    this.region = store.select(state => state.weather.region);
-    this.temp = store.select(state => state.weather.temp);
-    this.icon = store.select(state => state.weather.icon);
-    this.loading = store.select(state => state.weather.loading);
-  }
-
-  ngOnInit(){
-    this.updateWeather();
-  }
-
-  updateWeather() {
-    this.store.dispatch(new WeatherActions.StartLoading());
-
-    this.weatherService.getWeatherStream()
-      .subscribe((results) => {
-        this.store.dispatch(new WeatherActions.Update(results));
-        this.store.dispatch(new WeatherActions.EndLoading());
-      });
+  constructor(private weatherService: WeatherService) {
+    this.city = this.weatherService.weather.map(weather => weather.city);
+    this.region = this.weatherService.weather.map(weather => weather.region);
+    this.temp = this.weatherService.weather.map(weather => weather.temp);
+    this.icon = this.weatherService.weather.map(weather => weather.icon);
+    this.loading = this.weatherService.loading;
   }
 
 }

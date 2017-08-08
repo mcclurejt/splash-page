@@ -8,7 +8,7 @@ export interface State {
 }
 
 const initialState: State = {
-  loading: false,
+  loading: true,
   isSignedIn: false,
   currentUser: null,
 }
@@ -17,7 +17,7 @@ export function reducer(state = initialState, action: AuthActions.All): State {
   switch (action.type) {
     
     case AuthActions.START_LOADING: {
-      console.log('START_LOADING');
+      console.log(AuthActions.START_LOADING);
       return {
         loading: true,
         isSignedIn: state.isSignedIn,
@@ -26,7 +26,7 @@ export function reducer(state = initialState, action: AuthActions.All): State {
     }
 
     case AuthActions.STOP_LOADING: {
-      console.log('STOP_LOADING');
+      console.log(AuthActions.STOP_LOADING);
       return {
         loading: false,
         isSignedIn: state.isSignedIn,
@@ -34,8 +34,8 @@ export function reducer(state = initialState, action: AuthActions.All): State {
       }
     }
 
-    case AuthActions.STATE_CHANGE: {
-      console.log('UPDATE',action);
+    case AuthActions.HANDLE_STATE_CHANGE: {
+      console.log(AuthActions.HANDLE_STATE_CHANGE,action);
       if(action.payload == null){
         return {
           loading: state.loading,

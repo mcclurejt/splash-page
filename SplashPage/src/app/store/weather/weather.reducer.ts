@@ -19,6 +19,7 @@ const initialState: State = {
 export function reducer(state = initialState, action: WeatherActions.All): State {
   switch (action.type) {
     case WeatherActions.UPDATE: {
+      console.log(WeatherActions.UPDATE);
       return Object.assign(
         {},
         state,
@@ -27,6 +28,7 @@ export function reducer(state = initialState, action: WeatherActions.All): State
     }
 
     case WeatherActions.START_LOADING: {
+      console.log(WeatherActions.START_LOADING);
       return Object.assign(
         {},
         state,
@@ -35,6 +37,7 @@ export function reducer(state = initialState, action: WeatherActions.All): State
     }
 
     case WeatherActions.END_LOADING: {
+      console.log(WeatherActions.END_LOADING);
       return Object.assign(
         {},
         state,

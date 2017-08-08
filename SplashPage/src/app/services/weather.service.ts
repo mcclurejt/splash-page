@@ -17,9 +17,12 @@ export class WeatherService {
   private city;
   private region;
 
-  constructor(
-    private http: Http
-  ) { }
+  public weather;
+  public loading;
+  constructor(private http: Http, private store: Store<fromRoot.State>) { 
+    this.weather = this.store.select(state => state.weather);
+    this.loading = this.store.select(state => state.weather.loading);
+  }
 
   public getWeatherStream(): Observable<any> {
     return this.requestIpLocation()

@@ -35,7 +35,6 @@ export class AuthService {
       return '';
     });
     this.afAuth.authState.distinctUntilChanged().subscribe((user) => {
-      console.log('User Changed: ', user);
       this.store.dispatch(new AuthActions.StateChange(user));
     });
   }
@@ -43,7 +42,6 @@ export class AuthService {
   signInWithProvider(provider: string): Observable<firebase.User> {
     switch (provider) {
       case ('google'): {
-        console.log('Signing in with: ', provider);
         return this.signInWithGoogle();
       }
       default: {

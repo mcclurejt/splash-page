@@ -1,3 +1,4 @@
+import { WeatherEffects } from './store/weather/weather.effects';
 import { AuthEffects } from './store/auth/auth.effects';
 import { CalendarDialogComponent } from './components/calendar-dialog/calendar-dialog.component';
 import { CalendarService } from './services/calendar.service';
@@ -20,7 +21,7 @@ import { HomeComponent } from './+home/home.component';
 import { TimeComponent } from './components/time/time.component';
 import { WeatherComponent } from './components/weather/weather.component';
 import { HttpModule } from '@angular/http';
-import { CalendarComponent} from './components/calendar/calendar.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 import { MailComponent } from './components/mail/mail.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DatePipe } from '@angular/common'
@@ -36,7 +37,7 @@ import {
   MdDatepickerModule,
   MdNativeDateModule,
   MdGridListModule,
-  MdIconModule, 
+  MdIconModule,
   MdInputModule,
   MdListModule,
   MdMenuModule,
@@ -137,7 +138,7 @@ export const MaterialModules = [
     InfiniteScrollModule,
     FormsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, WeatherEffects]),
     Angular2FontawesomeModule,
   ],
   providers: [
@@ -148,7 +149,7 @@ export const MaterialModules = [
     GmailService,
     CalendarService,
     MailService
-    ],
+  ],
   entryComponents: [
     CalendarDialogComponent,
   ],

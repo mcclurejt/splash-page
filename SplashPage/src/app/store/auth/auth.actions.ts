@@ -6,6 +6,7 @@ export const SIGNOUT = 'AUTH_SIGNOUT';
 export const START_LOADING = 'AUTH_START_LOADING';
 export const STOP_LOADING = 'AUTH_STOP_LOADING';
 export const STATE_CHANGE = 'AUTH_STATE_CHANGE';
+export const HANDLE_STATE_CHANGE = 'AUTH_HANDLE_STATE_CHANGE';
 export const DEFAULT = 'AUTH_DEFAULT'
 
 export class SignIn implements Action {
@@ -35,9 +36,15 @@ export class StateChange implements Action {
     constructor(public payload : firebase.User){}
 }
 
+export class HandleStateChange implements Action {
+    readonly type = HANDLE_STATE_CHANGE;
+
+    constructor(public payload : firebase.User){}
+}
+
 export class Default implements Action {
     readonly type = DEFAULT;
     constructor(){}
 }
 
-export type All = StartLoading | StopLoading | StateChange | Default;
+export type All = StartLoading | StopLoading | HandleStateChange | Default;

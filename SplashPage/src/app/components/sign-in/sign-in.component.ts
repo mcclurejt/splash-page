@@ -20,7 +20,6 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(provider: string){
-    console.log('Signing in with: ',provider);
     this.store.dispatch(new AuthActions.SignIn(provider));
   }
 
