@@ -11,42 +11,23 @@ import { Store } from "@ngrx/store";
 import * as CalendarActions from 'app/store/calendar/calendar.actions';
 import * as fromRoot from 'app/store/reducers';
 
+import * as _ from 'lodash';
+
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/throttle';
 import 'rxjs/add/observable/interval';
 
 @Injectable()
 export class CalendarService {
-
-  private calendarsLoaded = false;
+  
   public calendars: Observable<Calendar[]>;
   public events: Observable<CalendarEvent[]>;
+  public loading: Observable<boolean>;
 
   constructor(public gcalService: GcalService, public dialog: MdDialog, private store: Store<fromRoot.State>) {
     this.calendars = this.store.select(state => state.calendar.calendars);
     this.events = this.store.select(state => state.calendar.events);
-  }
-
-  loadAllCalendars() {
-    if (this.calendarsLoaded) {
-      this.gcalService.updateCalendars();
-    } else {
-      console.log('Load All Calendars');
-      this.gcalService.loadCalendars();
-      this.calendarsLoaded = true;
-    }
-  }
-
-  addEvent(event: CalendarEvent, calendars: Calendar[]): void {
-    this.gcalService.addEvent(event, calendars);
-  }
-
-  editEvent(event: CalendarEvent, newEvent: CalendarEvent, calendars: Calendar[]): void {
-    this.gcalService.editEvent(event, newEvent, calendars);
-  }
-
-  deleteEvent(event: CalendarEvent): void {
-    this.gcalService.deleteEvent(event);
+    this.loading = this.store.select(state => state.calendar.loading);
   }
 
   onScrollDown() {
@@ -58,6 +39,7 @@ export class CalendarService {
       data: {
         mode: mode,
         event: event,
+        calendars: this.calendars,
       },
     });
     dialogRef.afterClosed()
@@ -72,11 +54,11 @@ export class CalendarService {
         let newEvent = result[0][2];
         let calendars = result[1];
         if (mode == 'Add') {
-          this.addEvent(newEvent, calendars);
+          this.store.dispatch(new CalendarActions.EventAdd({event: newEvent,calendars: calendars}));
         } else if (mode == 'Edit') {
-          this.editEvent(event, newEvent, calendars);
+          this.store.dispatch(new CalendarActions.EventEdit({event: event,newEvent: newEvent,calendars: calendars}));
         } else if (mode == 'Delete') {
-          this.deleteEvent(event);
+          this.store.dispatch(new CalendarActions.EventDelete({event: event,calendars: calendars}));
         } else {
           console.log('Unrecognized Mode', mode);
         }

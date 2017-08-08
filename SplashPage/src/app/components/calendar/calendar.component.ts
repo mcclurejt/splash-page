@@ -1,21 +1,16 @@
 import { CalendarService } from 'app/services/calendar.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit{
+export class CalendarComponent{
   @Input() view: string;
   
   constructor(private calendarService: CalendarService) {
     
-  }
-
-  ngOnInit(): void {
-    this.calendarService.loadAllCalendars();
-    console.log('view',this.view);
   }
 }
 

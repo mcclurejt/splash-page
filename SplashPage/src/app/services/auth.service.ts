@@ -21,13 +21,13 @@ export class AuthService {
 
   public currentUser: Observable<firebase.User>;
   public isSignedIn: Observable<boolean>;
-  public isLoading: Observable<boolean>;
+  public loading: Observable<boolean>;
   public displayName: Observable<string>;
 
   constructor(private afAuth: AngularFireAuth, private router: Router, private gapiService: GapiService, private store: Store<fromRoot.State>) {
     this.currentUser = this.store.select(state => state.auth.currentUser);
     this.isSignedIn = this.store.select(state => state.auth.isSignedIn);
-    this.isLoading = this.store.select(state => state.auth.loading);
+    this.loading = this.store.select(state => state.auth.loading);
     this.displayName = this.currentUser.map(user => {
       if (user) {
         return user.displayName;
@@ -69,8 +69,6 @@ export class AuthService {
   handleSignOut() {
     this.gapiService.signOut();
     this.afAuth.auth.signOut();
-    this.store.dispatch(new CalendarActions.CalendarClearAll());
-    this.store.dispatch(new MailActions.ClearAll());
     this.router.navigate(['/']);
   }
 

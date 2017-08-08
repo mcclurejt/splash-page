@@ -14,6 +14,7 @@ import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/combineAll';
+
 import * as _ from "lodash";
 
 @Injectable()
@@ -21,76 +22,37 @@ export class GcalService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  addEvent(event: CalendarEvent, calendars: Calendar[]) {
+  addEvent(event: CalendarEvent, calendars: Calendar[]): Observable<CalendarEvent> {
     let googleEvent = this._mapCalendarEventToGoogleEvent(event);
     // send request to add event
-    gapi.client.request({
+    return Observable.fromPromise(gapi.client.request({
       path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events',
       method: 'POST',
       body: googleEvent,
-    }).then(
-      (response) => {
-        let calendarEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == event.calendarId));
-        this.store.dispatch(new CalendarActions.EventAdd(calendarEvent));
-        console.log('GcalService Event Added');
-      },
-      (onRejected) => { console.log('Event Added OnFailure', onRejected) },
-      (context) => { console.log('Event Added Context', context) });
+    })).map((response) => {
+      let calendarEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == event.calendarId));
+      console.log('GcalService Event Added');
+      return calendarEvent;
+    });
   }
 
-  editEvent(event: CalendarEvent, newEvent: CalendarEvent, calendars: Calendar[]) {
-    if (event.calendarId != newEvent.calendarId) {
-      newEvent.backgroundColor = event.backgroundColor;
-      newEvent.foregroundColor = event.foregroundColor;
-      this.deleteEvent(event);
-      this.addEvent(newEvent, calendars);
-      return;
-    }
-    let googleEvent = this._mapCalendarEventToGoogleEvent(newEvent);
-    gapi.client.request({
-      path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
-      method: 'PUT',
-      body: googleEvent,
-    }).then(
-      (response) => {
-        console.log('Event Edited', response);
-        newEvent = this._mapGoogleEventToCalendarEvent(response.result, calendars.find((calendar) => calendar.id == newEvent.calendarId));
-        this.store.dispatch(new CalendarActions.EventDelete(event));
-        this.store.dispatch(new CalendarActions.EventAdd(newEvent));
-      },
-      (onRejected) => { console.log('Event Updated OnFailure', onRejected) },
-      (context) => { console.log('Event Updated Context', context) });
-  }
-
-  deleteEvent(event: CalendarEvent) {
-    gapi.client.request({
+  deleteEvent(event: CalendarEvent, calendars : Calendar[]) : Observable<CalendarEvent> {
+    return Observable.fromPromise(gapi.client.request({
       path: 'https://www.googleapis.com/calendar/v3/calendars/' + event.calendarId + '/events/' + event.id,
       method: 'DELETE',
-    }).then(
-      (onFulfilled) => {
-        this.store.dispatch(new CalendarActions.EventDelete(event));
-       console.log('Event Deleted');
-      },
-      (onRejected) => { console.log('Event Deleted OnFailure', onRejected) },
-      (context) => { console.log('Event Deleted Context', context) });
+    })).map((response) => event);
   }
 
-  updateCalendars(){
+  updateCalendars() {
     console.log('TODO: implement updating calendars with synctoken');
   }
 
-  loadCalendars(startDate?: Date) {
+  loadCalendars(startDate?: Date): Observable<Array<any>> {
     console.log('Loading Calendars');
-    this._requestCalendars()
+    return this._requestCalendars()
       .flatMap(response => Observable.from(this._mapCalendars(response.result)))
-      .flatMap(calendar => this._requestEvents(calendar))
-      .map((respCalArray) => this._mapEvents(respCalArray))
-      .subscribe((eventCalArray) => {
-        let events = eventCalArray[0];
-        let calendar = eventCalArray[1];
-        this.store.dispatch(new CalendarActions.EventAdd(events));
-        this.store.dispatch(new CalendarActions.CalendarAdd(calendar));
-      });
+      .flatMap(calendar => this._requestEvents(calendar, startDate))
+      .map((respCalArray) => this._mapEvents(respCalArray));
   }
 
   private _requestCalendars(): Observable<any> {

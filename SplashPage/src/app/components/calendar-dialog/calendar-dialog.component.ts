@@ -17,11 +17,11 @@ export class CalendarDialogComponent implements OnInit {
   newEvent: CalendarEvent;
   calendars: Observable<Calendar[]>;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>, private calendarService: CalendarService) { }
+  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) { }
 
   ngOnInit() {
     this.mode = this.data.mode;
-    this.calendars = this.calendarService.calendars;
+    this.calendars = this.data.calendars;
 
     if (this.mode == 'Add') {
       this.event = new CalendarEvent();

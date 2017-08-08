@@ -1,4 +1,3 @@
-import { STATE_CHANGE } from './../auth/auth.actions';
 import { WeatherService } from './../../services/weather.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';

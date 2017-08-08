@@ -1,4 +1,4 @@
-<div fxLayoutAlign='center center' class='signInContainer' *ngIf='true;else loadingTemplate'>
+<div fxLayoutAlign='center center' class='signInContainer' *ngIf='!(authService.loading | async);else loadingTemplate'>
     <md-card id='signIn' fxLayout='column' fxLayoutAlign='center center'>
       <md-card-title>
         <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>

@@ -1,3 +1,4 @@
+import { CalendarEffects } from './store/calendar/calendar.effects';
 import { WeatherEffects } from './store/weather/weather.effects';
 import { AuthEffects } from './store/auth/auth.effects';
 import { CalendarDialogComponent } from './components/calendar-dialog/calendar-dialog.component';
@@ -138,7 +139,7 @@ export const MaterialModules = [
     InfiniteScrollModule,
     FormsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects, WeatherEffects]),
+    EffectsModule.forRoot([AuthEffects, WeatherEffects, CalendarEffects]),
     Angular2FontawesomeModule,
   ],
   providers: [

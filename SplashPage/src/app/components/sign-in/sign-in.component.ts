@@ -20,6 +20,7 @@ export class SignInComponent implements OnInit {
   }
 
   signIn(provider: string){
+    this.store.dispatch(new AuthActions.StartLoading());
     this.store.dispatch(new AuthActions.SignIn(provider));
   }
 
