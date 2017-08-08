@@ -23,4 +23,4 @@ export class ClearAll implements Action {
     constructor(){}
 }
 
-export type All = MailAdd | MailDelete;
+export type All = MailAdd | MailDelete | ClearAll;

@@ -1,4 +1,4 @@
-<div fxLayout='column' fxLayoutAlign='start center' class='container'>
+<!-- <div fxLayout='column' fxLayoutAlign='start center' class='container'>
 
   <div *ngFor="let eventArray of (events | async)" style='border-radius: 5px;width:100%;'>
 
@@ -42,5 +42,46 @@
         <i fa [name]="'minus-square-o'" [size]=1 [fw]=true></i>
       </button>
     </div>
+  </div>
+</div>  -->
+<!--  -->
+<div fxLayout='column' fxLayoutAlign='start center' class='container'>
+  <div *ngFor="let eventArray of (events | async);first as isFirstArray" style='border-radius: 5px;width:100%;'>
+    <div *ngFor="let event of eventArray;first as isFirst" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px'>
+
+      <div *ngIf='isFirst;else noDate' fxLayout='column' fxLayoutAlign='start center' fxFlex='15%'>
+        <div [style.xs]='{"font-size.px" : 18}' [style.gt-xs]='{"font-size.px" : 20}'>{{event?.startDate | date:'EEE'}}</div>
+        <div [style.xs]='{"font-size.px" : 14}' [style.gt-xs]='{"font-size.px" : 16}'>{{event?.startDate | date:'MMM d'}}</div>
+      </div>
+      <ng-template #noDate>
+        <div fxFlex='15%'></div>
+      </ng-template>
+
+      <div class='calendar-color' style='height: 70%;width: 4px;border-radius: 2px' [style.background-color]='event.backgroundColor' fxFlex='1%'>&nbsp;</div>
+
+      <span class='event-summary' fxFlex='67%' [style.xs]='{"font-size.px" : 12}'>
+        {{event.summary}}
+      </span>
+
+      <div fxFlex='2%'></div>
+
+      <div fxLayout='column' fxLayoutAlign='center center' fxFlex='15%'>
+        <span *ngIf='event.allDayEvent;else timedEvent' class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
+        All Day
+      </span>
+      </div>
+      <ng-template #timedEvent>
+        <div fxLayout='column' fxLayoutAlign='center center' fxFlex='15%'>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
+            {{(event.startTime | time)}}
+          </div>
+          <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
+            {{(event.endTime | time)}}
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+
   </div>
 </div>

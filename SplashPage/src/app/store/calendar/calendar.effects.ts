@@ -20,7 +20,7 @@ export class CalendarEffects {
 
   constructor(private actions: Actions, private store: Store<fromRoot.State>, private calendarService: CalendarService, private gcalService: GcalService) { }
 
-  @Effect() onStateChange: Observable<CalendarActions.All[]> = this.actions.ofType(CalendarActions.ON_STATE_CHANGE)
+  @Effect() onStateChange: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.ON_STATE_CHANGE)
     .do(() => this.store.dispatch(new CalendarActions.StartLoading()))
     .switchMap(() => {
       // TODO: Add code to detect all calendar providers
