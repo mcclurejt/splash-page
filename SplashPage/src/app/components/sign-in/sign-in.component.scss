@@ -1,8 +1,3 @@
-$light-text: rgba(245, 245, 245, 1);
-$dark-text: rgba(66, 66, 66, 1);
-$light-background:rgba(245, 245, 245, 1);
-$dark-background:rgba(117, 117, 117, 0.6);
-$transparent-background: rgba(245, 245, 245, 0);
 #signIn {
   padding: 30px 20px;
   margin: 20px 40px;
@@ -19,20 +14,3 @@ $transparent-background: rgba(245, 245, 245, 0);
     }
   }
 }
-
-.container {
-  height: 100%;
-  .weatherContainer {
-    padding-top: 20px;
-  }
-  .contentContainer {
-    .calendarContainer {
-      padding: 20px;
-    }
-    .mailContainer {
-      padding: 20px;
-    }
-  }
-}
-
-

@@ -15,24 +15,9 @@ const initialState: State = {
 
 export function reducer(state = initialState, action: AuthActions.All): State {
   switch (action.type) {
-
-    case (AuthActions.HANDLE_SIGNIN): {
-      return {
-        loading: false,
-        isSignedIn: true,
-        currentUser: action.payload,
-      }
-    }
-
-    case (AuthActions.HANDLE_SIGNOUT): {
-      return {
-        loading: false,
-        isSignedIn: false,
-        currentUser: null,
-      }
-    }
-
-    case (AuthActions.START_LOADING): {
+    
+    case AuthActions.START_LOADING: {
+      console.log('START_LOADING');
       return {
         loading: true,
         isSignedIn: state.isSignedIn,
@@ -40,11 +25,27 @@ export function reducer(state = initialState, action: AuthActions.All): State {
       }
     }
 
-    case (AuthActions.STOP_LOADING): {
+    case AuthActions.STOP_LOADING: {
+      console.log('STOP_LOADING');
       return {
         loading: false,
         isSignedIn: state.isSignedIn,
         currentUser: state.currentUser,
+      }
+    }
+
+    case AuthActions.STATE_CHANGE: {
+      console.log('UPDATE',action);
+      if(action.payload == null){
+        return {
+          loading: state.loading,
+          isSignedIn: false,
+          currentUser: null,};
+      }
+      return {
+        loading: state.loading,
+        isSignedIn: true,
+        currentUser: action.payload,
       }
     }
 

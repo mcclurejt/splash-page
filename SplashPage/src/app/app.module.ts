@@ -1,3 +1,4 @@
+import { AuthEffects } from './store/auth/auth.effects';
 import { CalendarDialogComponent } from './components/calendar-dialog/calendar-dialog.component';
 import { CalendarService } from './services/calendar.service';
 import { GmailService } from './content-providers/google/gmail.service';
@@ -68,6 +69,8 @@ import { FromPipe } from './pipes/from.pipe';
 import { DecodeHTMLPipe } from './pipes/decode-html.pipe';
 import { MailDatePipe } from './pipes/mail-date.pipe';
 import { SubjectPipe } from './pipes/subject.pipe';
+import { EffectsModule } from '@ngrx/effects';
+import { SignInComponent } from './components/sign-in/sign-in.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -118,6 +121,7 @@ export const MaterialModules = [
     DecodeHTMLPipe,
     MailDatePipe,
     SubjectPipe,
+    SignInComponent,
   ],
   imports: [
     BrowserModule,
@@ -133,6 +137,7 @@ export const MaterialModules = [
     InfiniteScrollModule,
     FormsModule,
     StoreModule.forRoot(reducers),
+    EffectsModule.forRoot([AuthEffects]),
     Angular2FontawesomeModule,
   ],
   providers: [

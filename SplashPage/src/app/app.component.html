@@ -1,5 +1,5 @@
 <div class='container'>
-  <div class='navbarContainer' fxFlexAlign='center' *ngIf="(authService.isSignedInStream | async)">
+  <div class='navbarContainer' fxFlexAlign='center' *ngIf="(authService.isSignedIn | async)">
     <app-navbar></app-navbar>
   </div>
   <div class='contentContainer'>

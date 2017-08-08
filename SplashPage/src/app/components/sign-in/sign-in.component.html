@@ -1,0 +1,16 @@
+<div fxLayoutAlign='center center' class='signInContainer' *ngIf='true;else loadingTemplate'>
+    <md-card id='signIn' fxLayout='column' fxLayoutAlign='center center'>
+      <md-card-title>
+        <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
+        <span fxShow='false' fxShow.xs style='font-size: 20px;'>You must be signed in</span>
+      </md-card-title>
+      <button id='google-button' md-button (click)='signIn(google)'></button>
+    </md-card>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div fxLayoutAlign='center center' class='loadingContainer'>
+      <md-progress-bar color="primary" mode="indeterminate">
+      </md-progress-bar>
+    </div>
+  </ng-template>>
