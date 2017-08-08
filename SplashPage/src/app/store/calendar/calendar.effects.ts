@@ -29,21 +29,14 @@ export class CalendarEffects {
       return this.gcalService.getCalendars();
     })
     .switchMap((calendars: Calendar[]) => {
+      console.log('Calendars: ',calendars);
       this.store.dispatch(new CalendarActions.CalendarAdd(calendars));
       return this.gcalService.getEvents(calendars)
     })
     .map((events: CalendarEvent[]) => {
+      console.log('Events: ',events);
       this.store.dispatch(new CalendarActions.HandleEventAdd(events));
       return new CalendarActions.StopLoading();
-    })
-
-    .mergeMap((eventCalArray) => {
-      let events = eventCalArray[0];
-      let calendar = eventCalArray[1];
-      let actions = [];
-      actions.push(new CalendarActions.HandleEventAdd(events));
-      actions.push(new CalendarActions.CalendarAdd(calendar));
-      return Observable.from(actions);
     })
 
   @Effect() addEvent: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.EVENT_ADD)

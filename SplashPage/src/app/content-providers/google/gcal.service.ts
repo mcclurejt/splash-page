@@ -110,7 +110,6 @@ export class GcalService {
     if (events == null) {
       return [];
     }
-    console.log('Events: ', events);
     let calendarEvents = [];
     for (let event of events) {
       let calendarEvent = this._mapGoogleEventToCalendarEvent(event, calendar);
