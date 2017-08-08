@@ -14,6 +14,8 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/bufferTime';
+import { Calendar } from "app/store/calendar/calendar";
 
 @Injectable()
 export class CalendarEffects {
@@ -24,8 +26,17 @@ export class CalendarEffects {
     .do(() => this.store.dispatch(new CalendarActions.StartLoading()))
     .switchMap(() => {
       // TODO: Add code to detect all calendar providers
-      return this.gcalService.loadCalendars();
+      return this.gcalService.getCalendars();
     })
+    .switchMap((calendars: Calendar[]) => {
+      this.store.dispatch(new CalendarActions.CalendarAdd(calendars));
+      return this.gcalService.getEvents(calendars)
+    })
+    .map((events: CalendarEvent[]) => {
+      this.store.dispatch(new CalendarActions.HandleEventAdd(events));
+      return new CalendarActions.StopLoading();
+    })
+
     .mergeMap((eventCalArray) => {
       let events = eventCalArray[0];
       let calendar = eventCalArray[1];
@@ -33,7 +44,7 @@ export class CalendarEffects {
       actions.push(new CalendarActions.HandleEventAdd(events));
       actions.push(new CalendarActions.CalendarAdd(calendar));
       return Observable.from(actions);
-    });
+    })
 
   @Effect() addEvent: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.EVENT_ADD)
     .map(toPayload)

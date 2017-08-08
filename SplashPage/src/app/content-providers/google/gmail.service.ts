@@ -11,6 +11,7 @@ import * as fromRoot from 'app/store/reducers';
 import * as MailActions from 'app/store/mail/mail.actions';
 
 import 'rxjs/add/operator/bufferTime';
+import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class GmailService {
@@ -19,22 +20,23 @@ export class GmailService {
   private nextPageToken: string;
 
 
-  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) {}
+  constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
   //TODO: consider adding a query parameter
   loadEmails(): void {
     console.log('Loading Emails');
-    this.requestEmailIds()
-      .flatMap((response) => this.mapEmailIds(response.result))
-      .flatMap((messageId) => this.requestEmail(messageId))
-      .map((messageResp) => this.mapEmail(messageResp))
-      .bufferTime(100)
-      .subscribe((messages) => {
-        if(messages.length > 0){
-          console.log('Messages',messages);
-          this.store.dispatch(new MailActions.MailAdd(messages));
-        }
-      });
+    this.loadEmails2();
+    // this.requestEmailIds()
+    //   .flatMap((response) => this.mapEmailIds(response.result))
+    //   .flatMap((message) => this.requestEmail(message))
+    //   .map((messageResp) => this.mapEmail(messageResp))
+    //   .bufferTime(500)
+    //   .subscribe((messages) => {
+    //     if(messages.length > 0){
+    //       console.log('Messages',messages);
+    //       this.store.dispatch(new MailActions.MailAdd(messages));
+    //     }
+    //   });
   }
 
   requestEmailIds(): Observable<any> {
@@ -135,7 +137,7 @@ export class GmailService {
     return new MailMessage(result);
   }
 
-  mapPartialGoogleMessageToEmailMessage(googleMessage: any): MailMessage{
+  mapPartialGoogleMessageToEmailMessage(googleMessage: any): MailMessage {
     let message = new MailMessage(googleMessage);
     message.headers = this.indexHeaders(googleMessage.payload.headers);
     return message;
@@ -156,5 +158,53 @@ export class GmailService {
     return decodeURIComponent(Array.prototype.map.call(atob(str.replace(/-/g, '+').replace(/_/g, '/')), (c) => {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
+  }
+
+  loadEmails2(): void {
+    console.log('Loading Emails');
+    this.requestEmailIds()
+      .map((response) => this.mapEmailIds(response.result))
+      .switchMap((messages) => this.requestEmail2(messages))
+      .map((messageResp) => this.mapEmail2(messageResp))
+      .subscribe((messages) => {
+        if (messages.length > 0) {
+          console.log('Messages', messages);
+          this.store.dispatch(new MailActions.MailAdd(messages));
+        }
+      });
+  }
+
+  requestEmail2(messages): Observable<any> {
+    let gapi = window['gapi'];
+    let params = {
+      format: "metadata"
+    };
+    let batch = gapi.client.newBatch();
+    for (let message of messages) {
+      let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id;
+      let req = gapi.client.request({
+        path: url,
+        method: 'GET',
+        params: params
+      });
+      batch.add(req);
+    }
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      batch.execute((response) => {
+        resolve(response);
+      });
+    })
+    );
+  }
+
+  mapEmail2(mailResp): MailMessage[] {
+    console.log('mailResp', mailResp);
+    let messages = [];
+    for (let key of _.keys(mailResp)) {
+      let message = mailResp[key].result;
+      let mailMessage = this.mapPartialGoogleMessageToEmailMessage(message);
+      messages.push(mailMessage);
+    }
+    return messages;
   }
 }
