@@ -60,7 +60,7 @@ export class GmailService {
 
   requestEmail(message): Observable<any> {
     let params = {
-      format: "full"
+      format: "metadata"
     };
     let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id;
     let req = gapi.client.request({
@@ -73,7 +73,7 @@ export class GmailService {
 
   mapEmail(mailResp): MailMessage {
     let message = mailResp.result;
-    let email = this.mapGoogleMessageToEmailMessage(message);
+    let email = this.mapPartialGoogleMessageToEmailMessage(message);
     return email;
   }
 
@@ -133,6 +133,12 @@ export class GmailService {
     }
 
     return new MailMessage(result);
+  }
+
+  mapPartialGoogleMessageToEmailMessage(googleMessage: any): MailMessage{
+    let message = new MailMessage(googleMessage);
+    message.headers = this.indexHeaders(googleMessage.payload.headers);
+    return message;
   }
 
   indexHeaders(headers: any): any {

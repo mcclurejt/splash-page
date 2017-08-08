@@ -43,7 +43,6 @@ export class CalendarDialogComponent implements OnInit {
       this.newEvent = new CalendarEvent(this.event);
     }
     // Convert dates
-    // this.event = this.convertDates(this.event);
     this.newEvent = this.convertDates(this.newEvent);
   }
 
@@ -64,7 +63,6 @@ export class CalendarDialogComponent implements OnInit {
     if (isUnmodified && action != this.DELETE) {
       this.dialogRef.close(null);
     } else {
-      this.event = this.convertDates(this.event);
       this.newEvent = this.convertDates(this.newEvent);
       this.dialogRef.close([action, this.event, this.newEvent]);
     }
