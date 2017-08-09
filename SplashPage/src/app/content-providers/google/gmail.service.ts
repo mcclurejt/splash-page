@@ -25,16 +25,17 @@ export class GmailService {
   //TODO: consider adding a query parameter
   loadEmails(): void {
     console.log('Loading Emails');
-    this.requestEmailIds()
-      .map((response) => this.mapEmailIds(response.result))
-      .switchMap((messages) => this.requestEmails(messages))
-      .map((messageResp) => this.mapEmails(messageResp))
-      .subscribe((messages) => {
-        if (messages.length > 0) {
-          console.log('Messages', messages);
-          this.store.dispatch(new MailActions.MailAdd(messages));
-        }
-      });
+    this.loadEmails2();
+    // this.requestEmailIds()
+    //   .map((response) => this.mapEmailIds(response.result))
+    //   .switchMap((messages) => this.requestEmails(messages))
+    //   .map((messageResp) => this.mapEmails(messageResp))
+    //   .subscribe((messages) => {
+    //     if (messages.length > 0) {
+    //       console.log('Messages', messages);
+    //       this.store.dispatch(new MailActions.MailAdd(messages));
+    //     }
+    //   });
   }
 
   requestEmailIds(): Observable<any> {
@@ -224,4 +225,22 @@ export class GmailService {
     console.log('mailResp mapped', messages);
     return messages;
   }
+
+  fetchFullMessage(messageId: string): void {
+    this.requestFullMessage(messageId)
+    .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
+  }
+
+  requestFullMessage(messageId: string): Observable<any> {
+        let params = {
+            format: 'full',
+        };
+        let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + messageId;
+        let req = gapi.client.request({
+            path: url,
+            method: 'GET',
+            params: params,
+        });
+        return Observable.fromPromise(req);
+    }
 }
