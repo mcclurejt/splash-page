@@ -22,9 +22,9 @@ export class CalendarDialogComponent implements OnInit {
   event: CalendarEvent;
   newEvent: CalendarEvent;
   calendars: Observable<Calendar[]>;
-  todaysDate: string;
-  startDateEmitter =  new EventEmitter();
-  endDateEmitter = new EventEmitter();
+  todaysDate: Date;
+  startDate: Date;
+  endDate: Date;
 
   constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) {
     this._setTodaysDate();
@@ -36,16 +36,20 @@ export class CalendarDialogComponent implements OnInit {
       this.mode = this.EDIT;
       this.event = this.data.event;
       this.newEvent = new CalendarEvent(this.event);
+      let sd_split = this.newEvent.startDate.split('-');
+      let startTime = this.newEvent.startTime.split(':');
+      this.startDate = new Date(parseInt(sd_split[0]), parseInt(sd_split[1]) - 1, parseInt(sd_split[2]), parseInt(startTime[0]), parseInt(startTime[1]));
+      let ed_split = this.newEvent.endDate.split('-');
+      let endTime = this.newEvent.endTime.split(':');
+      this.endDate = new Date(parseInt(ed_split[0]), parseInt(ed_split[1]) - 1, parseInt(ed_split[2]), parseInt(endTime[0]), parseInt(endTime[1]));
     } else {
       this.mode = this.ADD;
       this.event = new CalendarEvent();
-      this.event.allDayEvent = true;
-      this.event.startDate = this.todaysDate;
-      this.event.endDate = this.todaysDate;
-      this.newEvent = new CalendarEvent(this.event);
+      this.newEvent = new CalendarEvent();
+      this.newEvent.allDayEvent = true;
+      this.startDate = this.todaysDate;
+      this.endDate = this.todaysDate;
     }
-    // Convert dates
-    this.newEvent = this.convertDates(this.newEvent);
   }
 
   closeDialog(action: string = this.mode) {
@@ -53,6 +57,7 @@ export class CalendarDialogComponent implements OnInit {
       this.dialogRef.close(null);
       return;
     }
+    this.newEvent = this.convertDates(this.newEvent);
     // If the event is unchanged, pass in null to not update anything
     let isUnmodified = (this.event.allDayEvent == this.newEvent.allDayEvent)
       && (this.event.startDate == this.newEvent.startDate)
@@ -66,7 +71,6 @@ export class CalendarDialogComponent implements OnInit {
       this.dialogRef.close(null);
       return;
     } else {
-      this.newEvent = this.convertDates(this.newEvent);
       this.dialogRef.close([action, this.event, this.newEvent]);
       return;
     }
@@ -75,48 +79,36 @@ export class CalendarDialogComponent implements OnInit {
   startDateChange(startDate: string) {
     // Change the end date if the start date is after it
     let sd = new Date(startDate).getTime();
-    let ed = new Date(this.newEvent.endDate).getTime();
-    if(sd > ed){
-      this.newEvent.endDate = new Date(startDate).toDateString();
+    let ed = new Date(this.endDate).getTime();
+    if (sd > ed) {
+      this.endDate = new Date(startDate);
     }
   }
 
   endDateChange(endDate: string) {
     // Change the start date if the end date is before it
-    let sd = new Date(this.newEvent.startDate).getTime();
+    let sd = this.startDate.getTime();
     let ed = new Date(endDate).getTime();
-    if(sd > ed){
-      this.newEvent.startDate = new Date(endDate).toDateString();
+    if (sd > ed) {
+      this.startDate = new Date(endDate);
     }
   }
 
   private convertDates(event: CalendarEvent) {
-    if (!event.startDate.toString().includes(' ')) {
-      // Normal Date Format -> Google Date Format
-      let sd_split = event.startDate.split('-');
-      let sd = new Date(parseInt(sd_split[0]),parseInt(sd_split[1]) - 1,parseInt(sd_split[2]));
-      event.startDate = sd.toDateString();
-      let ed_split = event.endDate.split('-')
-      let ed = new Date(parseInt(ed_split[0]),parseInt(ed_split[1]) - 1,parseInt(ed_split[2]));
-      event.endDate = ed.toDateString();
-    } else {
-      // Google Date Format -> Normal Date Format
-      let sd = new Date(event.startDate);
-      event.startDate = sd.toISOString().split('T')[0];
-      let ed = new Date(event.endDate);
-      event.endDate = ed.toISOString().split('T')[0];
-    }
+    // Convert from Date obj format to the one I use
+    event.startDate = this.startDate.toISOString().split('T')[0];
+    event.startTime = this.startDate.toTimeString().split(' ')[0].substr(0, 5);
+    event.endDate = this.endDate.toISOString().split('T')[0];
+    event.endTime = this.endDate.toTimeString().split(' ')[0].substr(0, 5);
     return event;
   }
 
   private _setTodaysDate() {
     let d = new Date();
-    let year = String(d.getFullYear());
-    let month = String(d.getMonth() + 1);
-    month = month.length > 1 ? month : '0' + month;
-    let date = String(d.getDate())
-    date = date.length > 1 ? date : '0' + date;
-    this.todaysDate = year + '-' + month + '-' + date;
+    let year = d.getFullYear();
+    let month = d.getMonth();
+    let date = d.getDate();
+    this.todaysDate = new Date(year,month,date)
   }
 
 }
