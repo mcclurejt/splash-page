@@ -73,6 +73,7 @@ import { MailDatePipe } from './pipes/mail-date.pipe';
 import { SubjectPipe } from './pipes/subject.pipe';
 import { EffectsModule } from '@ngrx/effects';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { MailDetailDialogComponent } from './components/mail-detail-dialog/mail-detail-dialog.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -124,6 +125,7 @@ export const MaterialModules = [
     MailDatePipe,
     SubjectPipe,
     SignInComponent,
+    MailDetailDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -168,7 +168,7 @@ export class GmailService {
       .map((messageResp) => this.mapEmail2(messageResp))
       .subscribe((messages) => {
         if (messages.length > 0) {
-          console.log('Messages', messages);
+          // console.log('Messages', messages);
           this.store.dispatch(new MailActions.MailAdd(messages));
         }
       });
@@ -187,7 +187,7 @@ export class GmailService {
         method: 'GET',
         params: params
       });
-      batch.add(req);
+      batch.add(req, {'id': message.id});
     }
     return Observable.fromPromise(new Promise((resolve, reject) => {
       batch.execute((response) => {
@@ -205,6 +205,7 @@ export class GmailService {
       let mailMessage = this.mapPartialGoogleMessageToEmailMessage(message);
       messages.push(mailMessage);
     }
+    console.log('mailResp mapped', messages);
     return messages;
   }
 }

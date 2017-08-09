@@ -26,8 +26,13 @@ export class MailSimpleInboxViewComponent implements OnInit {
     .map(threads => this.simpleInboxViewFilter(threads));
   }
 
+  openDialog(event: Thread) {
+    this.mailService.openDialogHandler(event.messages[0].id);
+  }
+
   private simpleInboxViewFilter(mailThreadObj): Thread[] {
     let threadArray: Thread[] = [];
+    console.log(mailThreadObj);
     _.forIn(mailThreadObj, (value, key) => {
       let thread: Thread = {
         messages: value.sort(this.compareMessageInternalDates),
@@ -39,6 +44,7 @@ export class MailSimpleInboxViewComponent implements OnInit {
     });
     // Now that we have access to the highest internalDate sort all the threads
     threadArray = threadArray.sort(this.compareThreadInternalDates);
+    // console.log(threadArray);
     return threadArray;
   }
 

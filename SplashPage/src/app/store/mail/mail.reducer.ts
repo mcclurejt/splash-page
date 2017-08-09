@@ -6,14 +6,20 @@ export interface MailThread {
   [key: string]: MailMessage[]
 }
 
+export interface MailMessageLookup {
+  [key : string]: MailMessage;
+}
+
 export interface State {
   messages: MailMessage[],
-  threads: MailThread
+  threads: MailThread,
+  messageLookup: MailMessageLookup
 }
 
 const initialState: State = {
   messages: [],
-  threads: {}
+  threads: {},
+  messageLookup: {}
 }
 
 
@@ -27,6 +33,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
         newState = Object.assign({
           messages: [...action.payload, ...state.messages],
           threads: Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId"))),
+          messageLookup: Object.assign({}, state.messageLookup),
         })
       } else {
         let threadObj = { threads: Object.assign({}, state.threads) }
@@ -38,6 +45,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
           {},
           state,
           { messages: [action.payload, ...state.messages] },
+          { messageLookup: state.messageLookup },
           threadObj,
         )
       }
