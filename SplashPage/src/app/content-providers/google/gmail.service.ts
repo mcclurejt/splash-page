@@ -97,6 +97,7 @@ export class GmailService {
   }
 
   mapGoogleMessageToEmailMessage(gMessage: any): MailMessage {
+    // console.log("gMessage: ", gMessage);
     let result: any = {
       id: gMessage.id,
       threadId: gMessage.threadId,
@@ -215,20 +216,24 @@ export class GmailService {
   }
 
   mapEmail2(mailResp): MailMessage[] {
-    console.log('mailResp', mailResp);
+    // console.log('mailResp', mailResp);
     let messages = [];
     for (let key of _.keys(mailResp)) {
       let message = mailResp[key].result;
       let mailMessage = this.mapPartialGoogleMessageToEmailMessage(message);
       messages.push(mailMessage);
     }
-    console.log('mailResp mapped', messages);
+    // console.log('mailResp mapped', messages);
     return messages;
   }
 
   fetchFullMessage(messageId: string): void {
     this.requestFullMessage(messageId)
+    .map((message) => { return message.result})
     .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
+    .subscribe((message) => {
+      console.log("full message: ", message);
+    });
   }
 
   requestFullMessage(messageId: string): Observable<any> {

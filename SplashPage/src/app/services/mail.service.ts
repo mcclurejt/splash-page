@@ -38,7 +38,8 @@ export class MailService {
       if (messageLookup[messageId]) {
         this.openDialog('placeholder', messageLookup[messageId]);
       } else {
-        //TODO make gmail service call, in future do general mail service call that chooses provider call
+        console.log("Message not in lookup");
+        this.gmailService.fetchFullMessage(messageId);
       }
     });
   }

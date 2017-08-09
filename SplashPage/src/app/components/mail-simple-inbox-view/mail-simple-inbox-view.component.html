@@ -2,7 +2,7 @@
 
   <div *ngFor='let thread of (threads | async)' style='border-radius: 5px;width:100%;'>
 
-    <div fxLayout='row' class='message-group-container'>
+    <div fxLayout='row' class='message-group-container' (click)='openDialog(thread)'>
 
       <div fxFlex='83%' fxLayout='column' fxLayoutAlign='center start' class='message-container'>
         <div class='from-row ellipsis'>

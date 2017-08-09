@@ -32,7 +32,7 @@ export class MailSimpleInboxViewComponent implements OnInit {
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {
     let threadArray: Thread[] = [];
-    console.log(mailThreadObj);
+    // console.log(mailThreadObj);
     _.forIn(mailThreadObj, (value, key) => {
       let thread: Thread = {
         messages: value.sort(this.compareMessageInternalDates),
