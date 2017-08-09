@@ -24,6 +24,7 @@ textarea {
   line-height: inherit;
 }
 
+// Dialog
 .mat-dialog-container {
   background-color: rgba(245, 245, 245, 1) !important;
 }
@@ -37,10 +38,14 @@ textarea {
   background-color: $transparent-background !important;
   color: $dark-text !important;
 }
-
 .mat-menu-panel{
   font-family: 'Comfortaa', cursive !important;
   background-color: $light-background !important;
   color: $dark-text !important;
+}
+
+// Timepicker
+tr.text-center.hidden{
+  display: none;
 }
 

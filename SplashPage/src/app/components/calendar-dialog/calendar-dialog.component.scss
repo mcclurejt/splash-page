@@ -1,11 +1,12 @@
 $light-text: rgba(245, 245, 245, 1);
 $dark-text: rgba(66, 66, 66, 1);
 $light-background:rgba(245, 245, 245, 0.9);
+$accent-background: rgba(210, 210, 210, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 // font-family: 'Comfortaa', cursive !important;
-
 .dialogContainer {
+  padding: 20px;
   font-family: 'Comfortaa', cursive !important;
   h1 {
     font-family: 'Comfortaa', cursive !important;
@@ -21,8 +22,19 @@ $transparent-background: rgba(245, 245, 245, 0);
         font-family: 'Comfortaa', cursive !important;
       }
       md-input-container {
+        width: 100%;
         font-family: 'Comfortaa', cursive !important;
       }
     }
   }
+}
+
+.datetime-input-container {
+  color: black; 
+  background-color: $accent-background;
+  border-radius: 5px;
+  margin: 10px 0px;
+}
+.mat-input-wrapper{
+  padding: none;
 }

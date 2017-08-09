@@ -1,4 +1,4 @@
-<div fxLayout='column' fxLayoutAlign='start center' class='container'>
+<div fxLayout='column' fxLayoutAlign='start center' class='agenda-container'>
   <div *ngFor="let eventArray of (events | async);first as isFirstArray" style='border-radius: 5px;width:100%;'>
     <div *ngFor="let event of eventArray;first as isFirst" fxLayout fxLayoutAlign='start center' class='event-row' style='border-radius: 5px' (click)='calendarService.openDialog(event)'>
 

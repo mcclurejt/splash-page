@@ -1,49 +1,60 @@
 <div class='dialogContainer'>
-  <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1>
+  <!-- <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1> -->
   <md-dialog-content>
     <form fxFlex fxLayout='column' #addEventForm='ngForm' (ngSubmit)='closeDialog()'>
-      
-      <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding-bottom:20px'>All Day Event</md-checkbox>
-      
-      <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
-        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
-          <md-icon [style.background-color]='calendar.backgroundColor'></md-icon>
-          <span>{{ calendar.summary }}</span>
-        </md-option>
-      </md-select>
-      
+
       <md-input-container fxFlex>
         <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
       </md-input-container>
-      
-      <md-input-container>
-        <input mdInput [mdDatepicker]="startDatePicker" type='text' [(ngModel)]='newEvent.startDate' name='startDate' placeholder="Start Date">
-        <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
-      </md-input-container>
-      <md-datepicker #startDatePicker></md-datepicker>
 
-      <md-input-container>
-        <input mdInput [mdDatepicker]="endDatePicker" type='text' [(ngModel)]='newEvent.endDate' name='endDate' placeholder="End Date">
-        <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
-      </md-input-container>
-      <md-datepicker #endDatePicker></md-datepicker>
-      
-      <md-input-container fxFlex>
-        <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'
-          placeholder='Start Time' name='startTime'>
-      </md-input-container>
-      
-      <md-input-container fxFlex>
-        <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.endTime' type='text'
-          placeholder='End Time' name='endTime'>
-      </md-input-container>
-    
+      <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
+        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
+          <i fa [name]="'calendar'" [size]=1 [fw]=true [style.color]='calendar.backgroundColor'></i>
+          <span>{{ calendar.summary }}</span>
+        </md-option>
+      </md-select>
+
+      <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding: 20px 0px'>All Day Event</md-checkbox>
+
+      <div class='datetime-input-container' fxLayout='column' fxLayoutAlign='start center'>
+        <div style='font-size:24px;font-weight:400;color: black'>Start</div>
+
+        <div fxLayout='row' fxLayout.xs='column' fxLayoutAlign='space-between center'>
+          <timepicker [(ngModel)]='startDate' minuteStep='30' [showSpinners]='false' [readonlyInput]="newEvent.allDayEvent" name='startTimepicker'></timepicker>
+          
+          <div fxFlex='5%'></div>
+          
+          <md-input-container>
+            <input mdInput [mdDatepicker]="startDatePicker" type='text' [(ngModel)]='startDate' name='startDate'>
+            <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
+          </md-input-container>
+          <md-datepicker (selectedChanged)='startDateChange($event)' #startDatePicker></md-datepicker>
+        </div>
+
+      </div>
+
+      <div class='datetime-input-container' fxLayout='column' fxLayoutAlign='start center'>
+        <div style='font-size:24px;font-weight:400;color: black'>End</div>
+        <div fxLayout='row' fxLayout.xs='column' fxLayoutAlign='space-between center'>
+          <timepicker [(ngModel)]='endDate' minuteStep='30' [showSpinners]='false' [readonlyInput]="newEvent.allDayEvent" name='endTimePicker'></timepicker>
+          <div fxFlex='5%'></div>
+          <md-input-container>
+            <input mdInput [mdDatepicker]="endDatePicker" type='text' [(ngModel)]='endDate' name='endDate'>
+            <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
+          </md-input-container>
+          <md-datepicker (selectedChanged)='endDateChange($event)' #endDatePicker></md-datepicker>
+        </div>
+      </div>
+
+
     </form>
   </md-dialog-content>
   <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center'>
     <button *ngIf='mode == ADD' md-raised-button (click)='closeDialog(CANCEL)'>Cancel</button>
-    <button *ngIf='mode == ADD' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid' type='submit'>Add</button>
+    <button *ngIf='mode == ADD' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
+      type='submit'>Add</button>
     <button *ngIf='mode == EDIT' color='warn' md-raised-button (click)='closeDialog(DELETE)'>Remove</button>
-    <button *ngIf='mode == EDIT' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid' type='submit'>Submit</button>
+    <button *ngIf='mode == EDIT' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
+      type='submit'>Submit</button>
   </md-dialog-actions>
 </div>

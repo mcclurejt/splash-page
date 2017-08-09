@@ -25,27 +25,28 @@ export class GmailService {
   //TODO: consider adding a query parameter
   loadEmails(): void {
     console.log('Loading Emails');
-    this.loadEmails2();
-    // this.requestEmailIds()
-    //   .flatMap((response) => this.mapEmailIds(response.result))
-    //   .flatMap((message) => this.requestEmail(message))
-    //   .map((messageResp) => this.mapEmail(messageResp))
-    //   .bufferTime(500)
-    //   .subscribe((messages) => {
-    //     if(messages.length > 0){
-    //       console.log('Messages',messages);
-    //       this.store.dispatch(new MailActions.MailAdd(messages));
-    //     }
-    //   });
+    this.requestEmailIds()
+      .map((response) => this.mapEmailIds(response.result))
+      .switchMap((messages) => this.requestEmails(messages))
+      .map((messageResp) => this.mapEmails(messageResp))
+      .subscribe((messages) => {
+        if (messages.length > 0) {
+          console.log('Messages', messages);
+          this.store.dispatch(new MailActions.MailAdd(messages));
+        }
+      });
   }
 
   requestEmailIds(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
+          let params;
+          this.nextPageToken != null ? params={pageToken: this.nextPageToken} : params={};
           gapi.client.request({
             path: 'https://www.googleapis.com/gmail/v1/users/me/messages',
             method: 'GET',
+            params: params,
           }).then((response) => {
             resolve(response);
           });
@@ -60,23 +61,38 @@ export class GmailService {
     return messages;
   }
 
-  requestEmail(message): Observable<any> {
+  requestEmails(messages): Observable<any> {
+    let gapi = window['gapi'];
     let params = {
       format: "metadata"
     };
-    let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id;
-    let req = gapi.client.request({
-      path: url,
-      method: 'GET',
-      params: params
-    });
-    return Observable.fromPromise(req);
+    let batch = gapi.client.newBatch();
+    for (let message of messages) {
+      let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id;
+      let req = gapi.client.request({
+        path: url,
+        method: 'GET',
+        params: params
+      });
+      batch.add(req);
+    }
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      batch.execute((response) => {
+        resolve(response);
+      });
+    })
+    );
   }
 
-  mapEmail(mailResp): MailMessage {
-    let message = mailResp.result;
-    let email = this.mapPartialGoogleMessageToEmailMessage(message);
-    return email;
+  mapEmails(mailResp): MailMessage[] {
+    console.log('mailResp', mailResp);
+    let messages = [];
+    for (let key of _.keys(mailResp)) {
+      let message = mailResp[key].result;
+      let mailMessage = this.mapPartialGoogleMessageToEmailMessage(message);
+      messages.push(mailMessage);
+    }
+    return messages;
   }
 
   mapGoogleMessageToEmailMessage(gMessage: any): MailMessage {
