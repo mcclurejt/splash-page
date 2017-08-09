@@ -4,17 +4,7 @@ $light-background:rgba(245, 245, 245, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 
-@mixin md-icon-size($size: 24px) {
-  font-size: $size;
-  height: $size;
-  width: $size;
-}
-
-.material-icons.mat-icon {
-  @include md-icon-size(32px);
-}
-
-.container {
+.navbar-container {
   height: 50px;
   font-family: 'Comfortaa', cursive !important;
   background-color: $light-background;
@@ -34,7 +24,10 @@ $transparent-background: rgba(245, 245, 245, 0);
       height: 100%;
     }
     #displayName {
+      text-align: center;
       font-size: 24px;
+      height: 50px;
+      line-height: 55px;
     }
   }
   .navigationButtons {

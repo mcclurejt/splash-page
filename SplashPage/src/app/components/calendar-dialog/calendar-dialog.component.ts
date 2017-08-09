@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { CalendarService } from './../../services/calendar.service';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, EventEmitter } from '@angular/core';
 import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material'
 import { Calendar } from "app/store/calendar/calendar";
 @Component({
@@ -23,6 +23,8 @@ export class CalendarDialogComponent implements OnInit {
   newEvent: CalendarEvent;
   calendars: Observable<Calendar[]>;
   todaysDate: string;
+  startDateEmitter =  new EventEmitter();
+  endDateEmitter = new EventEmitter();
 
   constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>) {
     this._setTodaysDate();
@@ -31,9 +33,9 @@ export class CalendarDialogComponent implements OnInit {
   ngOnInit() {
     this.calendars = this.data.calendars;
     if (this.data.event) {
+      this.mode = this.EDIT;
       this.event = this.data.event;
       this.newEvent = new CalendarEvent(this.event);
-      this.mode = this.EDIT;
     } else {
       this.mode = this.ADD;
       this.event = new CalendarEvent();
@@ -47,9 +49,9 @@ export class CalendarDialogComponent implements OnInit {
   }
 
   closeDialog(action: string = this.mode) {
-    console.log('Action: ', action);
     if (action == this.CANCEL) {
       this.dialogRef.close(null);
+      return;
     }
     // If the event is unchanged, pass in null to not update anything
     let isUnmodified = (this.event.allDayEvent == this.newEvent.allDayEvent)
@@ -62,33 +64,47 @@ export class CalendarDialogComponent implements OnInit {
 
     if (isUnmodified && action != this.DELETE) {
       this.dialogRef.close(null);
+      return;
     } else {
       this.newEvent = this.convertDates(this.newEvent);
       this.dialogRef.close([action, this.event, this.newEvent]);
+      return;
+    }
+  }
+
+  startDateChange(startDate: string) {
+    // Change the end date if the start date is after it
+    let sd = new Date(startDate).getTime();
+    let ed = new Date(this.newEvent.endDate).getTime();
+    if(sd > ed){
+      this.newEvent.endDate = new Date(startDate).toDateString();
+    }
+  }
+
+  endDateChange(endDate: string) {
+    // Change the start date if the end date is before it
+    let sd = new Date(this.newEvent.startDate).getTime();
+    let ed = new Date(endDate).getTime();
+    if(sd > ed){
+      this.newEvent.startDate = new Date(endDate).toDateString();
     }
   }
 
   private convertDates(event: CalendarEvent) {
-    console.log('StartDate', event.startDate);
-    console.log('EndDate', event.endDate);
     if (!event.startDate.toString().includes(' ')) {
       // Normal Date Format -> Google Date Format
-      console.log('StartDate', event.startDate);
-      console.log('EndDate', event.endDate);
-      let sd = new Date(event.startDate);
-      sd.setDate(sd.getDate() + 1);
+      let sd_split = event.startDate.split('-');
+      let sd = new Date(parseInt(sd_split[0]),parseInt(sd_split[1]) - 1,parseInt(sd_split[2]));
       event.startDate = sd.toDateString();
-      let ed = new Date(event.endDate);
-      ed.setDate(ed.getDate() + 1);
+      let ed_split = event.endDate.split('-')
+      let ed = new Date(parseInt(ed_split[0]),parseInt(ed_split[1]) - 1,parseInt(ed_split[2]));
       event.endDate = ed.toDateString();
-      console.log('StartDate', event.startDate);
-      console.log('EndDate', event.endDate);
     } else {
       // Google Date Format -> Normal Date Format
       let sd = new Date(event.startDate);
-      event.startDate = sd.getFullYear() + '-' + (sd.getMonth() + 1) + '-' + sd.getDate();
+      event.startDate = sd.toISOString().split('T')[0];
       let ed = new Date(event.endDate);
-      event.endDate = ed.getFullYear() + '-' + (ed.getMonth() + 1) + '-' + ed.getDate();
+      event.endDate = ed.toISOString().split('T')[0];
     }
     return event;
   }

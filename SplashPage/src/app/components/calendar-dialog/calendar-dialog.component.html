@@ -1,5 +1,5 @@
 <div class='dialogContainer'>
-  <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1>
+  <!-- <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1> -->
   <md-dialog-content>
     <form fxFlex fxLayout='column' #addEventForm='ngForm' (ngSubmit)='closeDialog()'>
       
@@ -20,13 +20,13 @@
         <input mdInput [mdDatepicker]="startDatePicker" type='text' [(ngModel)]='newEvent.startDate' name='startDate' placeholder="Start Date">
         <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
       </md-input-container>
-      <md-datepicker #startDatePicker></md-datepicker>
+      <md-datepicker (selectedChanged)='startDateChange($event)' #startDatePicker></md-datepicker>
 
       <md-input-container>
         <input mdInput [mdDatepicker]="endDatePicker" type='text' [(ngModel)]='newEvent.endDate' name='endDate' placeholder="End Date">
         <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
       </md-input-container>
-      <md-datepicker #endDatePicker></md-datepicker>
+      <md-datepicker (selectedChanged)='endDateChange($event)' #endDatePicker></md-datepicker>
       
       <md-input-container fxFlex>
         <input [disabled]='newEvent.allDayEvent' mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.startTime' type='text'

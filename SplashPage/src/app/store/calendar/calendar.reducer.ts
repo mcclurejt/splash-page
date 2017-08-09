@@ -24,13 +24,13 @@ export function reducer(state = initialState, action: CalendarActions.All): Stat
         newState = Object.assign({
           calendars: [...action.payload,...state.calendars],
           events: [...state.events],
-          loading: false,
+          loading: state.loading,
         });
       } else {
         newState = Object.assign({
           calendars: [action.payload,...state.calendars],
           events: [...state.events],
-          loading: false,
+          loading: state.loading,
         })
       }
       // console.log('CALENDAR_ADD New State', newState);
@@ -45,9 +45,7 @@ export function reducer(state = initialState, action: CalendarActions.All): Stat
     case CalendarActions.HANDLE_EVENT_ADD: {
       console.log(CalendarActions.HANDLE_EVENT_ADD);
       if(action.payload == null){
-        let newState =  Object.assign({},state);
-        newState.loading = false;
-        return newState;
+        return state;
       }
 
       let newState;
@@ -55,16 +53,15 @@ export function reducer(state = initialState, action: CalendarActions.All): Stat
         newState = Object.assign({
           calendars: [...state.calendars],
           events: [...action.payload, ...state.events],
-          loading: false,
+          loading: state.loading,
         });
       } else {
         newState = Object.assign({
           calendars: [...state.calendars],
           events: [action.payload, ...state.events],
-          loading: false,
+          loading: state.loading,
         });
       }
-      // console.log('EVENT_ADD', newState);
       return newState;
     }
 
@@ -72,7 +69,6 @@ export function reducer(state = initialState, action: CalendarActions.All): Stat
       console.log(CalendarActions.HANDLE_EVENT_DELETE);
       let newState = Object.assign({}, state);
       newState.events = newState.events.filter((event) => event.id != action.payload.id);
-      newState.loading = false;
       return newState;
     }
 
