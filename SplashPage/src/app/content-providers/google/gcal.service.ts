@@ -76,6 +76,7 @@ export class GcalService {
     }
     return Observable.fromPromise(batch)
       .map((eventsResp: any) => {
+        console.log('eventsresp',eventsResp);
         eventsResp = eventsResp.result;
         let events = [];
         for (let key of _.keys(eventsResp)) {
@@ -133,16 +134,20 @@ export class GcalService {
     });
     // Apply the correct fields based on whether the event is all day
     if (googleEvent.start.date != null) {
-      calendarEvent.startDate = googleEvent.start.date;
-      calendarEvent.endDate = googleEvent.end.date;
+      let sd = googleEvent.start.date.split('-');
+      let ed = googleEvent.end.date.split('-');
+      calendarEvent.startDate = new Date(parseInt(sd[0]),parseInt(sd[1]) - 1,parseInt(sd[2]))
+      calendarEvent.endDate = new Date(parseInt(sd[0]),parseInt(sd[1]) - 1,parseInt(sd[2]))
       calendarEvent.allDayEvent = true;
     } else {
       let startDateTime = googleEvent.start.dateTime.split('T');
       let endDateTime = googleEvent.end.dateTime.split('T');
-      calendarEvent.startDate = startDateTime[0];
-      calendarEvent.startTime = startDateTime[1].split('-')[0].substr(0, 5);
-      calendarEvent.endDate = endDateTime[0];
-      calendarEvent.endTime = endDateTime[1].split('-')[0].substr(0, 5);
+      let sd = startDateTime[0].split('-');
+      let st = startDateTime[1].split('-')[0].substr(0, 5).split(':');
+      let ed = endDateTime[0].split('-');
+      let et = endDateTime[1].split('-')[0].substr(0, 5).split(':');
+      calendarEvent.startDate = new Date(parseInt(sd[0]),parseInt(sd[1])-1,parseInt(sd[2]),parseInt(st[0]),parseInt(st[1]));
+      calendarEvent.endDate = new Date(parseInt(ed[0]),parseInt(ed[1])-1,parseInt(ed[2]),parseInt(et[0]),parseInt(et[1]));
       calendarEvent.allDayEvent = false;
     }
     return calendarEvent;
@@ -157,18 +162,19 @@ export class GcalService {
     // handle dates
     if (event.allDayEvent) {
       googleEvent.start = {
-        date: event.startDate,
+        date: event.startDate.getFullYear() + '-' + (event.startDate.getMonth()) + '-' + event.startDate.getDate(),
       }
       googleEvent.end = {
-        date: event.endDate,
+        date: event.endDate.getFullYear() + '-' + (event.endDate.getMonth()) + '-' + event.endDate.getDate(),
       }
     } else {
       googleEvent.start = {
-        dateTime: event.startDate + 'T' + event.startTime + ':00',
+        dateTime: event.startDate.getFullYear() + '-' + (event.startDate.getMonth()) + '-' + event.startDate.getDate() + 'T' + event.startDate.getHours() + ':' + event.startDate.getMinutes() + ':00',
         timeZone: event.timeZone,
       }
+      //2017-08-10T06:30:00-05:00
       googleEvent.end = {
-        dateTime: event.endDate + 'T' + event.endTime + ':00',
+        dateTime: event.endDate.getFullYear() + '-' + (event.endDate.getMonth()) + '-' + event.endDate.getDate() + 'T' + event.endDate.getHours() + ':' + event.endDate.getMinutes() + ':00',
         timeZone: event.timeZone,
       }
     }

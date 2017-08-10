@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgendaViewComponent implements OnInit {
   events: Observable<Array<CalendarEvent[]>>;
-  todaysDate: string
+  todaysDate: Date;
   isScrollLoading: false;
 
   constructor(private calendarService: CalendarService) {
@@ -33,14 +33,13 @@ export class AgendaViewComponent implements OnInit {
 
   private agendaViewFilter(events): Array<CalendarEvent[]> {
     let sortedEvents = events.sort(this.compareStartDates);
-    let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1);
-    let filteredEvents = this.getEventsFromDate(sortedEvents, today);
+    let filteredEvents = this.getEventsFromDate(sortedEvents, this.todaysDate);
     let groupedEvents = new Array<CalendarEvent[]>();
     let sameDayEvents = new Array<CalendarEvent>();
     for (let i = 0; i < filteredEvents.length; i++) {
       if (sameDayEvents.length == 0) {
         sameDayEvents.push(filteredEvents[i]);
-      } else if (filteredEvents[i].startDate == sameDayEvents[0].startDate) {
+      } else if (filteredEvents[i].startDate.toDateString() == sameDayEvents[0].startDate.toDateString()) {
         sameDayEvents.push(filteredEvents[i]);
       } else {
         groupedEvents.push(sameDayEvents);
@@ -51,13 +50,15 @@ export class AgendaViewComponent implements OnInit {
     if (sameDayEvents.length != 0) {
       groupedEvents.push(sameDayEvents);
     }
-
+    console.log('GroupedEvents',groupedEvents);
     return groupedEvents;
   }
 
   private compareStartDates(event1: CalendarEvent, event2: CalendarEvent): number {
-    let time1 = new Date(event1.startDate);
-    let time2 = new Date(event2.startDate);
+    let e1 = new Date(event1.startDate.getFullYear(),event1.startDate.getMonth(),event1.startDate.getDate())
+    let e2 = new Date(event2.startDate.getFullYear(),event2.startDate.getMonth(),event2.startDate.getDate())
+    let time1 = e1.getTime();
+    let time2 = e2.getTime();
     if (time1 < time2) {
       return -1;
     }
@@ -71,9 +72,8 @@ export class AgendaViewComponent implements OnInit {
   private getEventsFromDate(sortedEvents: CalendarEvent[], d: Date): CalendarEvent[] {
     let sortedEventsAfterDate: CalendarEvent[] = [];
     for (let event of sortedEvents) {
-      let eventDate = new Date(event.startDate);
       // Push the event if today or later
-      if (d.getTime() <= eventDate.getTime()) {
+      if (d.getTime() <= event.startDate.getTime()) {
         sortedEventsAfterDate.push(event);
       }
     }
@@ -82,21 +82,9 @@ export class AgendaViewComponent implements OnInit {
 
   private _setTodaysDate() {
     let d = new Date();
-    let year = String(d.getFullYear());
-    let month = String(d.getMonth() + 1);
-    month = month.length > 1 ? month : '0' + month;
-    let date = String(d.getDate())
-    date = date.length > 1 ? date : '0' + date;
-    this.todaysDate = year + '-' + month + '-' + date;
-  }
-
-  /**
-   * Returns the Date object representing the first day of the week
-   */
-  private getFirstDayOfWeek(): Date {
-    let d = new Date();
-    let day = d.getDay();
-    let diff = d.getDate() - day;
-    return new Date(d.setDate(diff));
+    let year = d.getFullYear();
+    let month = d.getMonth();
+    let day = d.getDate();
+    this.todaysDate = new Date(year,month,day);
   }
 }

@@ -4,10 +4,8 @@ export class CalendarEvent {
   foregroundColor: string;
   backgroundColor: string;
   allDayEvent: boolean;
-  startDate: string;
-  startTime: string;
-  endDate: string;
-  endTime: string;
+  startDate: Date;
+  endDate: Date;
   calendarId: string;
   timeZone: string;
   provider: string;
@@ -21,10 +19,8 @@ export class CalendarEvent {
     }
     this.foregroundColor = obj && obj.foregroundColor || '#000000';
     this.backgroundColor = obj && obj.backgroundColor || '#ffffff';
-    this.startDate = obj && obj.startDate || '';
-    this.startTime = obj && obj.startTime || '00:00';
-    this.endDate = obj && obj.endDate || '';
-    this.endTime = obj && obj.endTime || '00:00';
+    this.startDate = obj && obj.startDate || new Date();
+    this.endDate = obj && obj.endDate || new Date();
     this.calendarId = obj && obj.calendarId || '';
     this.timeZone = obj && obj.timeZone || '';
     this.provider = obj && obj.provider || '';

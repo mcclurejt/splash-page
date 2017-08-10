@@ -9,40 +9,40 @@
 
       <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
         <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
-          <i fa [name]="'calendar'" [size]=1 [fw]=true [style.color]='calendar.backgroundColor'></i>
+          <i fa [name]="'calendar-o'" [size]=1 [fw]=true [style.color]='calendar.backgroundColor'></i>
           <span>{{ calendar.summary }}</span>
         </md-option>
       </md-select>
 
       <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding: 20px 0px'>All Day Event</md-checkbox>
 
-      <div class='datetime-input-container' fxLayout='column' fxLayoutAlign='start center'>
-        <div style='font-size:24px;font-weight:400;color: black'>Start</div>
-
+      <div fxLayout='column' fxLayoutAlign='start center'>
         <div fxLayout='row' fxLayout.xs='column' fxLayoutAlign='space-between center'>
-          <timepicker [(ngModel)]='startDate' minuteStep='30' [showSpinners]='false' [readonlyInput]="newEvent.allDayEvent" name='startTimepicker'></timepicker>
-          
+          <div>
+              <md2-datepicker name='startTime' placeholder='Start Time' [(ngModel)]='newEvent.startDate' [disabled]='newEvent.allDayEvent'
+              [openOnFocus]='false' type='time' format='HH:mm a' (change)='startTimeChange($event.value)' [touchUi]='true'></md2-datepicker>
+          </div>
           <div fxFlex='5%'></div>
-          
-          <md-input-container>
-            <input mdInput [mdDatepicker]="startDatePicker" type='text' [(ngModel)]='startDate' name='startDate'>
-            <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
-          </md-input-container>
-          <md-datepicker (selectedChanged)='startDateChange($event)' #startDatePicker></md-datepicker>
+          <div>
+              <md2-datepicker name='startDate' placeholder='Start Date' [(ngModel)]='newEvent.startDate'
+              [openOnFocus]='true' type='date' format='M/d/y' (change)='startDateChange($event.value)' [touchUi]='true'></md2-datepicker>
+          </div>
         </div>
 
       </div>
 
-      <div class='datetime-input-container' fxLayout='column' fxLayoutAlign='start center'>
-        <div style='font-size:24px;font-weight:400;color: black'>End</div>
+      <div fxLayout='column' fxLayoutAlign='start center'>
         <div fxLayout='row' fxLayout.xs='column' fxLayoutAlign='space-between center'>
-          <timepicker [(ngModel)]='endDate' minuteStep='30' [showSpinners]='false' [readonlyInput]="newEvent.allDayEvent" name='endTimePicker'></timepicker>
+          
+          <div>
+              <md2-datepicker name='endTime' placeholder='End Time' [(ngModel)]='newEvent.endDate' [disabled]='newEvent.allDayEvent'
+              [openOnFocus]='false' type='time' format='HH:mm a' (change)='endTimeChange($event.value)' [touchUi]='true'></md2-datepicker>
+          </div>
           <div fxFlex='5%'></div>
-          <md-input-container>
-            <input mdInput [mdDatepicker]="endDatePicker" type='text' [(ngModel)]='endDate' name='endDate'>
-            <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
-          </md-input-container>
-          <md-datepicker (selectedChanged)='endDateChange($event)' #endDatePicker></md-datepicker>
+          <div>
+              <md2-datepicker name='endDate' placeholder='End Date' [(ngModel)]='newEvent.endDate'
+              [openOnFocus]='true' type='date' format='M/d/y' (change)='endDateChange($event.value)' [touchUi]='true'></md2-datepicker>
+          </div>
         </div>
       </div>
 

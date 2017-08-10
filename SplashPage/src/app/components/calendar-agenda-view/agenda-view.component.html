@@ -26,10 +26,10 @@
       <ng-template #timedEvent>
         <div fxLayout='column' fxLayoutAlign='center center' fxFlex='15%'>
           <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
-            {{(event.startTime | time)}}
+            {{(event?.startDate | date:'h:mma')}}
           </div>
           <div class='event-time' [style.xs]='{"font-size.px" : 12,"width.px" : 50}'>
-            {{(event.endTime | time)}}
+            {{(event?.endDate | date:'h:mma')}}
           </div>
         </div>
       </ng-template>

@@ -48,16 +48,13 @@ export class CalendarService {
           console.log('Dialog closed, no changes made.');
           return;
         }
-
         let action = result[0][0];
         let event = result[0][1];
         let newEvent = result[0][2];
         let calendars = result[1];
-
         if (newEvent.timeZone == '') {
           newEvent.timeZone = calendars.find((calendar) => calendar.id == newEvent.calendarId).timeZone;
         }
-
         switch (action) {
           case 'ADD': {
             this.store.dispatch(new CalendarActions.EventAdd({ event: newEvent, calendars: calendars }));
@@ -72,10 +69,9 @@ export class CalendarService {
             break;
           }
           default: {
-
+            return;
           }
         }
-
       });
   }
 }

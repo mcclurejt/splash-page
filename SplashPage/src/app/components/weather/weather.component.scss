@@ -13,7 +13,7 @@ $transparent-background: rgba(245, 245, 245, 0);
   .iconContainer {
     align-self: flex-start;
     #weatherIcon {
-      color: $light-background;
+      color: $dark-text;
       font-size: 96px;
       padding-bottom: 0px;
       padding-right: 10px;
@@ -27,7 +27,7 @@ $transparent-background: rgba(245, 245, 245, 0);
       display: inline-flex;
       flex-direction: row;
       .weatherTemp {
-        color: $light-background;
+        color: $dark-text;
         align-self: flex-start;
         font-family: 'Comfortaa', cursive !important;
         font-size: 80px; 
@@ -35,7 +35,7 @@ $transparent-background: rgba(245, 245, 245, 0);
         margin-bottom: -10px;
       }
       .wi {
-        color: $light-background;
+        color: $dark-text;
         align-self: flex-end;
         font-size: 96px;
         line-height: 60px;
@@ -43,7 +43,7 @@ $transparent-background: rgba(245, 245, 245, 0);
       }
     }
     .locationContainer {
-      color: $light-background;
+      color: $dark-text;
       align-self: flex-start;
       padding-bottom: 2px;
     }

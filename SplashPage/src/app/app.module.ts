@@ -74,7 +74,7 @@ import { SubjectPipe } from './pipes/subject.pipe';
 import { EffectsModule } from '@ngrx/effects';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MailDetailDialogComponent } from './components/mail-detail-dialog/mail-detail-dialog.component';
-import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { Md2Module }  from 'md2';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -144,7 +144,7 @@ export const MaterialModules = [
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot([AuthEffects, WeatherEffects, CalendarEffects]),
     Angular2FontawesomeModule,
-    TimepickerModule.forRoot(),
+    Md2Module,
   ],
   providers: [
     WeatherService,
