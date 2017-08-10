@@ -10,13 +10,14 @@ import { Observable } from "rxjs/Observable";
 })
 export class MailDetailDialogComponent implements OnInit {
 
-  public message: Observable<MailMessage>;
+  public message: MailMessage;
 
   constructor( @Inject(MD_DIALOG_DATA) public data: any, public diatlogRef: MdDialogRef<MailDetailDialogComponent>) {
   }
 
   ngOnInit() {
     this.message = this.data.message;
+    console.log("MessageDialog: ", this.message);
     // Is the message in the lookupTable,
     // if so, use it, if not, get it. Probably do this logic in the store. or the service
     

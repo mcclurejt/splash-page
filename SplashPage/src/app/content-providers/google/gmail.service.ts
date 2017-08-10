@@ -227,13 +227,10 @@ export class GmailService {
     return messages;
   }
 
-  fetchFullMessage(messageId: string): void {
-    this.requestFullMessage(messageId)
+  fetchFullMessage(messageId: string): Observable<MailMessage> {
+    return this.requestFullMessage(messageId)
     .map((message) => { return message.result})
-    .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
-    .subscribe((message) => {
-      console.log("full message: ", message);
-    });
+    .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
   }
 
   requestFullMessage(messageId: string): Observable<any> {

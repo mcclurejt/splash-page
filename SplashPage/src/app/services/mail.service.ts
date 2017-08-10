@@ -36,18 +36,23 @@ export class MailService {
   openDialogHandler(messageId: string) {
     this.messageLookup.subscribe((messageLookup) => {
       if (messageLookup[messageId]) {
-        this.openDialog('placeholder', messageLookup[messageId]);
+        this.openDialog(messageLookup[messageId]);
       } else {
         console.log("Message not in lookup");
-        this.gmailService.fetchFullMessage(messageId);
+        this.gmailService.fetchFullMessage(messageId)
+        .subscribe((message: MailMessage) => {
+          if (message !== null) {
+            console.log("message before open: ", message);
+            this.openDialog(message);
+          }
+        });
       }
     });
   }
 
-  openDialog(mode: string, message: MailMessage) {
+  openDialog(message: MailMessage) {
     let dialogRef = this.dialog.open(MailDetailDialogComponent, {
       data: {
-        mode: mode,
         message: message,
       }
     });

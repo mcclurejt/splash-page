@@ -5,7 +5,12 @@
     
     </div>
     <div class='message-body-container'>
-      
+       <div [innerHTML]="message.textHtml">
+      </div> 
+      <hr>
+      <div>
+        {{message.textPlain}}
+      </div>
     </div>
   </md-dialog-content>
   <md-dialog-actions>
