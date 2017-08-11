@@ -5,11 +5,12 @@
     
     </div>
     <div class='message-body-container'>
-       <div [innerHTML]="message.textHtml">
-      </div> 
+       <!-- <div [innerHTML]="message.textHtml"> -->
+      <!-- </div>  -->
       <hr>
       <div>
-        {{message.textPlain}}
+        <iframe id='message-iframe' [srcdoc]='loading'>
+        </iframe>
       </div>
     </div>
   </md-dialog-content>
