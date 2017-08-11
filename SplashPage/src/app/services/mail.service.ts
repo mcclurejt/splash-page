@@ -32,7 +32,6 @@ export class MailService {
     }
   }
 
-
   openDialogHandler(messageId: string) {
     this.messageLookup.subscribe((messageLookup) => {
       if (messageLookup[messageId]) {
@@ -41,7 +40,7 @@ export class MailService {
         console.log("Message not in lookup");
         this.gmailService.fetchFullMessage(messageId)
         .subscribe((message: MailMessage) => {
-          if (message !== null) {
+          if (message != null) {
             console.log("message before open: ", message);
             this.openDialog(message);
           }

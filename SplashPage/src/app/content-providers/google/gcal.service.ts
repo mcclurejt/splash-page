@@ -76,7 +76,6 @@ export class GcalService {
     }
     return Observable.fromPromise(batch)
       .map((eventsResp: any) => {
-        console.log('eventsresp',eventsResp);
         eventsResp = eventsResp.result;
         let events = [];
         for (let key of _.keys(eventsResp)) {

@@ -1,24 +1,8 @@
-<div class='dialogContainer'>
-  <h1 md-dialog-title>Subject</h1>
-  <md-dialog-content>
-    <div class='message-info-container'>
-    
-    </div>
-    <div class='message-body-container'>
-       <!-- <div [innerHTML]="message.textHtml"> -->
-      <!-- </div>  -->
-      <hr>
-      <div>
-        <iframe id='message-iframe' [srcdoc]='loading'>
-        </iframe>
-      </div>
-    </div>
-  </md-dialog-content>
-  <md-dialog-actions>
-
-
-  </md-dialog-actions>
-
-
-
-</div>
+<h1 md-dialog-title>
+  {{message.headers['subject']}}</h1>
+<md-dialog-content fxLayout fxLayoutAlign='center center'>
+  <!-- John's Code -->
+  <iframe id='mail-iframe' srcdoc='<p>Loading...</p>'></iframe>
+</md-dialog-content>
+<md-dialog-actions>
+</md-dialog-actions>

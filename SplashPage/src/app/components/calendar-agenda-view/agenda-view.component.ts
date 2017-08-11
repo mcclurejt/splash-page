@@ -50,7 +50,6 @@ export class AgendaViewComponent implements OnInit {
     if (sameDayEvents.length != 0) {
       groupedEvents.push(sameDayEvents);
     }
-    console.log('GroupedEvents',groupedEvents);
     return groupedEvents;
   }
 
