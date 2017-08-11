@@ -18,6 +18,7 @@ export class MailDetailDialogComponent implements OnInit {
 
   ngOnInit() {
     this.message = this.data.message;
+    this.loading = this.message.textHtml;
     // let temp: any = document.getElementById("message-iframe");
     // console.log(temp);
     // ifrm.document.body.innerHTML(this.message.textHtml);
