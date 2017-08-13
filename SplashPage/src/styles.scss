@@ -56,3 +56,10 @@ textarea {
 .bar-drop-shadow{
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 }
+
+.mail-dialog-styling .mat-dialog-container {
+  max-width: none;
+  width: 100vw;
+  height: 85vh;
+  padding-bottom: 0;
+}
