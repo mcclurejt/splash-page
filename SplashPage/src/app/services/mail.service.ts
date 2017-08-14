@@ -16,37 +16,13 @@ export class MailService {
   public messages: Observable<MailMessage[]>;
   public threads: Observable<MailThread>;
   public messageLookup: Observable<MailMessageLookup>;
+  public loading: Observable<boolean>;
 
   constructor(public gmailService: GmailService, private store: Store<fromRoot.State>, public dialog: MdDialog) {
     this.messages = this.store.select(store => store.mail.messages);
     this.threads = this.store.select(store => store.mail.threads);
     this.messageLookup = this.store.select(store => store.mail.messageLookup);
-  }
-
-  loadAllEmails() {
-    if(this.mailLoaded){
-      console.log('TODO: Handle Updating Emails');
-    } else {
-      this.gmailService.loadEmails();
-      this.mailLoaded = true;
-    }
-  }
-
-  openDetailDialogHandler(messageId: string): void {
-    this.messageLookup.subscribe((messageLookup) => {
-      if (messageLookup[messageId]) {
-        this.openDetailDialog(messageLookup[messageId]);
-      } else {
-        console.log("Message not in lookup");
-        this.gmailService.fetchFullMessage(messageId)
-        .subscribe((message: MailMessage) => {
-          if (message != null) {
-            console.log("message before open: ", message);
-            this.openDetailDialog(message);
-          }
-        });
-      }
-    });
+    this.loading = this.store.select(store => store.mail.loading);
   }
 
   openDetailDialog(message: MailMessage): void {
@@ -64,6 +40,7 @@ export class MailService {
         return;
       } else {
         console.log('TODO: do stuff after dialog closes Email');
+        return;
       }
     });
   }

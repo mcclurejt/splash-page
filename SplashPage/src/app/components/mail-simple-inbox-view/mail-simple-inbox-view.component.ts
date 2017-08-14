@@ -3,6 +3,9 @@ import { MailService } from "app/services/mail.service";
 import * as _ from "lodash";
 import { Observable } from "rxjs/Observable";
 import { MailMessage } from "app/store/mail/mail-message";
+import { Store } from '@ngrx/store';
+import * as fromRoot from 'app/store/reducers';
+import * as MailActions from 'app/store/mail/mail.actions';
 
 export interface Thread {
   messages: MailMessage[],
@@ -19,7 +22,7 @@ export class MailSimpleInboxViewComponent implements OnInit {
   
   public threads: Observable<Thread[]>;
 
-  constructor(private mailService: MailService) { }
+  constructor(private mailService: MailService, private store: Store<fromRoot.State>,) { }
 
   ngOnInit() {
     this.threads = this.mailService.threads
@@ -27,7 +30,14 @@ export class MailSimpleInboxViewComponent implements OnInit {
   }
 
   openDialog(event: Thread) {
-    this.mailService.openDetailDialogHandler(event.messages[0].id);
+    this.store.dispatch(new MailActions.OpenDetailDialog(event.messages[0]));
+  }
+
+  isRead(message: MailMessage): boolean{
+    if(message.labelIds.includes('UNREAD')){
+      return false;
+    }
+    return true;
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {

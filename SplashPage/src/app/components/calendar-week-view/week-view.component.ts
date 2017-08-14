@@ -1,6 +1,6 @@
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Observable } from 'rxjs/Observable';
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { CalendarService } from "app/services/calendar.service";
 import * as _ from 'lodash';
 
@@ -11,63 +11,79 @@ import * as _ from 'lodash';
 })
 export class WeekViewComponent {
 
-  times = ['12:00am', '1:00am', '2:00am', '3:00am', '4:00am', '5:00am', '6:00am', '7:00am', '8:00am', '9:00am', '10:00am', '11:00am',
-          '12:00pm', '1:00pm', '2:00pm', '3:00pm', '4:00pm', '5:00pm', '6:00pm', '7:00pm', '8:00pm', '9:00pm', '10:00pm', '11:00pm', ]
-  dates: string[] = [];
-  todaysDate: string;
-  allDayEvents: Observable<{ [key: string] : CalendarEvent[]}>;
-  timedEvents: Observable<{[key: string] : CalendarEvent[]}>;
+  private firstDayOfWeek = this.getFirstDayOfWeek();
+  dateObjArray: Date[] = [];
+  dateArray: number[] = [];
+  hourArray: Date[] = [];
+  allDayEvents: Observable<CalendarEvent[][]>;
+  timedEvents: Observable<any>;
 
   constructor(private calendarService: CalendarService) {
-    this._buildDates();
-    this._setTodaysDate();
-    this.allDayEvents = this.calendarService.events.map(events => this.getAllDayEvents(events));
-    this.timedEvents = this.calendarService.events.map(events => this.getTimedEvents(events));
-  }
-  getTimedEvents(events: CalendarEvent[]){
-    let timedEvents = _.filter(events, {'allDayEvent':false});
-    return this._filterEvents(timedEvents);
+    this.fillDateAndHourArrays();
+    this.allDayEvents = this.calendarService.events.map((events) => this.mapAllDayEvents(events));
+    this.timedEvents = this.calendarService.events.map((events) => this.mapTimedEvents(events));
   }
 
-  getAllDayEvents(events: CalendarEvent[]){
-    let allDayEvents = _.filter(events, {'allDayEvent':true});
-    return this._filterEvents(allDayEvents);
-  }
-
-  private _filterEvents(events: CalendarEvent[]): any{
-    let groupedEvents = _.groupBy(events,'startDate');
-    let pickedEvents = _.pick(groupedEvents,this.dates);
-    let datesWithEvents = _.keys(pickedEvents);
-    let missingDates = _.difference(this.dates,datesWithEvents);
-    for(let missingDate of missingDates){
-      pickedEvents[missingDate] = [];
+  mapAllDayEvents(events: CalendarEvent[]): CalendarEvent[][] {
+    let allDayEvents = _.filter(events, { 'allDayEvent': true });
+    let allDayEventArray = []
+    for (let event of allDayEvents) {
+      let diff = event.startDate.getTime() - this.firstDayOfWeek.getTime();
+      let idx = diff / (1000 * 3600 * 24);
+      if (idx < 7) {
+        allDayEventArray[idx] ? allDayEventArray[idx].push(event) : allDayEventArray[idx] = [event];
+      }
     }
-    return pickedEvents;
+    console.log('AllDayEvents',allDayEventArray);
+    return allDayEventArray;
   }
 
-  private _buildDates() {
-    let firstDayOfWeek = this.getFirstDayOfWeek();
+  mapTimedEvents(events: CalendarEvent[]) {
+    // Build the struct
+    let eventStruct = {};
+    for (let date of this.dateArray) {
+      for (let i = 0; i < 24; i++) {
+        if(i == 0){
+          eventStruct[date] = {[i]: []}
+        } else {
+          eventStruct[date][i] = [];
+        }
+      }
+    }
+
+    let timedEvents = _.filter(events, { 'allDayEvent': false });
+    for (let event of timedEvents) {
+      let startDayDiff = (event.startDate.getTime() - this.firstDayOfWeek.getTime()) / (1000 * 3600 * 24);
+      if (startDayDiff < 7) {
+        let hours = event.startDate.getHours();
+        while (hours < event.endDate.getHours()) {
+          let isInitialized = eventStruct[event.startDate.getDate()][hours] != undefined;
+          if (isInitialized) {
+            eventStruct[event.startDate.getDate()][hours].push(event);
+          } else {
+            eventStruct[event.startDate.getDate()][hours] = [event];
+          }
+          hours++;
+        }
+      }
+    }
+    
+    console.log('Timed Event Array', eventStruct);
+    return eventStruct;
+  }
+
+  private fillDateAndHourArrays() {
     for (let i = 0; i < 7; i++) {
-      let d = new Date();
-      d.setDate(firstDayOfWeek.getDate() + i);
-      let year = String(d.getFullYear());
-      let month = String(d.getMonth() + 1);
-      month = month.length > 1 ? month : '0' + month;
-      let date = String(d.getDate())
-      date = date.length > 1 ? date : '0' + date;
-      let dateString = year + '-' + month + '-' + date;
-      this.dates.push(dateString);
+      let dow = new Date(this.firstDayOfWeek.getFullYear(), this.firstDayOfWeek.getMonth(), this.firstDayOfWeek.getDate() + i);
+      this.dateObjArray.push(dow);
+      this.dateArray.push(dow.getDate());
     }
-  }
-
-  private _setTodaysDate() {
-    let d = new Date();
-    let year = String(d.getFullYear());
-    let month = String(d.getMonth() + 1);
-    month = month.length > 1 ? month : '0' + month;
-    let date = String(d.getDate())
-    date = date.length > 1 ? date : '0' + date;
-    this.todaysDate = year + '-' + month + '-' + date;
+    for(let i = 0; i < 24; i++){
+      let d = new Date();
+      d.setHours(i);
+      d.setMinutes(0);
+      this.hourArray.push(d);
+    }
   }
 
   /**
@@ -77,7 +93,9 @@ export class WeekViewComponent {
     let d = new Date();
     let day = d.getDay();
     let diff = d.getDate() - day;
-    return new Date(d.setDate(diff));
+    let newDate = new Date(d.setDate(diff));
+    newDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
+    return newDate;
   }
 
 }

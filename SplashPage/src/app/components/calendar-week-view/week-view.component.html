@@ -1,37 +1,24 @@
-<div fxLayoutAlign='center center' class='week-container'>
-  <div class='viewContainer' fxLayout='column'>
+<div class='week-container'>
+  <div fxLayout='row' fxLayoutAlign='center none'>
 
-    <div class='weekHeader' fxLayout='row' fxLayoutAlign='center center'>
-      <div class='dayHeader' fxFlex *ngFor='let date of dates'>
-        <div class='monthAndDate'>{{date | date:'MMM d'}}</div>
-        <div class='dayOfWeek'>{{date | date:'EEEE'}}</div>
-      </div>
-    </div>
-
-    <div class='allDayRow' fxLayout='row' fxLayoutAlign='center start'>
-      <div fxFlex *ngFor='let date of dates'>
-        <div class='eventListContainer' fxLayout='column' fxLayoutAlign='start center'>
-          <div *ngFor='let event of (allDayEvents | async)[date]' [style.background-color]='event.backgroundColor' [style.color]='event.foregroundColor'
-            class='eventContainer'>
-            <div class='summaryContainer'>
-              {{event.summary | truncate:30}}
-            </div>
+    <div *ngFor='let d of dateArray;index as idx;first as isFirst' class='day-column' fxFlex='14%' fxLayout='column' fxLayoutAlign='start center'>
+      <div class='all-day-event-cell' fxFlex='110px'>
+        &nbsp;
+        <div class='month-date'>{{dateObjArray[idx] | date:"MMM d"}}</div>
+        <div class='day'>{{dateObjArray[idx] | date:"EEE"}}</div>
+        <div *ngFor='let allDayEvent of (allDayEvents | async)[idx]' fxLayoutAlign='center center'>
+          <div class='event-summary' [style.backgroundColor]='allDayEvent.backgroundColor'>
+            {{allDayEvent.summary}}
           </div>
         </div>
       </div>
-    </div>
 
-    <div class='timedEventContainer' fxLayout='column' fxLayoutAlign='start center'>
-      <div class='timedEventRow' style='width:100%;' fxLayout='row' fxLayoutAlign='center center' *ngFor='let time of times'>
-        <div fxFlex *ngFor='let date of dates; first as isFirst'>
-          <div class='timeContainer'>
-            <div class='startTime' fxLayoutAlign='start center' *ngIf='isFirst'>
-              {{time}}
-            </div>
-            <div *ngFor='let event of (timedEvents | async)[date]' [style.background-color]='event.backgroundColor' [style.color]='event.foregroundColor'>
-              <div class='timedEvent' *ngIf='(event.startTime | time) == time'>
-                {{event.summary | truncate:30}}
-              </div>
+      <div class='timed-event-cell' fxFlex>
+        <div *ngFor='let hour of hourArray; index as h' class='hour-cell'>
+          <div *ngFor='let timedEvent of (timedEvents | async)[d][h]'fxLayoutAlign='center center'>
+            <div class='event-summary' [style.backgroundColor]='timedEvent.backgroundColor'>
+                <span>{{timedEvent.startDate | date:'hh:mma' | lowercase}}:</span>
+                <span>{{timedEvent.summary}}</span>
             </div>
           </div>
         </div>
