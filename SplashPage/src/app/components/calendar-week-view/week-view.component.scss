@@ -6,66 +6,43 @@ $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 .week-container {
   height: 100%;
-  .viewContainer {
-    height: 100%;
-    width: 100%;
-    background-color: $light-background;
-    .weekHeader {
-      height: 50px !important;
-      border-bottom: 1px solid $dark-background;
-      .dayHeader {
-        color: $dark-text;
-        text-align: center;
-        .monthAndDate {
-          font-weight: 300;
-          font-size: 12px;
-        }
-        .dayOfWeek {
-          font-weight: 400;
-          font-size: 18px;
-        }
-      }
-    }
-    .allDayRow {
-      max-height: 110px !important;
-      overflow: scroll;
-      border-bottom: 1px solid $dark-background;
-      .eventListContainer {
-        .eventContainer {
-          opacity: 10%;
-          width: 99%;
-          margin: 1px;
-          .summaryContainer {
-            margin: 5px 10px;
-            text-align: left;
-            font-size: 11px;
-            font-weight: 400;
-          }
-        }
-      }
-    }
-    .timedEventContainer {
-      height: 100%;
-      width: 100%;
-      padding-top: 20px;
-      overflow: scroll;
-      .timedEventRow {
-        border-bottom: 1px solid $dark-background;
-        min-height: 20px;
-        .timeContainer {
-          width: 100%;
-          .startTime {
-            font-size: 11px;
-          }
-          .timedEvent {
-            padding: 5px 0px;
-            margin: 0px 10px;
-            text-align: left;
-            font-size: 11px;
-            font-weight: 400;
-          }
-        }
-      }
-    }
+  width: 100%;
+  background-color: $light-background;
+}
+
+.day-column {
+  width: 100%;
+  height: 100%;
+  .all-day-event-cell {
+    text-align: center;
+    height: 50px;
+    width:100%;
+    border-bottom: 2px solid $dark-text;
   }
+}
+.month-date {
+  font-size: 12px;
+}
+.day {
+  font-size: 18px;
+}
+.event-summary {
+  height: 20px;
+  width: 97%;
+  font-size: 12px;
+  font-weight: 300;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  line-height: 20px;
+}
+.timed-event-cell {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.hour-cell {
+  height: 20px;
+  width: 100%;
+  border-bottom: 1px dotted $dark-text;
 }

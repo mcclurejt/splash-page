@@ -13,12 +13,13 @@ import * as MailActions from 'app/store/mail/mail.actions';
 
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
 
 @Injectable()
 export class MailEffects{
 
-  constructor(private actions: Actions, private store: Store<fromRoot.State>, private mailService: MailService, private gmailService: GmailService){}
+  constructor(private actions: Actions, private store: Store<fromRoot.State>, public mailService: MailService, private gmailService: GmailService){}
 
   @Effect() onStateChange: Observable<MailActions.All> = this.actions.ofType(MailActions.ON_STATE_CHANGE)
     .do(() => this.store.dispatch(new MailActions.StartLoading()))
@@ -35,6 +36,7 @@ export class MailEffects{
     .withLatestFrom(this.mailService.messageLookup)
     .map(([messageId, messageLookup]) => {
       if(messageLookup[messageId]){
+        console.log('MessageLookup',messageLookup[messageId]);
         this.mailService.openDialog(messageLookup[messageId]);
       } else {
         this.store.dispatch(new MailActions.FullMessageAdd(messageId))

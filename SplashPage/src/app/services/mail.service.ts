@@ -25,16 +25,6 @@ export class MailService {
     this.loading = this.store.select(store => store.mail.loading);
   }
 
-  openDialogHandler(messageId: string) {
-    this.messageLookup.subscribe((messageLookup) => {
-      if (messageLookup[messageId]) {
-        this.openDialog(messageLookup[messageId]);
-      } else {
-        this.store.dispatch(new MailActions.FullMessageAdd(messageId));
-      }
-    });
-  }
-
   openDialog(message: MailMessage) {
     let dialogRef = this.dialog.open(MailDetailDialogComponent, {
       panelClass: 'mail-dialog-styling',
@@ -50,6 +40,7 @@ export class MailService {
         return;
       } else {
         console.log('TODO: do stuff after dialog closes Email');
+        return;
       }
     });
   }
