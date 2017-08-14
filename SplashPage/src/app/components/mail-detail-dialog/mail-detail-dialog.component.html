@@ -1,8 +1,23 @@
-<h1 md-dialog-title>
-  {{message.headers['subject']}}</h1>
+
+<div fxLayout='column' class='heading'>
+  <div fxLayout='row'>
+    <h1 md-dialog-title class='mail-dialog-subject'>
+      {{message.headers['subject'] | decodeHTML | subject}}</h1>
+      <span fxFlex></span>
+      <button md-icon-button md-dialog-close style='margin-top:-15px;' ><i fa [name]="'times'" [size]=2 [fw]=true></i></button>
+  </div>
+  <div style='margin-top:-10px'><hr></div>
+  <div fxLayout='row' style='margin-top:-10px;'>
+    <h1 md-dialog-title class='mail-dialog-from'>
+      {{message.headers['from']}}</h1>
+      <span fxFlex></span>
+      <button md-icon-button><i fa [name]="'reply'" [size]=2 [fw]=true></i></button>
+  </div>
+</div>
 <md-dialog-content fxLayout fxLayoutAlign='center center'>
   <!-- John's Code -->
   <iframe id='mail-iframe' srcdoc='<p>Loading...</p>'></iframe>
 </md-dialog-content>
+
 
 

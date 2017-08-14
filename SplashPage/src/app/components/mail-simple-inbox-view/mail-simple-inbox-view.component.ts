@@ -27,7 +27,7 @@ export class MailSimpleInboxViewComponent implements OnInit {
   }
 
   openDialog(event: Thread) {
-    this.mailService.openDialogHandler(event.messages[0].id);
+    this.mailService.openDetailDialogHandler(event.messages[0].id);
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {

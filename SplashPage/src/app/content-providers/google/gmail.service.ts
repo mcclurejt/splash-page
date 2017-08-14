@@ -23,6 +23,44 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
+  sendEmail(headers: any, message: string, callback: any): void {
+    let email = '';
+
+    for (let header in headers) {
+      email += header += ': ' + headers[header] + '\r\n';
+    }
+
+    email += '/r/n' + message;
+
+    this.sendRequest(email)
+    .map((response) => this.mapGoogleMessageToEmailMessage(response))
+    .subscribe((message: MailMessage) => {
+      console.log("Sent Mail Message Returned?", message);
+     });
+  }
+
+  sendRequest(email: string): Observable<any> {
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
+        if (isSignedIn) {
+          const params = {
+            userId: 'me',
+            resource: {
+              raw: btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+            }
+          }
+          gapi.client.request({
+            path: 'https://www.googleapis.com/gmail/v1/users/userId/messages/send',
+            method: 'POST',
+            params: params,
+          }).then((response) => {
+            resolve(response);
+          });
+        }
+      });
+    }));
+  }
+
   loadEmails(): void {
     console.log('Loading Emails');
     this.requestEmailIds()
