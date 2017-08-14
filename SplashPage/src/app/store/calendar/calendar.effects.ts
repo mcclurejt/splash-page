@@ -20,14 +20,11 @@ import { Calendar } from "app/store/calendar/calendar";
 @Injectable()
 export class CalendarEffects {
 
-  constructor(private actions: Actions, private store: Store<fromRoot.State>, private calendarService: CalendarService, private gcalService: GcalService) { }
+  constructor(private actions: Actions, private store: Store<fromRoot.State>, private gcalService: GcalService) { }
 
   @Effect() onStateChange: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.ON_STATE_CHANGE)
     .do(() => this.store.dispatch(new CalendarActions.StartLoading()))
-    .switchMap(() => {
-      // TODO: Add code to detect all calendar providers
-      return this.gcalService.getCalendars();
-    })
+    .switchMap(() => this.gcalService.getCalendars())
     .switchMap((calendars: Calendar[]) => {
       this.store.dispatch(new CalendarActions.CalendarAdd(calendars));
       return this.gcalService.getEvents(calendars)
@@ -43,17 +40,11 @@ export class CalendarEffects {
       let event = payload.event;
       let calendars = payload.calendars;
       let provider = calendars.find((calendar) => calendar.id == event.calendarId).provider;
-      switch (provider) {
-        case 'google': {
-          return this.gcalService.addEvent(event, calendars).catch((error) => {
-            console.log('Error when adding event', error);
-            return Observable.of(null);
-          });
-        }
-        default: {
-          console.log('Calendar Provider Not Found');
-        }
-      }
+      return this.gcalService.addEvent(event, calendars).catch((error) => {
+        console.log('Error when adding event', error);
+        return Observable.of(null);
+      });
+
     })
     .map((event: CalendarEvent) => new CalendarActions.HandleEventAdd(event));
 

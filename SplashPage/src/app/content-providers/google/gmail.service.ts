@@ -1,10 +1,10 @@
+import { MailMessage } from './../../store/mail/mail-message';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { GapiService } from "app/content-providers/google/gapi.service";
 import { Subscription } from "rxjs/Rx";
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromPromise';
-import { MailMessage } from "app/store/mail/mail-message";
 import * as _ from "lodash";
 import { Store } from '@ngrx/store';
 import * as fromRoot from 'app/store/reducers';
@@ -23,29 +23,23 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  loadEmails(): void {
-    console.log('Loading Emails');
-    this.requestEmailIds()
+  getEmailIds(): Observable<any>{
+    return this.requestEmailIds()
       .map((response) => this.mapEmailIds(response.result))
-      .switchMap((messages) => this.requestEmails(messages))
-      .map((messageResp) => this.mapEmails(messageResp))
-      .subscribe((messages) => {
-        if (messages.length > 0) {
-          this.store.dispatch(new MailActions.MailAdd(messages));
-        }
-      });
   }
 
-  fetchFullMessage(messageId: string): Observable<MailMessage> {
+  getEmails(messageIds: any): Observable<MailMessage[]>{
+    return this.requestEmails(messageIds)
+      .map((messageResp) => this.mapEmails(messageResp))
+  }
+
+  getFullEmail(messageId: string): Observable<MailMessage> {
     return this.requestFullMessage(messageId)
-      .map((message) => {
-        // console.log('Response Message: ', base64url.decode(message.result.payload.body.data));
-        return message.result;
-      })
+      .map((message) => message.result)
       .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
   }
 
-  requestEmailIds(): Observable<any> {
+  private requestEmailIds(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
@@ -63,7 +57,7 @@ export class GmailService {
     }));
   }
 
-  requestEmails(messages): Observable<any> {
+  private requestEmails(messages): Observable<any> {
     let gapi = window['gapi'];
     let params = {
       format: "metadata"
@@ -86,7 +80,7 @@ export class GmailService {
     );
   }
 
-  requestFullMessage(messageId: string): Observable<any> {
+  private requestFullMessage(messageId: string): Observable<any> {
     let params = {
       format: 'full',
     };

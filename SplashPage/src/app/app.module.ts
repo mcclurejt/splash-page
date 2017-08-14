@@ -1,3 +1,4 @@
+import { MailEffects } from './store/mail/mail.effects';
 import { CalendarEffects } from './store/calendar/calendar.effects';
 import { WeatherEffects } from './store/weather/weather.effects';
 import { AuthEffects } from './store/auth/auth.effects';
@@ -142,7 +143,7 @@ export const MaterialModules = [
     InfiniteScrollModule,
     FormsModule,
     StoreModule.forRoot(reducers),
-    EffectsModule.forRoot([AuthEffects, WeatherEffects, CalendarEffects]),
+    EffectsModule.forRoot([AuthEffects, WeatherEffects, CalendarEffects, MailEffects]),
     Angular2FontawesomeModule,
     Md2Module,
   ],

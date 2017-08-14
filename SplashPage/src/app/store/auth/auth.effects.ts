@@ -50,6 +50,7 @@ export class AuthEffects {
       if(user != null){
         actions.push(new WeatherActions.OnStateChange());
         actions.push(new CalendarActions.OnStateChange());
+        actions.push(new MailActions.OnStateChange());
       } else {
         actions.push(new CalendarActions.CalendarClearAll());
         actions.push(new MailActions.ClearAll());

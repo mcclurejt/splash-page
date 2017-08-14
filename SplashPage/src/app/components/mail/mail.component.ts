@@ -9,18 +9,8 @@ import { MailService } from "app/services/mail.service";
   templateUrl: './mail.component.html',
   styleUrls: ['./mail.component.scss']
 })
-export class MailComponent implements OnInit {
-
-  isScrollLoading = false;
-  mailStream : Observable<any>;
-
+export class MailComponent {
 
   constructor(private mailService: MailService) {}
-
-  ngOnInit() {
-    this.mailService.loadAllEmails();
-  }
-
-  
 
 }

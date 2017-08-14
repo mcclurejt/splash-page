@@ -2,14 +2,14 @@ import { Component, Inject, OnInit, AfterContentInit } from '@angular/core';
 import { MdDialogRef, MD_DIALOG_DATA } from "@angular/material";
 import { MailMessage } from "app/store/mail/mail-message";
 import { Observable } from "rxjs/Observable";
-import { Renderer2, ElementRef } from '@angular/core';
+import { Renderer2, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-mail-detail-dialog',
   templateUrl: './mail-detail-dialog.component.html',
   styleUrls: ['./mail-detail-dialog.component.scss']
 })
-export class MailDetailDialogComponent implements AfterContentInit{
+export class MailDetailDialogComponent implements AfterViewInit{
 
   public message: MailMessage;
   public loading: string = '<p>Loading...</p>';
@@ -20,7 +20,7 @@ export class MailDetailDialogComponent implements AfterContentInit{
     this.loading = this.message.textHtml;
   }
 
-  ngAfterContentInit(): void {
+  ngAfterViewInit(): void {
     let iframe = document.getElementById('mail-iframe');
     let doc = (<HTMLIFrameElement>iframe).contentDocument || (<HTMLIFrameElement>iframe).contentWindow.document;
     let body = doc.body

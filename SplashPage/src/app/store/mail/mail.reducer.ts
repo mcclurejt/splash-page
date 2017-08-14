@@ -13,27 +13,30 @@ export interface MailMessageLookup {
 export interface State {
   messages: MailMessage[],
   threads: MailThread,
-  messageLookup: MailMessageLookup
+  messageLookup: MailMessageLookup,
+  loading: boolean,
 }
 
 const initialState: State = {
   messages: [],
   threads: {},
-  messageLookup: {}
+  messageLookup: {},
+  loading: false,
 }
 
 
 export function reducer(state = initialState, action: MailActions.All): State {
   switch (action.type) {
 
-    case MailActions.MAIL_ADD: {
-      console.log(MailActions.MAIL_ADD);
+    case MailActions.HANDLE_MAIL_ADD: {
+      console.log(MailActions.HANDLE_MAIL_ADD);
       let newState;
       if (Array.isArray(action.payload)) {
         newState = Object.assign({
           messages: [...action.payload, ...state.messages],
           threads: Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId"))),
           messageLookup: Object.assign({}, state.messageLookup),
+          loading: state.loading,
         })
       } else {
         let threadObj = { threads: Object.assign({}, state.threads) }
@@ -53,9 +56,30 @@ export function reducer(state = initialState, action: MailActions.All): State {
       return newState;
     }
 
+    case MailActions.HANDLE_FULL_MESSAGE_ADD: {
+      console.log(MailActions.HANDLE_FULL_MESSAGE_ADD);
+      let newState = Object.assign({},state);
+      newState.messageLookup[action.payload.id] = action.payload;
+      return newState;
+    }
+
     case MailActions.MAIL_CLEAR_ALL: {
       console.log(MailActions.MAIL_CLEAR_ALL);
       return Object.assign({}, initialState);
+    }
+
+    case MailActions.START_LOADING: {
+      console.log(MailActions.START_LOADING);
+      let newState = Object.assign({},state);
+      newState.loading = true;
+      return newState;
+    }
+
+    case MailActions.STOP_LOADING: {
+      console.log(MailActions.STOP_LOADING);
+      let newState = Object.assign({},state);
+      newState.loading = false;
+      return newState;
     }
 
     default: return state;

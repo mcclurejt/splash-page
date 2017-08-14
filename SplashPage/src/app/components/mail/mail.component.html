@@ -2,7 +2,13 @@
   <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='center center'>
     <div class='top-text'>Mail</div>
   </div>
-  <div class='viewContainer'>
+  <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'>
     <app-mail-simple-inbox-view></app-mail-simple-inbox-view>
   </div>
+
+  <ng-template #loadingTemplate>
+    <div fxLayoutAlign='center center' class='viewContainer'>
+      <md-spinner></md-spinner>
+    </div>
+  </ng-template>
 </div>
