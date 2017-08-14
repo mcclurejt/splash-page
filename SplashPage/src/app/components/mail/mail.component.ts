@@ -11,6 +11,6 @@ import { MailService } from "app/services/mail.service";
 })
 export class MailComponent {
 
-  constructor(private mailService: MailService) {}
+  constructor(public mailService: MailService) {}
 
 }

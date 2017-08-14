@@ -9,7 +9,7 @@ import { CalendarEvent } from 'app/store/calendar/calendar-event'
 export class CalendarComponent{
   @Input() view: string;
   
-  constructor(private calendarService: CalendarService) {
+  constructor(public calendarService: CalendarService) {
     
   }
 }
