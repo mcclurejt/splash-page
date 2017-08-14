@@ -25,7 +25,7 @@ export class MailService {
     this.loading = this.store.select(store => store.mail.loading);
   }
 
-  openDetailDialog(message: MailMessage): void {
+  openDialog(message: MailMessage): void {
     let dialogRef = this.dialog.open(MailDetailDialogComponent, {
       panelClass: 'mail-dialog-styling',
       data: {
