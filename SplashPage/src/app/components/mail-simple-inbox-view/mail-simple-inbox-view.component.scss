@@ -20,6 +20,12 @@ $transparent-background: rgba(245, 245, 245, 0);
     cursor: pointer;
   }
 
+  .unread-marker{
+    background-color: rgba(247,42,42,.8);
+    width: 4px;
+    border-radius: 2px
+  }
+
   .message-container {
     overflow-x: hidden;
   }

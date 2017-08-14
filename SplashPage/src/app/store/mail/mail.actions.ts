@@ -22,7 +22,7 @@ export class OnStateChange implements Action{
 export class OpenDetailDialog implements Action{
     readonly type= OPEN_DETAIL_DIALOG;
 
-    constructor(public payload: string){}
+    constructor(public payload: MailMessage){}
 }
 
 export class MailAdd implements Action {

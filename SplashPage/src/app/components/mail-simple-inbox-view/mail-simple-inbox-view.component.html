@@ -4,6 +4,8 @@
 
     <div fxLayout='row' class='message-group-container' (click)='openDialog(thread)'>
 
+      <div *ngIf='!isRead(thread.messages[0])' class='unread-marker'>&nbsp;</div>
+
       <div fxFlex='83%' fxLayout='column' fxLayoutAlign='center start' class='message-container'>
         <div class='from-row ellipsis'>
           {{thread.messages[0].headers.from | from}}
@@ -15,12 +17,15 @@
           {{thread.messages[0].snippet | decodeHTML}}
         </div>
       </div>
+
       <div fxFlex='2%'></div>
+
       <div fxFlex='15%' fxLayout='column' class='date-and-buttons-container'>
         <div class='date-row'>
           {{thread.messages[0].headers.date | mailDate}}
         </div>
       </div>
+      
     </div>
   </div>
 </div>

@@ -30,7 +30,14 @@ export class MailSimpleInboxViewComponent implements OnInit {
   }
 
   openDialog(event: Thread) {
-    this.store.dispatch(new MailActions.OpenDetailDialog(event.messages[0].id));
+    this.store.dispatch(new MailActions.OpenDetailDialog(event.messages[0]));
+  }
+
+  isRead(message: MailMessage): boolean{
+    if(message.labelIds.includes('UNREAD')){
+      return false;
+    }
+    return true;
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {

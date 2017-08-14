@@ -34,12 +34,12 @@ export class MailEffects{
     .map(toPayload)
     .do(() => this.store.dispatch(new MailActions.StartLoading()))
     .withLatestFrom(this.mailService.messageLookup)
-    .map(([messageId, messageLookup]) => {
-      if(messageLookup[messageId]){
-        console.log('MessageLookup',messageLookup[messageId]);
-        this.mailService.openDialog(messageLookup[messageId]);
+    .map(([message, messageLookup]) => {
+      if(messageLookup[message.id]){
+        console.log('MessageLookup',messageLookup[message.id]);
+        this.mailService.openDialog(messageLookup[message.id]);
       } else {
-        this.store.dispatch(new MailActions.FullMessageAdd(messageId))
+        this.store.dispatch(new MailActions.FullMessageAdd(message.id))
       }
       return new MailActions.StopLoading();
     });

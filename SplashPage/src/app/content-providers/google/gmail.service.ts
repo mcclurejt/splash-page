@@ -23,12 +23,12 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  getEmailIds(): Observable<any>{
+  getEmailIds(): Observable<any> {
     return this.requestEmailIds()
       .map((response) => this.mapEmailIds(response.result))
   }
 
-  getEmails(messageIds: any): Observable<MailMessage[]>{
+  getEmails(messageIds: any): Observable<MailMessage[]> {
     return this.requestEmails(messageIds)
       .map((messageResp) => this.mapEmails(messageResp))
   }
@@ -36,6 +36,20 @@ export class GmailService {
   getFullEmail(messageId: string): Observable<MailMessage> {
     return this.requestFullMessage(messageId)
       .map((message) => message.result)
+      .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
+  }
+
+  markRead(message: MailMessage): Observable<MailMessage> {
+    let params = {
+      "removeLabelIds": [
+        'UNREAD'
+      ]
+    }
+    return Observable.fromPromise(gapi.client.request({
+      path: 'https://www.googleapis.com/gmail/v1/users/me/messages' + message.id + 'modify',
+      method: 'POST',
+      params: params}))
+      .map((resp) => resp.result)
       .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
   }
 
@@ -196,7 +210,7 @@ export class GmailService {
     return decodeURIComponent(encodeURIComponent(atob(str.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, ''))));
   }
 
-  private b64DecodeUtf8(str: any){
-    return base64url.decode(str,'utf8');
+  private b64DecodeUtf8(str: any) {
+    return base64url.decode(str, 'utf8');
   }
 }
