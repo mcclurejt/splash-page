@@ -49,12 +49,12 @@ export class MailService {
     });
   }
 
-  openSendDialog(message?: any): void {
+  openSendDialog(message: any = ''): void {
     let dialogRef = this.dialogSend.open(MailSendDialogComponent, {
       panelClass: 'mail-send-dialog-styling',
       data : {
         message: message,
-        isReply: message !== null
+        isReply: message !== ''
       }
     });
     dialogRef.afterClosed()
@@ -71,11 +71,13 @@ export class MailService {
           'Subject': messageForm.subject,
         }, messageForm.message);
       } else if (result[0] === 'REPLY') {
+        console.log('Sending reply message');
         this.gmailService.sendEmail({
           'To': messageForm.recipient,
           'Subject': messageForm.subject,
-          'In-Reply-To': messageForm.inReplyTo
-        }, messageForm.message);
+          'In-Reply-To': messageForm.inReplyTo,
+          'References': messageForm.inReplyTo
+        }, messageForm.message, messageForm.threadId);
       }
     });
   }

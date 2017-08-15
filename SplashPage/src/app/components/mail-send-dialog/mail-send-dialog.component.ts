@@ -6,7 +6,8 @@ interface MessageForm {
   recipient: string,
   subject: string,
   inReplyTo: string,
-  message: string
+  message: string,
+  threadId: string
 }
 
 @Component({
@@ -23,7 +24,8 @@ export class MailSendDialogComponent implements OnInit {
     recipient : '',
     subject : '',
     inReplyTo : '',
-    message : ''
+    message : '',
+    threadId: ''
   }
   public message: MailMessage;
 
@@ -35,8 +37,9 @@ export class MailSendDialogComponent implements OnInit {
     if (this.data.message !== '') {
       this.message = this.data.message;
       this.messageForm.recipient = this.message.headers['reply-to'] || this.message.headers['from'];
-      this.messageForm.subject = (this.message.headers['subject'] && 'Re ' + this.message.headers['subject'].replace(/\"/g, '&quot;')) || 'Re: No Subject';
+      this.messageForm.subject = this.message.headers['subject'] || 'Re: No Subject';
       this.messageForm.inReplyTo = this.message.id;
+      this.messageForm.threadId = this.message.threadId;
     }
   }
 
@@ -45,7 +48,9 @@ export class MailSendDialogComponent implements OnInit {
       this.dialogRef.close(null);
       return;
     }
-
+    if(this.messageForm.inReplyTo) {
+      action = 'REPLY';
+    }
     this.dialogRef.close([action, this.messageForm]);
     
   }

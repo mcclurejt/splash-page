@@ -23,7 +23,7 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  sendEmail(headers: any, message: string): void {
+  sendEmail(headers: any, message: string, threadId: string = ''): void {
     let email = '';
 
     for (let header in headers) {
@@ -32,24 +32,34 @@ export class GmailService {
 
     email += '\r\n' + message;
     console.log( email);
-    this.sendRequest(email)
+    this.sendRequest(email, threadId)
     .map((response) => this.mapGoogleMessageToEmailMessage(response))
     .subscribe((message: MailMessage) => {
       console.log("Sent Mail Message Returned?", message);
      });
   }
 
-  sendRequest(email: string): Observable<any> {
+  sendRequest(email: string, threadId: string = ''): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {
         if (isSignedIn) {
           const params = {
             userId: 'me',
           }
-          const body = {
-            // raw: btoa(encodeURIComponent(email)).replace(/\+/g, '-').replace(/\//g, '_')
-            raw: base64url.encode(email, 'utf8').replace(/\+/g, '-').replace(/\//g, '_')
+          let body = {};
+          if (threadId !== '') {
+            body = {
+              // raw: btoa(encodeURIComponent(email)).replace(/\+/g, '-').replace(/\//g, '_')
+              raw: base64url.encode(email, 'utf8').replace(/\+/g, '-').replace(/\//g, '_'),
+              threadId: threadId
+            }
+          } else {
+            body = {
+              // raw: btoa(encodeURIComponent(email)).replace(/\+/g, '-').replace(/\//g, '_')
+              raw: base64url.encode(email, 'utf8').replace(/\+/g, '-').replace(/\//g, '_')
+            }
           }
+          
           gapi.client.request({
             path: 'https://www.googleapis.com/gmail/v1/users/userId/messages/send',
             method: 'POST',

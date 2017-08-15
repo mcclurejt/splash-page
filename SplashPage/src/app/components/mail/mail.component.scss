@@ -22,4 +22,9 @@ $transparent-background: rgba(245, 245, 245, 0);
     height: 100%;
     overflow-y: auto;
   }
+  .create-mail-btn {
+    color: $dark-text;
+    margin-bottom: 20%;
+    margin-left: 20%;
+  }
 }

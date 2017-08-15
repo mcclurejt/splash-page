@@ -23,8 +23,12 @@ export class MailDetailDialogComponent implements OnInit {
     let iframe = document.getElementById('mail-iframe');
     let doc = (<HTMLIFrameElement>iframe).contentDocument || (<HTMLIFrameElement>iframe).contentWindow.document;
     let body = doc.body;
-    body.innerHTML = this.message.textHtml;
-    iframe.style.width = body.scrollWidth + 'px';
+    if (this.message.textHtml === ''){
+      body.innerHTML = this.message.textPlain;
+    } else {
+      body.innerHTML = this.message.textHtml;
+    }
+      iframe.style.width = body.scrollWidth + 'px';
   }
 
   closeDialog(): void {

@@ -1,4 +1,4 @@
-<h1 md-dialog-title>Sends Stuffs</h1>
+<h1 md-dialog-title>Create Email</h1>
 
 <md-dialog-content>
   <form fxFlex fxLayout='column' #sendMessageForm='ngForm' (ngSubmit)='closeDialog(SEND)'>
@@ -13,7 +13,7 @@
     </md-input-container>
   </form>
 </md-dialog-content>
-<md-dialog-actions>
+<md-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
   <button md-raised-button (click)='closeDialog(CANCEL)'>Cancel</button>
   <button md-raised-button color='primary' type='submit' (click)='sendMessageForm.ngSubmit.emit()'>Send</button>
 </md-dialog-actions>
