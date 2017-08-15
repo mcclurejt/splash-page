@@ -24,6 +24,16 @@ export class WeekViewComponent {
     this.timedEvents = this.calendarService.events.map((events) => this.mapTimedEvents(events));
   }
 
+  openDialog(event: CalendarEvent, d: Date = new Date(), h: Date = new Date()){
+    if(event == undefined){
+      event = new CalendarEvent();
+      event.startDate = new Date(d.getFullYear(),d.getMonth(),d.getDate(),h.getHours())
+      event.endDate = new Date(d.getFullYear(),d.getMonth(),d.getDate(),h.getHours() + 1)
+      event.allDayEvent = false;
+    } 
+    this.calendarService.openDialog(event);
+  }
+
   mapAllDayEvents(events: CalendarEvent[]): CalendarEvent[][] {
     let allDayEvents = _.filter(events, { 'allDayEvent': true });
     let allDayEventArray = []
@@ -34,7 +44,6 @@ export class WeekViewComponent {
         allDayEventArray[idx] ? allDayEventArray[idx].push(event) : allDayEventArray[idx] = [event];
       }
     }
-    console.log('AllDayEvents',allDayEventArray);
     return allDayEventArray;
   }
 
@@ -68,7 +77,6 @@ export class WeekViewComponent {
       }
     }
     
-    console.log('Timed Event Array', eventStruct);
     return eventStruct;
   }
 

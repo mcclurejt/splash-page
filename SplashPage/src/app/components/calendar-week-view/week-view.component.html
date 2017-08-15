@@ -7,7 +7,7 @@
         <div class='month-date'>{{dateObjArray[idx] | date:"MMM d"}}</div>
         <div class='day'>{{dateObjArray[idx] | date:"EEE"}}</div>
         <div *ngFor='let allDayEvent of (allDayEvents | async)[idx]' fxLayoutAlign='center center'>
-          <div class='event-summary' [style.backgroundColor]='allDayEvent.backgroundColor'>
+          <div class='event-summary' [style.backgroundColor]='allDayEvent.backgroundColor' (click)='openDialog(allDayEvent)'>
             {{allDayEvent.summary}}
           </div>
         </div>
@@ -16,7 +16,7 @@
       <div class='timed-event-cell' fxFlex>
         <div *ngFor='let hour of hourArray; index as h' class='hour-cell'>
           <div *ngFor='let timedEvent of (timedEvents | async)[d][h]'fxLayoutAlign='center center'>
-            <div class='event-summary' [style.backgroundColor]='timedEvent.backgroundColor'>
+            <div class='event-summary' [style.backgroundColor]='timedEvent.backgroundColor' (click)='openDialog(timedEvent,d,hour)'>
                 <span>{{timedEvent.startDate | date:'hh:mma' | lowercase}}:</span>
                 <span>{{timedEvent.summary}}</span>
             </div>
