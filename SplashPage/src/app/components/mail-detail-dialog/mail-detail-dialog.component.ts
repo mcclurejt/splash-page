@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, AfterContentInit, AfterViewInit } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA } from "@angular/material";
+import { MdDialogRef, MD_DIALOG_DATA, MdDialog } from "@angular/material";
 import { MailMessage } from "app/store/mail/mail-message";
 import { Observable } from "rxjs/Observable";
+import { MailSendDialogComponent } from "app/components/mail-send-dialog/mail-send-dialog.component";
 
 @Component({
   selector: 'app-mail-detail-dialog',
@@ -13,8 +14,9 @@ export class MailDetailDialogComponent implements OnInit {
   public message: MailMessage;
 
   constructor( @Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<MailDetailDialogComponent>) {
-    this.message = data.message;   
+    public dialogRef: MdDialogRef<MailDetailDialogComponent>,
+    public dialogSendRef: MdDialog) {
+    this.message = data.message;
   }
 
   ngOnInit(): void {
@@ -25,4 +27,11 @@ export class MailDetailDialogComponent implements OnInit {
     iframe.style.width = body.scrollWidth + 'px';
   }
 
+  closeDialog(): void {
+    this.dialogRef.close(null);
+  }
+
+  replyCloseDialog(): void {
+    this.dialogRef.close(this.message);
+  }
 }

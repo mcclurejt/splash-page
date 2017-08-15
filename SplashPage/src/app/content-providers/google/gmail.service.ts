@@ -23,15 +23,15 @@ export class GmailService {
 
   constructor(private gapiService: GapiService, private store: Store<fromRoot.State>) { }
 
-  sendEmail(headers: any, message: string, callback: any): void {
+  sendEmail(headers: any, message: string): void {
     let email = '';
 
     for (let header in headers) {
       email += header += ': ' + headers[header] + '\r\n';
     }
 
-    email += '/r/n' + message;
-
+    email += '\r\n' + message;
+    console.log( email);
     this.sendRequest(email)
     .map((response) => this.mapGoogleMessageToEmailMessage(response))
     .subscribe((message: MailMessage) => {
@@ -45,14 +45,16 @@ export class GmailService {
         if (isSignedIn) {
           const params = {
             userId: 'me',
-            resource: {
-              raw: btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
-            }
+          }
+          const body = {
+            // raw: btoa(encodeURIComponent(email)).replace(/\+/g, '-').replace(/\//g, '_')
+            raw: base64url.encode(email, 'utf8').replace(/\+/g, '-').replace(/\//g, '_')
           }
           gapi.client.request({
             path: 'https://www.googleapis.com/gmail/v1/users/userId/messages/send',
             method: 'POST',
             params: params,
+            body: body
           }).then((response) => {
             resolve(response);
           });

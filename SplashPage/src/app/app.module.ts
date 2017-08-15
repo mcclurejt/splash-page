@@ -160,7 +160,8 @@ export const MaterialModules = [
   ],
   entryComponents: [
     CalendarDialogComponent,
-    MailDetailDialogComponent
+    MailDetailDialogComponent,
+    MailSendDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
