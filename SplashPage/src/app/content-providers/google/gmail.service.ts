@@ -76,21 +76,29 @@ export class GmailService {
   getFullEmail(messageId: string): Observable<MailMessage> {
     return this.requestFullMessage(messageId)
       .map((message) => message.result)
-      .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
+      .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
+      .map((message) => {
+        console.log('Message',message);
+        return message;
+      })
   }
 
   markRead(message: MailMessage): Observable<MailMessage> {
-    let params = {
+    let body = {
       "removeLabelIds": [
-        'UNREAD'
+        'UNREAD',
       ]
     }
     return Observable.fromPromise(gapi.client.request({
-      path: 'https://www.googleapis.com/gmail/v1/users/me/messages' + message.id + 'modify',
+      path: 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id + '/modify',
       method: 'POST',
-      params: params}))
+      body: body}))
       .map((resp) => resp.result)
-      .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp));
+      .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
+      .map((message) => {
+        console.log('Read Message: ',message);
+        return message;
+      })
   }
 
   private requestEmailIds(): Observable<any> {

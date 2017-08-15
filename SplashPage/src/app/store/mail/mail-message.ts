@@ -2,13 +2,9 @@ export class MailMessage {
     id: string;
     threadId: string;
     snippet?: string;
-    labelIds: [
-        string
-    ];
+    labelIds: string[];
     internalDate: number;
-    attachments: [
-        any
-    ];
+    attachments: any[];
     headers: Object;
     textPlain: string;
     textHtml: string;

@@ -7,7 +7,7 @@ export interface MailThread {
 }
 
 export interface MailMessageLookup {
-  [key : string]: MailMessage;
+  [key: string]: MailMessage;
 }
 
 export interface State {
@@ -15,6 +15,7 @@ export interface State {
   threads: MailThread,
   messageLookup: MailMessageLookup,
   loading: boolean,
+  unreadMessages: string[],
 }
 
 const initialState: State = {
@@ -22,6 +23,7 @@ const initialState: State = {
   threads: {},
   messageLookup: {},
   loading: false,
+  unreadMessages: [],
 }
 
 
@@ -30,36 +32,47 @@ export function reducer(state = initialState, action: MailActions.All): State {
 
     case MailActions.HANDLE_MAIL_ADD: {
       console.log(MailActions.HANDLE_MAIL_ADD);
-      let newState;
+      let newState = Object.assign({},state);
       if (Array.isArray(action.payload)) {
-        newState = Object.assign({
-          messages: [...action.payload, ...state.messages],
-          threads: Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId"))),
-          messageLookup: Object.assign({}, state.messageLookup),
-          loading: state.loading,
-        })
+        newState.messages = [...newState.messages,...action.payload];
+        newState.threads = Object.assign({}, _.merge(state.threads, _.groupBy(action.payload, "threadId")));
+        let unreadMessages = _.filter(action.payload,(message) => message.labelIds.includes('UNREAD')).map((message) => message.id);
+        unreadMessages = _.filter(unreadMessages, (id) => !newState.unreadMessages.includes(id))
+        newState.unreadMessages = [...newState.unreadMessages, ...unreadMessages]
+        console.log('UnreadMessage: ', action.payload.find((message) => message.id == '15de6574e03fed57'));
       } else {
-        let threadObj = { threads: Object.assign({}, state.threads) }
-        if (!_.keys(threadObj.threads).includes(action.payload.threadId)) {
-          threadObj.threads[action.payload.threadId] = [];
+        if (!_.keys(newState.threads).includes(action.payload.threadId)) {
+          newState.threads[action.payload.threadId] = [];
         }
-        threadObj.threads[action.payload.threadId].push(action.payload);
-        newState = Object.assign(
-          {},
-          state,
-          { messages: [action.payload, ...state.messages] },
-          { messageLookup: state.messageLookup },
-          threadObj,
-        )
+        newState.threads[action.payload.threadId].push(action.payload);
+        newState.messages = [...newState.messages,action.payload]
+        if(action.payload.labelIds.includes('UNREAD')){
+          newState.unreadMessages.push(action.payload.id);
+        }
       }
-      // console.log("MailAdd newState: ", newState);
+      console.log('UnreadMessages: ',newState.unreadMessages);
       return newState;
     }
 
     case MailActions.HANDLE_FULL_MESSAGE_ADD: {
       console.log(MailActions.HANDLE_FULL_MESSAGE_ADD);
-      let newState = Object.assign({},state);
+      let newState = Object.assign({}, state);
       newState.messageLookup[action.payload.id] = action.payload;
+      return newState;
+    }
+
+    case MailActions.HANDLE_MARK_READ: {
+      console.log(MailActions.MARK_READ);
+      let newState = Object.assign({},state);
+      _.remove(newState.unreadMessages, (messageId) => messageId == action.payload.id);
+      return newState;
+    }
+
+    case MailActions.HANDLE_MAIL_DELETE: {
+      console.log(MailActions.HANDLE_MAIL_DELETE);
+      let newState = Object.assign({}, state);
+      let messages = _.remove(newState.messages, (message) => message.id == action.payload.id);
+      newState.messages = messages;
       return newState;
     }
 
@@ -70,14 +83,14 @@ export function reducer(state = initialState, action: MailActions.All): State {
 
     case MailActions.START_LOADING: {
       console.log(MailActions.START_LOADING);
-      let newState = Object.assign({},state);
+      let newState = Object.assign({}, state);
       newState.loading = true;
       return newState;
     }
 
     case MailActions.STOP_LOADING: {
       console.log(MailActions.STOP_LOADING);
-      let newState = Object.assign({},state);
+      let newState = Object.assign({}, state);
       newState.loading = false;
       return newState;
     }

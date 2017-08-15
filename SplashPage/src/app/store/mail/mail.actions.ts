@@ -3,6 +3,8 @@ import { MailMessage } from "app/store/mail/mail-message";
 
 export const ON_STATE_CHANGE = 'MAIL_ON_STATE_CHANGE';
 export const OPEN_DETAIL_DIALOG = 'MAIL_OPEN_DETAIL_DIALOG';
+export const MARK_READ = 'MAIL_MARK_READ';
+export const HANDLE_MARK_READ = 'MAIL_HANDLE_MARK_READ'
 export const MAIL_ADD = 'MAIL_ADD';
 export const HANDLE_MAIL_ADD = 'HANDLE_MAIL_ADD';
 export const FULL_MESSAGE_ADD = 'FULL_MESSAGE_ADD';
@@ -23,6 +25,20 @@ export class OpenDetailDialog implements Action{
     readonly type= OPEN_DETAIL_DIALOG;
 
     constructor(public payload: MailMessage){}
+}
+
+export class MarkRead implements Action{
+    readonly type = MARK_READ;
+
+    constructor(public payload: MailMessage){}
+}
+
+export class HandleMarkRead implements Action{
+    readonly type = HANDLE_MARK_READ;
+
+    constructor(public payload: MailMessage){
+    
+    }
 }
 
 export class MailAdd implements Action {
@@ -52,7 +68,7 @@ export class HandleFullMessageAdd implements Action{
 export class MailDelete implements Action {
     readonly type = MAIL_DELETE;
 
-    constructor (public payload: any) {}
+    constructor (public payload: MailMessage) {}
 }
 
 export class HandleMailDelete implements Action{
@@ -79,4 +95,4 @@ export class StopLoading implements Action{
     constructor(){}    
 }
 
-export type All = OnStateChange | OpenDetailDialog |  MailAdd | HandleMailAdd | FullMessageAdd | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;
+export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;

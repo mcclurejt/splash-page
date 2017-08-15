@@ -1,6 +1,6 @@
-<div fxLayout='column' fxLayoutAlign='start center' class='inbox-container'>
+<div fxLayout='column' fxLayoutAlign='start center' class='inbox-container' >
 
-  <div *ngFor='let thread of (threads | async)' style='border-radius: 5px;width:100%;'>
+  <div *ngFor='let thread of threads' style='border-radius: 5px;width:100%;'>
 
     <div fxLayout='row' class='message-group-container' (click)='openDialog(thread)'>
 

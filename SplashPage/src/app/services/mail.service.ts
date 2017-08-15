@@ -18,12 +18,14 @@ export class MailService {
   public threads: Observable<MailThread>;
   public messageLookup: Observable<MailMessageLookup>;
   public loading: Observable<boolean>;
+  public unreadMessages: Observable<string[]>;
 
   constructor(public gmailService: GmailService, private store: Store<fromRoot.State>, public dialog: MdDialog, public dialogSend: MdDialog) {
     this.messages = this.store.select(store => store.mail.messages);
     this.threads = this.store.select(store => store.mail.threads);
     this.messageLookup = this.store.select(store => store.mail.messageLookup);
     this.loading = this.store.select(store => store.mail.loading);
+    this.unreadMessages = this.store.select(store => store.mail.unreadMessages);
   }
 
   openDialog(message: MailMessage): void {

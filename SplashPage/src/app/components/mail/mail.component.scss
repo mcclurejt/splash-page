@@ -12,10 +12,8 @@ $transparent-background: rgba(245, 245, 245, 0);
     height: 60px;
     width: 100%;
     border-radius: 5px 5px 0px 0px;
-    .top-text {
-      color: $dark-text;
-      font-weight: 300!important;
-      font-size: 30px;
+    .inbox-filter{
+      padding: 5px 5px 2px 5px;
     }
   }
   .viewContainer {

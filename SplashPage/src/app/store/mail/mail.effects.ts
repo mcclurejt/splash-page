@@ -32,27 +32,34 @@ export class MailEffects{
 
   @Effect() openDetailDialog: Observable<MailActions.All> = this.actions.ofType(MailActions.OPEN_DETAIL_DIALOG)
     .map(toPayload)
-    .do(() => this.store.dispatch(new MailActions.StartLoading()))
     .withLatestFrom(this.mailService.messageLookup)
-    .map(([message, messageLookup]) => {
+    .switchMap(([message, messageLookup]) => {
+      let actions = [];
       if(messageLookup[message.id]){
         console.log('MessageLookup',messageLookup[message.id]);
         this.mailService.openDialog(messageLookup[message.id]);
       } else {
-        this.store.dispatch(new MailActions.FullMessageAdd(message.id))
+        actions.push(new MailActions.FullMessageAdd(message.id));
+        actions.push(new MailActions.MarkRead(message));
       }
-      return new MailActions.StopLoading();
+      actions.push(new MailActions.StopLoading());
+      return actions;
     });
     
     
   @Effect() addFullMessage: Observable<MailActions.All> = this.actions.ofType(MailActions.FULL_MESSAGE_ADD)
     .map(toPayload)
-    .do(() => this.store.dispatch(new MailActions.StartLoading()))
     .switchMap((messageId: string) => this.gmailService.getFullEmail(messageId))
     .map((message: MailMessage) => {
       this.store.dispatch(new MailActions.HandleFullMessageAdd(message));
       this.mailService.openDialog(message);
       return new MailActions.StopLoading();
     });
+
+
+  @Effect() markRead: Observable<MailActions.All> = this.actions.ofType(MailActions.MARK_READ)
+    .map(toPayload)
+    .switchMap((message) => this.gmailService.markRead(message))
+    .map((message) => new MailActions.HandleMarkRead(message))
 
 }

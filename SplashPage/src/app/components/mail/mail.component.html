@@ -1,9 +1,18 @@
 <div class='mail-container card-drop-shadow' [style.xs]='{"height.px" : 300}' fxLayout='column' fxLayoutAlign='start center'>
-  <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='center center'>
-    <div class='top-text'>Mail</div>
+  <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='end end'>
+    <form class='inbox-filter'>
+      <md-select placeholder='Filter' [(ngModel)]='currentFilter' name='filter'>
+        <md-option class='inbox-filter-item' [value]='filters.all'>All</md-option>
+        <md-option class='inbox-filter-item' [value]='filters.inbox'>Inbox</md-option>
+        <md-option class='inbox-filter-item' [value]='filters.unread'>Unread</md-option>
+        <md-option class='inbox-filter-item' [value]='filters.personal'>Personal</md-option>
+        <md-option class='inbox-filter-item' [value]='filters.social'>Social</md-option>
+        <md-option class='inbox-filter-item' [value]='filters.promotions'>Promotions</md-option>
+      </md-select>
+    </form>
   </div>
   <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'>
-    <app-mail-simple-inbox-view></app-mail-simple-inbox-view>
+    <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
   </div>
 
   <ng-template #loadingTemplate>
