@@ -76,6 +76,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MailDetailDialogComponent } from './components/mail-detail-dialog/mail-detail-dialog.component';
 import { Md2Module }  from 'md2';
+import { MailSendDialogComponent } from './components/mail-send-dialog/mail-send-dialog.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -128,6 +129,7 @@ export const MaterialModules = [
     SubjectPipe,
     SignInComponent,
     MailDetailDialogComponent,
+    MailSendDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -158,7 +160,8 @@ export const MaterialModules = [
   ],
   entryComponents: [
     CalendarDialogComponent,
-    MailDetailDialogComponent
+    MailDetailDialogComponent,
+    MailSendDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

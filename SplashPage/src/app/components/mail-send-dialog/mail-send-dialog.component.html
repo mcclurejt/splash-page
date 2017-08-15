@@ -1,0 +1,19 @@
+<h1 md-dialog-title>Sends Stuffs</h1>
+
+<md-dialog-content>
+  <form fxFlex fxLayout='column' #sendMessageForm='ngForm' (ngSubmit)='closeDialog(SEND)'>
+    <md-input-container>
+      <input mdInput type='email' placeholder='Recipient' name='recipient'[(ngModel)]='messageForm.recipient' [value]='messageForm.recipient' required>
+    </md-input-container>
+    <md-input-container>
+      <input mdInput type='text' placeholder='Subject' name='subject' [(ngModel)]='messageForm.subject' [value]='messageForm.subject' required>
+    </md-input-container>
+    <md-input-container>
+      <textarea mdInput mdTextareaAutosize placeholder='Message' [(ngModel)]='messageForm.message' name='message'></textarea>
+    </md-input-container>
+  </form>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-raised-button (click)='closeDialog(CANCEL)'>Cancel</button>
+  <button md-raised-button color='primary' type='submit' (click)='sendMessageForm.ngSubmit.emit()'>Send</button>
+</md-dialog-actions>
