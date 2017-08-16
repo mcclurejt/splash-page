@@ -1,38 +1,48 @@
 <div fxHide fxShow.gt-xs fxLayoutAlign='none center' class='mail-tab-container'>
   <div fxFlex fxLayout='column' class='mail-tab card-drop-shadow'>
-    <div fxLayout fxLayoutAlign='start center'class='top-bar bar-drop-shadow'>
+    <div fxLayout fxLayoutAlign='start center' class='top-bar bar-drop-shadow'>
       <span class='mail-tab-heading'>Mail</span>
       <i fa [name]="'envelope'" [size]=3 [fw]=true class='mail-tab-heading-icon'></i>
       <span fxFlex></span>
       <button class='create-mail-btn' md-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
     </div>
     <div fxLayout='row' class='sidnav-inbox-container'>
-        <div class='sidenav'>
-          <span>Filter Inbox:</span>
-          <md-radio-group [(ngModel)]="currentFilter" fxLayout='column'>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.all">
-              All
-            </md-radio-button>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.inbox">
-              Inbox
-            </md-radio-button>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.unread">
-              UnRead
-            </md-radio-button>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.personal">
-              Personal
-            </md-radio-button>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.social">
-              Social
-            </md-radio-button>
-            <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.promotions">
-              Promotions
-            </md-radio-button>
-          </md-radio-group>
+      <div class='sidenav'>
+        <span>Filter Inbox:</span>
+        <md-radio-group [(ngModel)]="currentFilter" fxLayout='column'>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.all">
+            All
+          </md-radio-button>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.inbox">
+            Inbox
+          </md-radio-button>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.unread">
+            UnRead
+          </md-radio-button>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.personal">
+            Personal
+          </md-radio-button>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.social">
+            Social
+          </md-radio-button>
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.promotions">
+            Promotions
+          </md-radio-button>
+        </md-radio-group>
+      </div>
+      <div fxFlex class='inbox' *ngIf='!(mailService.loading | async);else loadingTemplate'
+      infinite-scroll
+      [infiniteScrollDistance]="6"
+      [infiniteScrollThrottle]="2000"
+      [scrollWindow]='false'
+      (scrolled)="onScroll()">
+        <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
+      </div>
+      <ng-template #loadingTemplate>
+        <div fxLayoutAlign='center center' class='inbox'>
+          <sk-folding-cube></sk-folding-cube>
         </div>
-        <div fxFlex class='inbox'>
-          <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
-        </div>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -20,7 +20,7 @@ $transparent-background: rgba(245, 245, 245, 0);
     // background-color: $light-background;
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: scroll;
   }
   .create-mail-btn {
     color: $dark-text;

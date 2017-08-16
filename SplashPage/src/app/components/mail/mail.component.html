@@ -15,7 +15,12 @@
       </md-select>
     </form>
   </div>
-  <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'>
+  <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'
+  infinite-scroll
+  [infiniteScrollDistance]="6"
+  [infiniteScrollThrottle]="2000"
+  [scrollWindow]='false'
+  (scrolled)="onScroll()">
     <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
   </div>
 

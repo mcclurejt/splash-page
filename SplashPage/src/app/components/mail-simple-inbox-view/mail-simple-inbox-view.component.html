@@ -1,10 +1,10 @@
-<div fxLayout='column' fxLayoutAlign='start center' class='inbox-container' >
+<div fxLayout='column' fxLayoutAlign='start center' class='inbox-container'>
 
-  <div *ngFor='let thread of threads' style='border-radius: 5px;width:100%;'>
+  <div *ngFor='let thread of threads | async' style='border-radius: 5px;width:100%;'>
 
     <div fxLayout='row' class='message-group-container' (click)='openDialog(thread)'>
 
-      <div *ngIf='!isRead(thread.messages[0])' class='unread-marker'>&nbsp;</div>
+      <div *ngIf='thread.messages[0].labelIds.includes("UNREAD")' class='unread-marker'>&nbsp;</div>
 
       <div fxFlex='83%' fxLayout='column' fxLayoutAlign='center start' class='message-container'>
         <div class='from-row ellipsis'>
@@ -25,7 +25,7 @@
           {{thread.messages[0].headers.date | mailDate}}
         </div>
       </div>
-      
+
     </div>
   </div>
 </div>
