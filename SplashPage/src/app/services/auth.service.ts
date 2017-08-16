@@ -69,7 +69,7 @@ export class AuthService {
   handleSignOut() {
     this.gapiService.signOut();
     this.afAuth.auth.signOut();
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 
 }
