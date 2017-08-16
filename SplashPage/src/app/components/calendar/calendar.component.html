@@ -1,4 +1,4 @@
-<div class='cal-container card-drop-shadow' [style.xs]='{"height.px" : 300}' fxLayout='column' fxLayoutAlign='start center'>
+<div class='cal-container card-drop-shadow' [style.xs]='{"height": xsHeight}' fxLayout='column' fxLayoutAlign='start center'>
   <div *ngIf='view == "agenda"' class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='start center'>
     <button md-icon-button (click)='calendarService.openDialog()' type='button' class='add-button'>
       <i fa [name]="'calendar-plus-o'" [size]=2 [fw]=true></i>

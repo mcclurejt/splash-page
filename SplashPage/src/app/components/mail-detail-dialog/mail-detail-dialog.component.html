@@ -1,8 +1,8 @@
 <div class='dialog-container'>
   <div class='top-bar bar-drop-shadow' fxLayout='row'>
     <div class='subject-from-container' fxLayout='column' fxLayoutAlign='center start'>
-      <div class='message-subject'>{{baseMessage.headers['subject'] | decodeHTML | subject}}</div>
-      <div class='message-from'>{{baseMessage.headers['from']}}</div>
+      <div class='message-subject' style='font-size: 24px' [style.xs]="{'font-size': '18px'}">{{baseMessage.headers['subject'] | decodeHTML | subject}}</div>
+      <div class='message-from' style='font-size: 16px' [style.xs]="{'font-size': '12px'}">{{baseMessage.headers['from']}}</div>
     </div>
     <div fxFlex></div>
     <div fxLayout='row'>
