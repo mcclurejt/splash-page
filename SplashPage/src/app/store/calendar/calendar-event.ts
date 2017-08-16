@@ -23,6 +23,6 @@ export class CalendarEvent {
     this.endDate = obj && obj.endDate || new Date();
     this.calendarId = obj && obj.calendarId || '';
     this.timeZone = obj && obj.timeZone || '';
-    this.provider = obj && obj.provider || '';
+    this.provider = obj && obj.provider || 'google';
   }
 }

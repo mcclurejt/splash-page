@@ -8,6 +8,8 @@ export const HANDLE_MARK_READ = 'MAIL_HANDLE_MARK_READ'
 export const MAIL_ADD = 'MAIL_ADD';
 export const HANDLE_MAIL_ADD = 'HANDLE_MAIL_ADD';
 export const FULL_MESSAGE_ADD = 'FULL_MESSAGE_ADD';
+export const FULL_THREAD_ADD = 'MAIL_FULL_THREAD_ADD';
+export const FULL_THREAD_GET = 'MAIL_FULL_THREAD_GET';
 export const HANDLE_FULL_MESSAGE_ADD = 'HANDLE_FULL_MESSAGE_ADD';
 export const MAIL_DELETE = 'MAIL_DELETE';
 export const HANDLE_MAIL_DELETE = 'HANDLE_MAIL_DELETE';
@@ -36,9 +38,7 @@ export class MarkRead implements Action{
 export class HandleMarkRead implements Action{
     readonly type = HANDLE_MARK_READ;
 
-    constructor(public payload: MailMessage){
-    
-    }
+    constructor(public payload: MailMessage){}
 }
 
 export class MailAdd implements Action {
@@ -59,10 +59,22 @@ export class FullMessageAdd implements Action{
     constructor(public payload: string){}
 }
 
+export class FullThreadAdd implements Action{
+    readonly type = FULL_THREAD_ADD;
+
+    constructor(public payload: MailMessage){}
+}
+
+export class FullThreadGet implements Action{
+    readonly type = FULL_THREAD_GET;
+
+    constructor(public payload: MailMessage){}
+}
+
 export class HandleFullMessageAdd implements Action{
     readonly type = HANDLE_FULL_MESSAGE_ADD;
 
-    constructor(public payload: MailMessage){}
+    constructor(public payload: MailMessage | MailMessage[]){}
 }
 
 export class MailDelete implements Action {
@@ -95,4 +107,4 @@ export class StopLoading implements Action{
     constructor(){}    
 }
 
-export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;
+export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | FullThreadAdd | FullThreadGet | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;

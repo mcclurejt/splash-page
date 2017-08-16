@@ -57,7 +57,19 @@ export function reducer(state = initialState, action: MailActions.All): State {
     case MailActions.HANDLE_FULL_MESSAGE_ADD: {
       console.log(MailActions.HANDLE_FULL_MESSAGE_ADD);
       let newState = Object.assign({}, state);
-      newState.messageLookup[action.payload.id] = action.payload;
+      let ar;
+      if(Array.isArray(action.payload)){
+        console.log('Adding Full Message Array',action.payload);
+        ar = true;
+        for(let message of action.payload){
+          newState.messageLookup[message.id] = message;
+        }
+      } else {
+        newState.messageLookup[action.payload.id] = action.payload;
+      }
+      if(ar){
+        console.log('Full message array new State',newState);
+      }
       return newState;
     }
 

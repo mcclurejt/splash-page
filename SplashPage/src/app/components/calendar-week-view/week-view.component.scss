@@ -18,6 +18,7 @@ $transparent-background: rgba(245, 245, 245, 0);
     height: 50px;
     width:100%;
     border-bottom: 2px solid $dark-text;
+    overflow-y: auto;
   }
 }
 
@@ -46,6 +47,8 @@ $transparent-background: rgba(245, 245, 245, 0);
   overflow-x: hidden;
   line-height: 20px;
   font-weight: 400;
+  border-top: 1px solid $light-text;
+  border-bottom: 1px solid $light-text;
 }
 
 .event-summary:hover {

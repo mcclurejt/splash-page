@@ -1,3 +1,4 @@
+import { MailThread } from 'app/store/mail/mail.reducer';
 import { MailMessageLookup } from 'app/store/mail/mail.reducer';
 import { toPayload } from '@ngrx/effects';
 import { MailMessage } from './mail-message';
@@ -39,8 +40,12 @@ export class MailEffects{
         console.log('MessageLookup',messageLookup[message.id]);
         this.mailService.openDialog(messageLookup[message.id]);
       } else {
+        // Load the full initial message first, then load the full message for each message in the thread (if there are any more)
         actions.push(new MailActions.FullMessageAdd(message.id));
-        actions.push(new MailActions.MarkRead(message));
+        if(message.labelIds.includes('UNREAD')){
+          actions.push(new MailActions.MarkRead(message));
+        }
+        actions.push(new MailActions.FullThreadAdd(message));
       }
       actions.push(new MailActions.StopLoading());
       return actions;
@@ -56,6 +61,23 @@ export class MailEffects{
       return new MailActions.StopLoading();
     });
 
+  @Effect() addFullThread: Observable<MailActions.All> = this.actions.ofType(MailActions.FULL_THREAD_ADD)
+    .do(() => {console.log(MailActions.FULL_THREAD_ADD);})
+    .map(toPayload)
+    .withLatestFrom(this.mailService.threads)
+    .switchMap(([message,threads]) => {
+      console.log('Thread',threads[message.threadId]);
+      if(threads[message.threadId].length > 1){
+        return this.gmailService.getFullThread(message,threads);
+      }
+      return Observable.of([]);
+    })
+    .map((messages) => {
+      if(messages != []){
+        return new MailActions.HandleFullMessageAdd(messages);
+      }
+      return new MailActions.StopLoading();
+    });
 
   @Effect() markRead: Observable<MailActions.All> = this.actions.ofType(MailActions.MARK_READ)
     .map(toPayload)

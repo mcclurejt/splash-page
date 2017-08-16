@@ -6,6 +6,8 @@ import { Component, Inject, OnInit, EventEmitter } from '@angular/core';
 import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material'
 import { Calendar } from "app/store/calendar/calendar";
 import { MdSnackBar } from '@angular/material';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-calendar-dialog',
   templateUrl: './calendar-dialog.component.html',
@@ -32,7 +34,11 @@ export class CalendarDialogComponent implements OnInit {
   ngOnInit() {
     this.calendars = this.data.calendars;
     if (this.data.event) {
-      this.mode = this.EDIT;
+      if(this.data.event.calendarId == ''){
+        this.mode = this.ADD;
+      } else {
+        this.mode = this.EDIT;
+      }
       this.event = this.data.event;
       this.newEvent = new CalendarEvent(this.event);
     } else {

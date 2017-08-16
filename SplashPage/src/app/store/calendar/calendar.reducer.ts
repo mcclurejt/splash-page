@@ -38,7 +38,7 @@ export function reducer(state = initialState, action: CalendarActions.All): Stat
     }
 
     case CalendarActions.CALENDAR_CLEAR_ALL: {
-      console.log('CALENDAR_CLEAR_ALL');
+      console.log(CalendarActions.CALENDAR_CLEAR_ALL);
       return Object.assign({},initialState);
     }
 

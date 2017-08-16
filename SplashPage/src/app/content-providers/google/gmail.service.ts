@@ -1,3 +1,4 @@
+import { MailThread } from './../../store/mail/mail.reducer';
 import { MailMessage } from './../../store/mail/mail-message';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -31,12 +32,12 @@ export class GmailService {
     }
 
     email += '\r\n' + message;
-    console.log( email);
+    console.log(email);
     this.sendRequest(email, threadId)
-    .map((response) => this.mapGoogleMessageToEmailMessage(response))
-    .subscribe((message: MailMessage) => {
-      console.log("Sent Mail Message Returned?", message);
-     });
+      .map((response) => this.mapGoogleMessageToEmailMessage(response))
+      .subscribe((message: MailMessage) => {
+        console.log("Sent Mail Message Returned?", message);
+      });
   }
 
   sendRequest(email: string, threadId: string = ''): Observable<any> {
@@ -59,7 +60,7 @@ export class GmailService {
               raw: base64url.encode(email, 'utf8').replace(/\+/g, '-').replace(/\//g, '_')
             }
           }
-          
+
           gapi.client.request({
             path: 'https://www.googleapis.com/gmail/v1/users/userId/messages/send',
             method: 'POST',
@@ -87,10 +88,11 @@ export class GmailService {
     return this.requestFullMessage(messageId)
       .map((message) => message.result)
       .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
-      .map((message) => {
-        console.log('Message',message);
-        return message;
-      })
+  }
+
+  getFullThread(message: MailMessage, threads: MailThread): Observable<MailMessage[]> {
+    return this.requestFullThread(message, threads)
+      .map((messageResp) => this.mapFullEmails(messageResp))
   }
 
   markRead(message: MailMessage): Observable<MailMessage> {
@@ -102,13 +104,10 @@ export class GmailService {
     return Observable.fromPromise(gapi.client.request({
       path: 'https://www.googleapis.com/gmail/v1/users/me/messages/' + message.id + '/modify',
       method: 'POST',
-      body: body}))
+      body: body
+    }))
       .map((resp) => resp.result)
       .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
-      .map((message) => {
-        console.log('Read Message: ',message);
-        return message;
-      })
   }
 
   private requestEmailIds(): Observable<any> {
@@ -168,6 +167,43 @@ export class GmailService {
   private mapEmailIds(messageList): Array<any> {
     this.nextPageToken = messageList.nextPageToken;
     const messages = messageList.messages;
+    return messages;
+  }
+
+  private requestFullThread(message: MailMessage, threads: MailThread): Observable<any> {
+    let gapi = window['gapi'];
+    let params = {
+      format: 'full',
+    };
+    let batch = gapi.client.newBatch();
+    let thread = threads[message.threadId];
+    for (let threadMsg of thread) {
+      if (threadMsg.id != message.id) {
+        let url = 'https://www.googleapis.com/gmail/v1/users/me/messages/' + threadMsg.id;
+        let req = gapi.client.request({
+          path: url,
+          method: 'GET',
+          params: params
+        });
+        batch.add(req, { 'id': threadMsg.id });
+      }
+    }
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      batch.execute((response) => {
+        resolve(response);
+      });
+    })
+    );
+  }
+
+  private mapFullEmails(mailResp): MailMessage[] {
+    let messages = [];
+    for (let key of _.keys(mailResp)) {
+      let message = mailResp[key].result;
+      let mailMessage = this.mapGoogleMessageToEmailMessage(message);
+      messages.push(mailMessage);
+    }
+    // console.log('mailResp mapped', messages);
     return messages;
   }
 

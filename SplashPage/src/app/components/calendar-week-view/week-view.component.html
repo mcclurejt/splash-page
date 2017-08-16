@@ -2,7 +2,7 @@
   <div fxLayout='row' fxLayoutAlign='center none'>
 
     <div *ngFor='let d of dateArray;index as idx;first as isFirst' class='day-column' fxFlex='14%' fxLayout='column' fxLayoutAlign='start center'>
-      <div class='all-day-event-cell' fxFlex='110px'>
+      <div class='all-day-event-cell' fxFlex='130px'>
         &nbsp;
         <div class='top-date-container' (click)='openAllDayDialog(idx)' fxLayout='column'>
           <div class='month-date'>{{dateObjArray[idx] | date:"MMM d"}}</div>
