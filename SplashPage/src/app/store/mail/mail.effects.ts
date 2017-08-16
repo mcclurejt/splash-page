@@ -14,8 +14,8 @@ import * as MailActions from 'app/store/mail/mail.actions';
 
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/withLatestFrom';
+import 'rxjs/add/observable/from';
 
 @Injectable()
 export class MailEffects {
@@ -24,6 +24,7 @@ export class MailEffects {
 
   @Effect() onStateChange: Observable<MailActions.All> = this.actions.ofType(MailActions.ON_STATE_CHANGE)
     .do(() => this.store.dispatch(new MailActions.StartLoading()))
+    .do(() => this.gmailService.clearNextPageToken())
     .switchMap(() => this.gmailService.getEmailIds())
     .switchMap((messageIds: any) => this.gmailService.getEmails(messageIds))
     .map((messages) => {
@@ -34,7 +35,7 @@ export class MailEffects {
   @Effect() openDetailDialog: Observable<MailActions.All> = this.actions.ofType(MailActions.OPEN_DETAIL_DIALOG)
     .map(toPayload)
     .withLatestFrom(this.mailService.messageLookup)
-    .switchMap(([message, messageLookup]) => {
+    .mergeMap(([message, messageLookup]) => {
       let actions = [];
       if (messageLookup[message.id]) {
         this.mailService.openDialog(messageLookup[message.id]);
@@ -47,16 +48,17 @@ export class MailEffects {
         actions.push(new MailActions.FullThreadAdd(message));
       }
       actions.push(new MailActions.StopLoading());
-      return actions;
+      return Observable.from(actions);
     });
 
 
-  @Effect({dispatch: false}) addFullMessage: Observable<MailActions.All> = this.actions.ofType(MailActions.FULL_MESSAGE_ADD)
+  @Effect({ dispatch: false }) addFullMessage: Observable<MailActions.All> = this.actions.ofType(MailActions.FULL_MESSAGE_ADD)
+    .do(() => { console.log(MailActions.FULL_MESSAGE_ADD); })
     .map(toPayload)
     .switchMap((messageId: string) => this.gmailService.getFullEmail(messageId))
     .map((message: MailMessage) => {
-      this.store.dispatch(new MailActions.HandleFullMessageAdd(message));
       this.mailService.openDialog(message);
+      this.store.dispatch(new MailActions.HandleFullMessageAdd(message));
       return null;
     });
 

@@ -110,6 +110,10 @@ export class GmailService {
       .map((messageResp) => this.mapGoogleMessageToEmailMessage(messageResp))
   }
 
+  clearNextPageToken(): void{
+    this.nextPageToken = undefined;
+  }
+
   private requestEmailIds(): Observable<any> {
     return Observable.fromPromise(new Promise((resolve, reject) => {
       this.gapiService.getIsSignedInStream().subscribe((isSignedIn) => {

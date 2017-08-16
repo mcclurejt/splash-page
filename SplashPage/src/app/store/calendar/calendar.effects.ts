@@ -50,7 +50,7 @@ export class CalendarEffects {
 
   @Effect() editEvent: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.EVENT_EDIT)
     .map(toPayload)
-    .switchMap((payload) => {
+    .mergeMap((payload) => {
       let event = payload.event;
       let newEvent = payload.newEvent;
       let calendars = payload.calendars;
@@ -75,7 +75,7 @@ export class CalendarEffects {
           console.log('Calendar Provider Not Found');
         }
       }
-      return actions;
+      return Observable.from(actions);
     });
 
   @Effect() deleteEvent: Observable<CalendarActions.All> = this.actions.ofType(CalendarActions.EVENT_DELETE)

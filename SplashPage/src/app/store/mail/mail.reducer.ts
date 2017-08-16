@@ -10,12 +10,22 @@ export interface MailMessageLookup {
   [key: string]: MailMessage;
 }
 
+export enum Filter {
+  all,
+  inbox,
+  unread,
+  personal,
+  social,
+  promotions
+}
+
 export interface State {
   messages: MailMessage[],
   threads: MailThread,
   messageLookup: MailMessageLookup,
   loading: boolean,
   unreadMessages: string[],
+  currentFilter: Filter
 }
 
 const initialState: State = {
@@ -24,6 +34,7 @@ const initialState: State = {
   messageLookup: {},
   loading: false,
   unreadMessages: [],
+  currentFilter: Filter.all,
 }
 
 
@@ -78,6 +89,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
       let newState = Object.assign({},state);
       newState.threads = Object.assign({},state.threads);      
       _.remove(newState.unreadMessages, (messageId) => messageId == action.payload.id);
+      newState.threads[action.payload.threadId].find((message) => message.id == action.payload.id).labelIds = action.payload.labelIds;
       return newState;
     }
 
@@ -108,6 +120,13 @@ export function reducer(state = initialState, action: MailActions.All): State {
       let newState = Object.assign({}, state);
       newState.threads = Object.assign({},state.threads);      
       newState.loading = false;
+      return newState;
+    }
+
+    case MailActions.UPDATE_FILTER: {
+      let newState = Object.assign({}, state);
+      newState.threads = Object.assign({},state.threads);
+      newState.currentFilter = action.payload;
       return newState;
     }
 

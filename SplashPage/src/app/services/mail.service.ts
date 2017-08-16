@@ -9,16 +9,10 @@ import { MailThread, MailMessageLookup } from "app/store/mail/mail.reducer";
 import { MdDialog } from "@angular/material";
 import { MailDetailDialogComponent } from "app/components/mail-detail-dialog/mail-detail-dialog.component";
 import { MailSendDialogComponent } from "app/components/mail-send-dialog/mail-send-dialog.component";
-import * as _ from 'lodash';
+import { Filter } from 'app/store/mail/mail.reducer';
+import 'rxjs/add/observable/combineLatest';
 
-export const Filters = {
-  all : 'ALL',
-  inbox: 'INBOX',
-  unread: 'UNREAD',
-  personal: 'PERSONAL',
-  social: 'SOCIAL',
-  promotions: 'PROMOTIONS',
-}
+import * as _ from 'lodash';
 
 export interface Thread {
   messages: MailMessage[],
@@ -34,19 +28,29 @@ export class MailService {
   public messageLookup: Observable<MailMessageLookup>;
   public loading: Observable<boolean>;
   public unreadMessages: Observable<string[]>;
+  public currentFilter: Observable<Filter>;
   public viewThreads: Observable<Thread[]>;
 
-  
   constructor(public gmailService: GmailService, private store: Store<fromRoot.State>, public dialog: MdDialog, public dialogSend: MdDialog) {
     this.messages = this.store.select(store => store.mail.messages);
     this.threads = this.store.select(store => store.mail.threads);
     this.messageLookup = this.store.select(store => store.mail.messageLookup);
     this.loading = this.store.select(store => store.mail.loading);
     this.unreadMessages = this.store.select(store => store.mail.unreadMessages);
-    this.viewThreads = this.threads.map((threads) => this.simpleInboxViewFilter(threads));
+    this.currentFilter = this.store.select(store => store.mail.currentFilter)
+    this.viewThreads = Observable.combineLatest(
+      this.threads,
+      this.currentFilter,
+      this.unreadMessages,
+      (threads,currentFilter,unreadMessages) => {
+        let newThreads =  this.simpleInboxViewFilter(threads);
+        return this.getFilteredMessages(newThreads, currentFilter, unreadMessages);
+      }
+    )
   }
 
   openDialog(message: MailMessage): void {
+    console.log('Open Dialog');
     let dialogRef = this.dialog.open(MailDetailDialogComponent, {
       panelClass: 'mail-dialog-styling',
       data: {
@@ -105,28 +109,28 @@ export class MailService {
     this.store.dispatch(new MailActions.LoadMoreMessages());
   }
 
-  getFilteredMessages(filter): Observable<Thread[]>{
+  getFilteredMessages(threads: Thread[], filter: Filter, unreadMessages: string[]): Thread[]{
     switch (filter){
-      case Filters.all:{
-        return this.viewThreads;
+      case Filter.all:{
+        return threads;
       }
-      case Filters.inbox:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('INBOX')));
+      case Filter.inbox:{
+        return _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('INBOX'));
       }
-      case Filters.unread:{
-        return this.viewThreads.withLatestFrom(this.unreadMessages).map(([threads,unreadMessages]) => _.filter(threads,  (thread) => !this.isRead(thread.messages[0],unreadMessages)));
+      case Filter.unread:{
+        return  _.filter(threads,  (thread) => !this.isRead(thread.messages[0],unreadMessages));
       }
-      case Filters.personal:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')));
+      case Filter.personal:{
+        return _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL'));
       }
-      case Filters.promotions:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')));
+      case Filter.promotions:{
+        return _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL'));
       }
-      case Filters.social:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_SOCIAL')));
+      case Filter.social:{
+        return _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_SOCIAL'));
       }
       default:{
-        return this.viewThreads;
+        return threads;
       }
     }
   }
@@ -136,6 +140,10 @@ export class MailService {
       return false;
     }
     return true;
+  }
+
+  updateFilter(filter: Filter){
+    this.store.dispatch(new MailActions.UpdateFilter(filter));
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {

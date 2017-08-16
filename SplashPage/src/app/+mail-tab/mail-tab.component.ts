@@ -1,5 +1,8 @@
+import { Thread } from './../services/mail.service';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
-import { MailService, Filters } from "app/services/mail.service";
+import { MailService} from "app/services/mail.service";
+import { Filter } from 'app/store/mail/mail.reducer';
 
 @Component({
   selector: 'app-mail-tab',
@@ -8,13 +11,25 @@ import { MailService, Filters } from "app/services/mail.service";
 })
 export class MailTabComponent {
 
-  filters = Filters;
-  currentFilter = Filters.all;
-  
-  constructor(public mailService: MailService) { }
+  public all = Filter.all;
+  public inbox = Filter.inbox;
+  public personal = Filter.personal;
+  public promotions = Filter.promotions;
+  public social = Filter.social;
+  public unread = Filter.unread;
+
+  threads: Observable<Thread[]>
+
+  constructor(public mailService: MailService) { 
+    this.threads = this.mailService.viewThreads;
+  }
 
   onScroll(){
     this.mailService.onScroll();
+  }
+
+  updateFilter(filter: Filter){
+    this.mailService.updateFilter(filter);
   }
 
 }

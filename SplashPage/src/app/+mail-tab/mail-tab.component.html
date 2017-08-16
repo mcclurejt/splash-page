@@ -9,34 +9,34 @@
     <div fxLayout='row' class='sidnav-inbox-container'>
       <div class='sidenav'>
         <span>Filter Inbox:</span>
-        <md-radio-group [(ngModel)]="currentFilter" fxLayout='column'>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.all">
+        <md-radio-group (change)='updateFilter($event.value)' fxLayout='column'>
+          <md-radio-button [checked]='true' class='filter-radio-btn' color='warn' [value]="all">
             All
           </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.inbox">
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="inbox">
             Inbox
           </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.unread">
-            UnRead
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="unread">
+            Unread
           </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.personal">
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="personal">
             Personal
           </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.social">
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="social">
             Social
           </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="filters.promotions">
+          <md-radio-button class='filter-radio-btn' color='warn' [value]="promotions">
             Promotions
           </md-radio-button>
         </md-radio-group>
       </div>
       <div fxFlex class='inbox' *ngIf='!(mailService.loading | async);else loadingTemplate'
       infinite-scroll
-      [infiniteScrollDistance]="6"
-      [infiniteScrollThrottle]="2000"
+      [infiniteScrollDistance]="4"
+      [infiniteScrollThrottle]="1500"
       [scrollWindow]='false'
       (scrolled)="onScroll()">
-        <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
+        <app-mail-simple-inbox-view [threads]='threads | async'></app-mail-simple-inbox-view>
       </div>
       <ng-template #loadingTemplate>
         <div fxLayoutAlign='center center' class='inbox'>

@@ -5,23 +5,23 @@
     </div>
     <span fxFlex></span>
     <form class='inbox-filter' fxFlexAlign='end'>
-      <md-select placeholder='Filter' [(ngModel)]='currentFilter' name='filter'>
-        <md-option class='inbox-filter-item' [value]='filters.all'>All</md-option>
-        <md-option class='inbox-filter-item' [value]='filters.inbox'>Inbox</md-option>
-        <md-option class='inbox-filter-item' [value]='filters.unread'>Unread</md-option>
-        <md-option class='inbox-filter-item' [value]='filters.personal'>Personal</md-option>
-        <md-option class='inbox-filter-item' [value]='filters.social'>Social</md-option>
-        <md-option class='inbox-filter-item' [value]='filters.promotions'>Promotions</md-option>
+      <md-select placeholder='Filter' (change)='updateFilter($event.value)' name='filter'>
+        <md-option selected class='inbox-filter-item' [value]='all'>All</md-option>
+        <md-option class='inbox-filter-item' [value]='inbox'>Inbox</md-option>
+        <md-option class='inbox-filter-item' [value]='unread'>Unread</md-option>
+        <md-option class='inbox-filter-item' [value]='personal'>Personal</md-option>
+        <md-option class='inbox-filter-item' [value]='social'>Social</md-option>
+        <md-option class='inbox-filter-item' [value]='promotions'>Promotions</md-option>
       </md-select>
     </form>
   </div>
   <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'
   infinite-scroll
-  [infiniteScrollDistance]="6"
-  [infiniteScrollThrottle]="2000"
+  [infiniteScrollDistance]="4"
+  [infiniteScrollThrottle]="1500"
   [scrollWindow]='false'
   (scrolled)="onScroll()">
-    <app-mail-simple-inbox-view [filter]='currentFilter'></app-mail-simple-inbox-view>
+    <app-mail-simple-inbox-view [threads]='threads | async'></app-mail-simple-inbox-view>
   </div>
 
   <ng-template #loadingTemplate>

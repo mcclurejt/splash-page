@@ -1,5 +1,6 @@
 import { Action } from "@ngrx/store";
 import { MailMessage } from "app/store/mail/mail-message";
+import { Filter } from 'app/store/mail/mail.reducer'
 
 export const ON_STATE_CHANGE = 'MAIL_ON_STATE_CHANGE';
 export const OPEN_DETAIL_DIALOG = 'MAIL_OPEN_DETAIL_DIALOG';
@@ -16,6 +17,7 @@ export const HANDLE_MAIL_DELETE = 'HANDLE_MAIL_DELETE';
 export const MAIL_CLEAR_ALL = 'MAIL_CLEAR_ALL';
 export const START_LOADING = 'MAIL_START_LOADING';
 export const STOP_LOADING = 'MAIL_STOP_LOADING';
+export const UPDATE_FILTER = 'MAIL_UPDATE_FILTER';
 
 export class OnStateChange implements Action{
     readonly type = ON_STATE_CHANGE;
@@ -107,4 +109,10 @@ export class StopLoading implements Action{
     constructor(){}    
 }
 
-export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | FullThreadAdd | HandleFullMessageAdd | LoadMoreMessages | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;
+export class UpdateFilter implements Action{
+    readonly type = UPDATE_FILTER;
+
+    constructor(public payload: Filter){}
+}
+
+export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | FullThreadAdd | HandleFullMessageAdd | LoadMoreMessages | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading | UpdateFilter;
