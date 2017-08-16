@@ -1,40 +1,37 @@
-<div fxLayout='column'>
-  <div fxLayout='row'>
-    <h1 md-dialog-title class='mail-dialog-subject'>
-      {{baseMessage.headers['subject'] | decodeHTML | subject}}</h1>
-    <span fxFlex></span>
-    <button md-button (click)='replyCloseDialog()' style='margin-top:-15px;margin-bottom:5px;'>
-      <i fa [name]="'reply'" [size]=2 [fw]=true></i>
-    </button>
-    <button md-button (click)='closeDialog()' style='margin-top:-15px;margin-bottom:5px;'>
-      <i fa [name]="'times'" [size]=2 [fw]=true></i>
-    </button>
+<div class='dialog-container'>
+  <div class='top-bar bar-drop-shadow' fxLayout='row'>
+    <div class='subject-from-container' fxLayout='column' fxLayoutAlign='center start'>
+      <div class='message-subject'>{{baseMessage.headers['subject'] | decodeHTML | subject}}</div>
+      <div class='message-from'>{{baseMessage.headers['from']}}</div>
+    </div>
+    <div fxFlex></div>
+    <div fxLayout='row'>
+      <button md-button (click)='replyCloseDialog()'>
+        <i fa [name]="'reply'" [size]=2 [fw]=true></i>
+      </button>
+      <button md-button (click)='closeDialog()'>
+        <i fa [name]="'times'" [size]=2 [fw]=true></i>
+      </button>
+    </div>
   </div>
-  <div style='margin-top:-10px'>
-    <hr>
-  </div>
-  <div fxLayout='row' style='margin-top:-10px;'>
-    <h1 md-dialog-title class='mail-dialog-from'>
-      {{baseMessage.headers['from']}}</h1>
-    <span fxFlex></span>
+
+  <div class='content-container' fxLayout fxLayoutAlign='center start'>
+
+    <div fxHide.xs class='sidenav-container' fxFlex='200px' fxLayout='column' fxLayoutAlign='start start'>
+      <div class='message-select-header'>
+        Messages:
+      </div>
+      <md-radio-group (change)='setIframeContent($event.value)'>
+        <md-radio-button *ngFor='let message of messages | async;first as isFirst' class='thread-radio-button' color='warn' [value]='message'
+          [checked]='isFirst'>
+          {{message.headers['subject']}}
+        </md-radio-button>
+      </md-radio-group>
+    </div>
+
+    <div fxFlex class='iframe-container'>
+      <iframe seamless sandbox="allow-same-origin allow-popups allow-top-navigation" id='mail-iframe'>&nbsp;</iframe>
+    </div>
+
   </div>
 </div>
-
-<md-dialog-content fxLayout fxLayoutAlign='center start'>
-
-  <div fxFlex='20%' fxLayout='column' fxLayoutAlign='start center'>
-    <div class='message-select-header'>
-      Thread Messages
-    </div>
-    <md-radio-group fxFlex='20%' (change)='setIframeContent($event.value)'>
-      <md-radio-button *ngFor='let message of messages | async;first as isFirst' class='thread-radio-button' color='warn' [value]='message' [checked]='isFirst'>
-        {{message.headers['subject']}}
-      </md-radio-button>
-    </md-radio-group>
-  </div>
-
-  <div fxFlex='80%' class='iframe-container'>
-    <iframe seamless sandbox="allow-same-origin allow-popups allow-top-navigation" id='mail-iframe'>&nbsp;</iframe>
-  </div>
-
-</md-dialog-content>

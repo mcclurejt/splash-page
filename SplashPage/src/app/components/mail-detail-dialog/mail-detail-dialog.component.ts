@@ -71,7 +71,7 @@ export class MailDetailDialogComponent implements OnInit, OnDestroy {
   }
 
   replyCloseDialog(): void {
-    this.dialogRef.close(this.messages[0]);
+    this.dialogRef.close(this.baseMessage);
   }
 
   ngOnDestroy(): void {

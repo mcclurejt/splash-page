@@ -62,7 +62,7 @@ textarea {
   max-width: none;
   width: 95vw;
   height: 95vh;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .mail-send-dialog-styling .mat-dialog-container {
@@ -82,4 +82,15 @@ textarea {
   font-family: 'Comfortaa', cursive !important;
   // background-color: $light-background !important;
   // color: $dark-text !important;
+}
+
+// Radio Buttons
+.mat-radio-label-content{
+  width: 97% !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+.mat-radio-label{
+  width: 100%;
 }

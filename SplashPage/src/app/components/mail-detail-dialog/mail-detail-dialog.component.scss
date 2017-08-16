@@ -4,20 +4,45 @@ $light-background:rgba(245, 245, 245, 1);
 $dark-background:rgba(117, 117, 117, 0.6);
 $transparent-background: rgba(245, 245, 245, 0);
 
-h1 {
-  // text-align: left;
-  font-family: 'Comfortaa', cursive !important;
-  color: $dark-text;
-  // white-space: nowrap;
+.dialog-container{
+  width: 100%;
+  height: 100%;
+}
+
+.top-bar{
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 65px;
+  .subject-from-container{
+    width: calc(100% - 185px);
+  }
+}
+
+.message-subject{
+  font-size: 24px;
+  font-weight: 700;
+  width: 97%;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  // width: 97%;
   overflow-x: hidden;
+}
+
+.message-from{
+  font-size: 16px;
+  width: 97%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+button {
+  color: $dark-text;
 }
 
 .iframe-container{
   height:100%;
-
-  padding-bottom: 20px;
+  padding: 20px;
 }
 
 iframe {
@@ -26,36 +51,36 @@ iframe {
   border: 0;
 }
 
-md-dialog-content {
-  padding-left: 20px;
-  padding-right: 20px;
-  height: 85%;
+.content-container{
+  height: calc(100% - 65px);
 }
 
-.mail-dialog-subject {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 400;
-}
-
-.mail-dialog-from {
-  margin-bottom: 5px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-button {
+.sidenav-container{
+  width: 200px;
+  height: 100%;
+  box-shadow: 5px 0px 5px -2px rgba(0,0,0,.26);
+  padding: 10px;
   color: $dark-text;
 }
 
-.thread-radio-button{
+.message-select-header{
+  padding-bottom: 5px;
   font-size: 18px;
   font-family: 'Comfortaa', cursive !important;
+  font-weight: 400;
 }
 
-.message-select-header{
-  padding: 10px;
-  font-size: 24px;
+.thread-radio-button{
+  font-size: 12px;
   font-family: 'Comfortaa', cursive !important;
-  font-weight: 700;
+  font-weight: 400;
 }
+
+md-radio-group{
+  width: 100%;
+}
+md-radio-button{
+  width: 90%;
+}
+
+
