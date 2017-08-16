@@ -44,8 +44,17 @@ export class WeekViewComponent {
     this.calendarService.openDialog(event);
   }
 
-  openAllDayDialog(event: CalendarEvent): void{
+  openAllDayDialog(dateIndex: number, event?: CalendarEvent): void {
+    if (event) {
+      this.calendarService.openDialog(event);
+      return;
+    }
+    event = new CalendarEvent();
+    event.allDayEvent = true;
+    event.startDate = this.dateObjArray[dateIndex];
+    event.endDate = this.dateObjArray[dateIndex];
     this.calendarService.openDialog(event);
+
   }
 
   mapAllDayEvents(events: CalendarEvent[]): CalendarEvent[][] {
@@ -90,7 +99,7 @@ export class WeekViewComponent {
         }
       }
     }
-    console.log('Timed Events: ',eventStruct);
+    console.log('Timed Events: ', eventStruct);
     return eventStruct;
   }
 

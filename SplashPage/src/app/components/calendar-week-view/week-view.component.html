@@ -4,10 +4,12 @@
     <div *ngFor='let d of dateArray;index as idx;first as isFirst' class='day-column' fxFlex='14%' fxLayout='column' fxLayoutAlign='start center'>
       <div class='all-day-event-cell' fxFlex='110px'>
         &nbsp;
-        <div class='month-date'>{{dateObjArray[idx] | date:"MMM d"}}</div>
-        <div class='day'>{{dateObjArray[idx] | date:"EEE"}}</div>
+        <div class='top-date-container' (click)='openAllDayDialog(idx)' fxLayout='column'>
+          <div class='month-date'>{{dateObjArray[idx] | date:"MMM d"}}</div>
+          <div class='day'>{{dateObjArray[idx] | date:"EEE"}}</div>
+        </div>
         <div *ngFor='let allDayEvent of allDayEvents[idx]' fxLayoutAlign='center center'>
-          <div class='event-summary' [style.backgroundColor]='allDayEvent.backgroundColor' (click)='openAllDayDialog(allDayEvent)'>
+          <div class='event-summary' [style.backgroundColor]='allDayEvent.backgroundColor' (click)='openAllDayDialog(idx, allDayEvent)'>
             {{allDayEvent.summary}}
           </div>
         </div>

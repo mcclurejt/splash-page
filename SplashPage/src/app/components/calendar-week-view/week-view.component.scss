@@ -20,12 +20,23 @@ $transparent-background: rgba(245, 245, 245, 0);
     border-bottom: 2px solid $dark-text;
   }
 }
+
+.top-date-container{
+  cursor: default;
+}
+
+.top-date-container:hover{
+  cursor: pointer;
+  font-weight: 700;
+}
+
 .month-date {
   font-size: 12px;
 }
 .day {
   font-size: 18px;
 }
+
 .event-summary {
   height: 20px;
   width: 97%;
