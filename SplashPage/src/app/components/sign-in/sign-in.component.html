@@ -1,10 +1,20 @@
 <div fxLayoutAlign='center center' class='signInContainer' *ngIf='!(authService.loading | async);else loadingTemplate'>
     <md-card id='signIn' fxLayout='column' fxLayoutAlign='center center'>
       <md-card-title>
-        <span fxShow='false' fxShow.gt-xs>Please sign in to use the app</span>
-        <span fxShow='false' fxShow.xs style='font-size: 20px;'>You must be signed in</span>
+        <span class='app-title' [style.xs]='{"font-size.px" : 40}'>Splash Page</span>
       </md-card-title>
-      <button id='google-button' md-button (click)='signIn(google)'></button>
+      <md-card-content>
+        <span fxShow='false' fxShow.gt-xs class='pls-sign'>Please sign in to use the app</span>
+        <span fxShow='false' fxShow.xs class='pls-sign'>You must be signed in</span>
+      </md-card-content>
+      <div fxLayout='column' fxLayoutAlign='center center'class='button-container'>
+        <div fxFlex>
+          <button id='google-button' md-button (click)='signIn(google)'></button>
+        </div>
+        <div fxFlex class='creator-names'>
+          <span>Created by John McClure and Collin Moore</span>
+        </div>
+      </div>
     </md-card>
   </div>
 

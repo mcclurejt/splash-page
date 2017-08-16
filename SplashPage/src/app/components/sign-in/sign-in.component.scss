@@ -1,7 +1,36 @@
+$light-text: rgba(245, 245, 245, 1);
+$dark-text: rgba(66, 66, 66, 1);
+$light-background:rgba(245, 245, 245, 1);
+$dark-background:rgba(117, 117, 117, 0.6);
+$transparent-background: rgba(245, 245, 245, 0);
+
 #signIn {
   padding: 30px 20px;
   margin: 20px 40px;
   font-family: 'Comfortaa', cursive !important;
+  color: $dark-text;
+  .pls-sign {
+    font-size: 20px;
+    font-weight: 200;
+  }
+  md-card-title {
+    padding: 10px 0;
+    .app-title {
+      font-size: 50px;
+      font-weight: 300;
+    }
+  }
+
+  .creator-names {
+    font-size: 10px;
+    font-weight: 100;
+    color: $dark-background;
+  }
+
+  .button-container {
+    width: 100%;
+  }
+
   #google-button {
     background-color: transparent;
     background-image: url('/assets/images/google_signin_dark.png');
