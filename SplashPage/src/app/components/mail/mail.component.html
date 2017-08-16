@@ -1,10 +1,10 @@
 <div class='mail-container card-drop-shadow' [style.xs]='{"height.px" : 300}' fxLayout='column' fxLayoutAlign='start center'>
-  <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='end end'>
+  <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='start center'>
     <div>
-      <button class='create-mail-btn' md-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'envelope'" [size]=2 [fw]=true></i></button>
+      <button class='create-mail-btn' md-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
     </div>
     <span fxFlex></span>
-    <form class='inbox-filter'>
+    <form class='inbox-filter' fxFlexAlign='end'>
       <md-select placeholder='Filter' [(ngModel)]='currentFilter' name='filter'>
         <md-option class='inbox-filter-item' [value]='filters.all'>All</md-option>
         <md-option class='inbox-filter-item' [value]='filters.inbox'>Inbox</md-option>
