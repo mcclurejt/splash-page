@@ -28,33 +28,33 @@ import { MailComponent } from './components/mail/mail.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DatePipe } from '@angular/common'
 import {
-  MdAutocompleteModule,
+  // MdAutocompleteModule,
   MdButtonModule,
   MdButtonToggleModule,
-  MdCardModule,
+  // MdCardModule,
   MdCheckboxModule,
-  MdChipsModule,
+  // MdChipsModule,
   MdDialogModule,
   MD_DIALOG_DATA,
   MdDatepickerModule,
   MdNativeDateModule,
-  MdGridListModule,
+  // MdGridListModule,
   MdIconModule,
   MdInputModule,
-  MdListModule,
+  // MdListModule,
   MdMenuModule,
   MdProgressBarModule,
-  MdProgressSpinnerModule,
+  // MdProgressSpinnerModule,
   MdRadioModule,
   MdRippleModule,
   MdSelectModule,
   MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
+  // MdSliderModule,
+  // MdSlideToggleModule,
   MdSnackBarModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule
+  // MdTabsModule,
+  // MdToolbarModule,
+  // MdTooltipModule
 } from '@angular/material';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -78,34 +78,35 @@ import { MailDetailDialogComponent } from './components/mail-detail-dialog/mail-
 import { Md2Module }  from 'md2';
 import { MailSendDialogComponent } from './components/mail-send-dialog/mail-send-dialog.component';
 import { MailTabComponent } from './+mail-tab/mail-tab.component';
+import { NgSpinKitModule } from 'ng-spin-kit';
 
 export const MaterialModules = [
-  MdAutocompleteModule,
+  // MdAutocompleteModule,
   MdButtonModule,
   MdButtonToggleModule,
-  MdCardModule,
-  MdChipsModule,
+  // MdCardModule,
+  // MdChipsModule,
   MdCheckboxModule,
   MdDatepickerModule,
   MdNativeDateModule,
   MdDialogModule,
-  MdGridListModule,
+  // MdGridListModule,
   MdIconModule,
   MdInputModule,
-  MdListModule,
+  // MdListModule,
   MdMenuModule,
   MdProgressBarModule,
-  MdProgressSpinnerModule,
+  // MdProgressSpinnerModule,
   MdRadioModule,
   MdRippleModule,
   MdSelectModule,
   MdSidenavModule,
-  MdSliderModule,
-  MdSlideToggleModule,
+  // MdSliderModule,
+  // MdSlideToggleModule,
   MdSnackBarModule,
-  MdTabsModule,
-  MdToolbarModule,
-  MdTooltipModule,
+  // MdTabsModule,
+  // MdToolbarModule,
+  // MdTooltipModule,
 ];
 
 @NgModule({
@@ -136,7 +137,7 @@ export const MaterialModules = [
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserModule,
+    BrowserModule, 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth 
@@ -150,6 +151,7 @@ export const MaterialModules = [
     EffectsModule.forRoot([AuthEffects, WeatherEffects, CalendarEffects, MailEffects]),
     Angular2FontawesomeModule,
     Md2Module,
+    NgSpinKitModule,
   ],
   providers: [
     WeatherService,

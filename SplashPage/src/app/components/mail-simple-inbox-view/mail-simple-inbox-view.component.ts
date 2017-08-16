@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
+import { Component, OnInit, Input, Output, OnDestroy } from '@angular/core';
 import { MailService } from "app/services/mail.service";
 import * as _ from "lodash";
 import { Observable } from "rxjs/Observable";
@@ -27,8 +28,10 @@ export interface Thread {
   templateUrl: './mail-simple-inbox-view.component.html',
   styleUrls: ['./mail-simple-inbox-view.component.scss']
 })
-export class MailSimpleInboxViewComponent implements OnInit {
-
+export class MailSimpleInboxViewComponent implements OnInit, OnDestroy {
+  
+  private mailSub: Subscription;
+  private unreadMessageSub: Subscription;
   private _filter;
   public unfilteredThreads: Thread[];
   public threads: Thread[];
@@ -37,13 +40,13 @@ export class MailSimpleInboxViewComponent implements OnInit {
   constructor(private mailService: MailService, private store: Store<fromRoot.State>,) { }
 
   ngOnInit() {
-    this.mailService.threads
+    this.mailSub = this.mailService.threads
     .map(threads => this.simpleInboxViewFilter(threads))
     .subscribe(threads => {
       this.unfilteredThreads = threads;
       this.threads = threads;
     });
-    this.mailService.unreadMessages.subscribe((messageIds: string[]) =>  this.unreadMessages = messageIds);
+    this.unreadMessageSub = this.mailService.unreadMessages.subscribe((messageIds: string[]) =>  this.unreadMessages = messageIds);
   }
 
   openDialog(event: Thread) {
@@ -89,7 +92,6 @@ export class MailSimpleInboxViewComponent implements OnInit {
         this.threads = this.unfilteredThreads;
       }
     }
-    console.log('Filtered Messages: ',this.threads);
   }
 
   private simpleInboxViewFilter(mailThreadObj): Thread[] {
@@ -126,6 +128,11 @@ export class MailSimpleInboxViewComponent implements OnInit {
       return 0;
     }
     return 1;
+  }
+
+  ngOnDestroy(): void {
+    this.mailSub.unsubscribe();
+    this.unreadMessageSub.unsubscribe();
   }
 
 }

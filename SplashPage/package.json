@@ -42,6 +42,7 @@
     "md2": "0.0.26",
     "ng-gapi": "0.0.39",
     "ng-material-datetimepicker": "^1.7.2",
+    "ng-spin-kit": "^5.1.1",
     "ng2-weather-icons": "^0.1.16",
     "ngx-bootstrap": "^1.8.1",
     "ngx-infinite-scroll": "^0.5.1",

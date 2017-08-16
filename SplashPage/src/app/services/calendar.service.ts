@@ -13,8 +13,9 @@ import * as fromRoot from 'app/store/reducers';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/withLatestFrom';
-import 'rxjs/add/operator/throttle';
+import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/interval';
+import "rxjs/add/operator/share";
 
 @Injectable()
 export class CalendarService {

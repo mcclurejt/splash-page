@@ -9,7 +9,6 @@ export const MAIL_ADD = 'MAIL_ADD';
 export const HANDLE_MAIL_ADD = 'HANDLE_MAIL_ADD';
 export const FULL_MESSAGE_ADD = 'FULL_MESSAGE_ADD';
 export const FULL_THREAD_ADD = 'MAIL_FULL_THREAD_ADD';
-export const FULL_THREAD_GET = 'MAIL_FULL_THREAD_GET';
 export const HANDLE_FULL_MESSAGE_ADD = 'HANDLE_FULL_MESSAGE_ADD';
 export const MAIL_DELETE = 'MAIL_DELETE';
 export const HANDLE_MAIL_DELETE = 'HANDLE_MAIL_DELETE';
@@ -65,12 +64,6 @@ export class FullThreadAdd implements Action{
     constructor(public payload: MailMessage){}
 }
 
-export class FullThreadGet implements Action{
-    readonly type = FULL_THREAD_GET;
-
-    constructor(public payload: MailMessage){}
-}
-
 export class HandleFullMessageAdd implements Action{
     readonly type = HANDLE_FULL_MESSAGE_ADD;
 
@@ -107,4 +100,4 @@ export class StopLoading implements Action{
     constructor(){}    
 }
 
-export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | FullThreadAdd | FullThreadGet | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;
+export type All = OnStateChange | OpenDetailDialog  | MarkRead | HandleMarkRead | MailAdd | HandleMailAdd | FullMessageAdd | FullThreadAdd | HandleFullMessageAdd | MailDelete | HandleMailDelete |  ClearAll | StartLoading | StopLoading;

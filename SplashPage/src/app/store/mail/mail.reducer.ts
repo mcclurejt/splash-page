@@ -39,7 +39,6 @@ export function reducer(state = initialState, action: MailActions.All): State {
         let unreadMessages = _.filter(action.payload,(message) => message.labelIds.includes('UNREAD')).map((message) => message.id);
         unreadMessages = _.filter(unreadMessages, (id) => !newState.unreadMessages.includes(id))
         newState.unreadMessages = [...newState.unreadMessages, ...unreadMessages]
-        console.log('UnreadMessage: ', action.payload.find((message) => message.id == '15de6574e03fed57'));
       } else {
         if (!_.keys(newState.threads).includes(action.payload.threadId)) {
           newState.threads[action.payload.threadId] = [];
@@ -50,7 +49,6 @@ export function reducer(state = initialState, action: MailActions.All): State {
           newState.unreadMessages.push(action.payload.id);
         }
       }
-      console.log('UnreadMessages: ',newState.unreadMessages);
       return newState;
     }
 
@@ -59,7 +57,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
       let newState = Object.assign({}, state);
       let ar;
       if(Array.isArray(action.payload)){
-        console.log('Adding Full Message Array',action.payload);
+        // console.log('Adding Full Message Array',action.payload);
         ar = true;
         for(let message of action.payload){
           newState.messageLookup[message.id] = message;
@@ -68,7 +66,7 @@ export function reducer(state = initialState, action: MailActions.All): State {
         newState.messageLookup[action.payload.id] = action.payload;
       }
       if(ar){
-        console.log('Full message array new State',newState);
+        // console.log('Full message array new State',newState);
       }
       return newState;
     }

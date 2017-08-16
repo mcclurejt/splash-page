@@ -16,7 +16,6 @@ export class CalendarComponent{
 
   private setXsHeightFromUrl(){
     let url = this.router.url;
-    console.log('Url',url);
     if(url == '/calendar'){
       this.xsHeight = '100%';
     } else {

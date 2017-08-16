@@ -1,6 +1,7 @@
+import { Subscription } from 'rxjs/Rx';
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Observable } from 'rxjs/Observable';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CalendarService } from "app/services/calendar.service";
 import * as _ from 'lodash';
 
@@ -9,8 +10,9 @@ import * as _ from 'lodash';
   templateUrl: './week-view.component.html',
   styleUrls: ['./week-view.component.scss']
 })
-export class WeekViewComponent {
+export class WeekViewComponent implements OnDestroy {
 
+  private eventSub : Subscription;
   private firstDayOfWeek = this.getFirstDayOfWeek();
   dateObjArray: Date[] = [];
   dateArray: number[] = [];
@@ -23,7 +25,7 @@ export class WeekViewComponent {
     // this.allDayEvents = this.calendarService.events.map((events) => this.mapAllDayEvents(events));
     // this.timedEvents = this.calendarService.events.map((events) => this.mapTimedEvents(events));
 
-    this.calendarService.events.subscribe((events) => {
+    this.eventSub = this.calendarService.events.subscribe((events) => {
       this.allDayEvents = this.mapAllDayEvents(events);
       this.timedEvents = this.mapTimedEvents(events);
     });
@@ -99,7 +101,7 @@ export class WeekViewComponent {
         }
       }
     }
-    console.log('Timed Events: ', eventStruct);
+    // console.log('Timed Events: ', eventStruct);
     return eventStruct;
   }
 
@@ -127,6 +129,10 @@ export class WeekViewComponent {
     let newDate = new Date(d.setDate(diff));
     newDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
     return newDate;
+  }
+
+  ngOnDestroy(): void {
+    this.eventSub.unsubscribe();
   }
 
 }

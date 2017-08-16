@@ -37,7 +37,6 @@ export class MailEffects{
     .switchMap(([message, messageLookup]) => {
       let actions = [];
       if(messageLookup[message.id]){
-        console.log('MessageLookup',messageLookup[message.id]);
         this.mailService.openDialog(messageLookup[message.id]);
       } else {
         // Load the full initial message first, then load the full message for each message in the thread (if there are any more)
@@ -66,7 +65,6 @@ export class MailEffects{
     .map(toPayload)
     .withLatestFrom(this.mailService.threads)
     .switchMap(([message,threads]) => {
-      console.log('Thread',threads[message.threadId]);
       if(threads[message.threadId].length > 1){
         return this.gmailService.getFullThread(message,threads);
       }
