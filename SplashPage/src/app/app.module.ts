@@ -79,6 +79,7 @@ import { Md2Module }  from 'md2';
 import { MailSendDialogComponent } from './components/mail-send-dialog/mail-send-dialog.component';
 import { MailTabComponent } from './+mail-tab/mail-tab.component';
 import { NgSpinKitModule } from 'ng-spin-kit';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'; 
 
 export const MaterialModules = [
   // MdAutocompleteModule,
@@ -152,6 +153,9 @@ export const MaterialModules = [
     Angular2FontawesomeModule,
     Md2Module,
     NgSpinKitModule,
+    StoreDevtoolsModule.instrument({
+      maxAge: 25 //  Retains last 25 states
+    })
   ],
   providers: [
     WeatherService,

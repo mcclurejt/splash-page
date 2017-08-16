@@ -26,6 +26,7 @@
     "@angular/router": "^4.3.1",
     "@ngrx/effects": "^4.0.2",
     "@ngrx/store": "^4.0.0",
+    "@ngrx/store-devtools": "^4.0.0",
     "@swimlane/ngx-datatable": "^9.3.1",
     "@types/gapi.auth2": "0.0.40",
     "@types/gapi.calendar": "^3.0.1",

@@ -26,15 +26,6 @@ export interface Thread {
   internalDate: number
 }
 
-interface FilteredThreads{
-  all?: Observable<Thread[]>,
-  inbox?: Observable<Thread[]>,
-  unread?: Observable<Thread[]>,
-  personal?: Observable<Thread[]>,
-  promotions?: Observable<Thread[]>,
-  social?: Observable<Thread[]>,
-}
-
 @Injectable()
 export class MailService {
   private mailLoaded = false;
@@ -120,19 +111,19 @@ export class MailService {
         return this.viewThreads;
       }
       case Filters.inbox:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('INBOX'))).share()
+        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('INBOX')));
       }
       case Filters.unread:{
         return this.viewThreads.withLatestFrom(this.unreadMessages).map(([threads,unreadMessages]) => _.filter(threads,  (thread) => !this.isRead(thread.messages[0],unreadMessages)));
       }
       case Filters.personal:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')))
+        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')));
       }
       case Filters.promotions:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')))
+        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_PERSONAL')));
       }
       case Filters.social:{
-        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_SOCIAL')))
+        return this.viewThreads.map((threads) => _.filter(threads,  (thread) => thread.messages[0].labelIds.includes('CATEGORY_SOCIAL')));
       }
       default:{
         return this.viewThreads;
