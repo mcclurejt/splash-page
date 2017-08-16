@@ -2,20 +2,16 @@
     <!-- Expand buttons on desktop -->
     <div class='button-row' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.xs fxHide.sm>
 
-      <button md-button [routerLink]="['/']">
+      <button md-button [routerLink]="['/home']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'home'" [size]=2 [fw]=true></i>
       </button>
 
-      <button md-button [routerLink]="['/calendar']">
+      <button md-button [routerLink]="['/calendar']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'calendar'" [size]=2 [fw]=true></i>
       </button>
 
-      <button md-button [routerLink]="['/']">
+      <button md-button [routerLink]="['/mail']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'envelope'" [size]=2 [fw]=true></i>
-      </button>
-
-      <button md-button [routerLink]="['/']">
-        <i fa [name]="'cog'" [size]=2 [fw]=true></i>
       </button>
 
     </div>
@@ -28,7 +24,7 @@
     </div>
 
     <md-menu [overlapTrigger]='false' #buttonMenu='mdMenu'>
-      <button md-menu-item [routerLink]="['/']">
+      <button md-menu-item [routerLink]="['/home']">
         <i fa [name]="'home'" [size]=1 [fw]=true></i>
         <span>Home</span>
       </button>
@@ -36,13 +32,9 @@
         <i fa [name]="'calendar'" [size]=1 [fw]=true></i>
         <span>Calendar</span>
       </button>
-      <button md-menu-item [routerLink]="['/']">
+      <button md-menu-item [routerLink]="['/mail']">
         <i fa [name]="'envelope'" [size]=1 [fw]=true></i>
         <span>Mail</span>
-      </button>
-      <button md-menu-item [routerLink]="['/']">
-        <i fa [name]="'cog'" [size]=1 [fw]=true></i>
-        <span>Settings</span>
       </button>
     </md-menu>
 

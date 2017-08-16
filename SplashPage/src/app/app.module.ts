@@ -77,6 +77,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MailDetailDialogComponent } from './components/mail-detail-dialog/mail-detail-dialog.component';
 import { Md2Module }  from 'md2';
 import { MailSendDialogComponent } from './components/mail-send-dialog/mail-send-dialog.component';
+import { MailTabComponent } from './+mail-tab/mail-tab.component';
 
 export const MaterialModules = [
   MdAutocompleteModule,
@@ -130,6 +131,7 @@ export const MaterialModules = [
     SignInComponent,
     MailDetailDialogComponent,
     MailSendDialogComponent,
+    MailTabComponent,
   ],
   imports: [
     BrowserModule,
