@@ -30,12 +30,18 @@ $transparent-background: rgba(245, 245, 245, 0);
   height: 20px;
   width: 97%;
   font-size: 12px;
-  font-weight: 300;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow-x: hidden;
   line-height: 20px;
+  font-weight: 400;
 }
+
+.event-summary:hover {
+  font-weight: 700;
+  cursor:pointer;
+}
+
 .timed-event-cell {
   text-align: center;
   height: 100%;
@@ -46,3 +52,36 @@ $transparent-background: rgba(245, 245, 245, 0);
   width: 100%;
   border-bottom: 1px dotted $dark-text;
 }
+
+.hour-cell:hover{
+  background-color: $accent-background;
+}
+
+.event-start-time{
+  font-size: 10px !important;
+  font-weight: 700;
+  text-align: center;
+}
+
+.timed-event-summary{
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.times{
+  height: 20px;
+  width: 97%;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+span{
+  cursor: default;
+}
+

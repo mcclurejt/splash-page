@@ -15,22 +15,36 @@ export class WeekViewComponent {
   dateObjArray: Date[] = [];
   dateArray: number[] = [];
   hourArray: Date[] = [];
-  allDayEvents: Observable<CalendarEvent[][]>;
-  timedEvents: Observable<any>;
+  allDayEvents: CalendarEvent[][];
+  timedEvents: any;
 
   constructor(private calendarService: CalendarService) {
     this.fillDateAndHourArrays();
-    this.allDayEvents = this.calendarService.events.map((events) => this.mapAllDayEvents(events));
-    this.timedEvents = this.calendarService.events.map((events) => this.mapTimedEvents(events));
+    // this.allDayEvents = this.calendarService.events.map((events) => this.mapAllDayEvents(events));
+    // this.timedEvents = this.calendarService.events.map((events) => this.mapTimedEvents(events));
+
+    this.calendarService.events.subscribe((events) => {
+      this.allDayEvents = this.mapAllDayEvents(events);
+      this.timedEvents = this.mapTimedEvents(events);
+    });
   }
 
-  openDialog(event: CalendarEvent, d: Date = new Date(), h: Date = new Date()){
-    if(event == undefined){
+  openTimedDialog(dateIndex: number, h: number): void {
+    let date = this.dateObjArray[dateIndex];
+    let dateNum: number = this.dateArray[dateIndex];
+    let event;
+    if (this.timedEvents[dateNum][h].length < 1) {
       event = new CalendarEvent();
-      event.startDate = new Date(d.getFullYear(),d.getMonth(),d.getDate(),h.getHours())
-      event.endDate = new Date(d.getFullYear(),d.getMonth(),d.getDate(),h.getHours() + 1)
+      event.startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h)
+      event.endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), h + 1)
       event.allDayEvent = false;
-    } 
+    } else {
+      event = this.timedEvents[dateNum][h][0];
+    }
+    this.calendarService.openDialog(event);
+  }
+
+  openAllDayDialog(event: CalendarEvent): void{
     this.calendarService.openDialog(event);
   }
 
@@ -52,8 +66,8 @@ export class WeekViewComponent {
     let eventStruct = {};
     for (let date of this.dateArray) {
       for (let i = 0; i < 24; i++) {
-        if(i == 0){
-          eventStruct[date] = {[i]: []}
+        if (i == 0) {
+          eventStruct[date] = { [i]: [] }
         } else {
           eventStruct[date][i] = [];
         }
@@ -76,7 +90,7 @@ export class WeekViewComponent {
         }
       }
     }
-    
+    console.log('Timed Events: ',eventStruct);
     return eventStruct;
   }
 
@@ -86,7 +100,7 @@ export class WeekViewComponent {
       this.dateObjArray.push(dow);
       this.dateArray.push(dow.getDate());
     }
-    for(let i = 0; i < 24; i++){
+    for (let i = 0; i < 24; i++) {
       let d = new Date();
       d.setHours(i);
       d.setMinutes(0);

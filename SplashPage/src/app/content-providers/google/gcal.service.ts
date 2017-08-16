@@ -204,14 +204,16 @@ export class GcalService {
       pad(d.getSeconds()) +
       timezoneOffset(d.getTimezoneOffset());
   }
-  /**
+   /**
    * Returns the Date object representing the first day of the week
    */
   private getFirstDayOfWeek(): Date {
     let d = new Date();
     let day = d.getDay();
     let diff = d.getDate() - day;
-    return new Date(d.setDate(diff));
+    let newDate = new Date(d.setDate(diff));
+    newDate = new Date(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
+    return newDate;
   }
 
 }
