@@ -43,7 +43,7 @@
     </div>
 
     <div class='userInfo' fxFlex='30%' fxLayout fxLayoutAlign='end center'>
-      <span id='displayName' fxHide.xs>{{authService.displayName | async}}</span>
+      <span id='displayName' fxHide.xs fxHide.sm>{{authService.displayName | async}}</span>
       <button md-button [mdMenuTriggerFor]='signOutMenu'>
         <i fa [name]="'user-circle'" [size]=2></i>
       </button>
