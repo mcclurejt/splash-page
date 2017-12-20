@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MD_DIALOG_DATA, MdDialogRef } from "@angular/material";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 import { MailMessage } from "app/store/mail/mail-message";
 
 interface MessageForm {
@@ -29,8 +29,8 @@ export class MailSendDialogComponent implements OnInit {
   }
   public message: MailMessage;
 
-  constructor(@Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<MailSendDialogComponent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<MailSendDialogComponent>) { }
 
 
   ngOnInit() {

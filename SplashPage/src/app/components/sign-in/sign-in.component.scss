@@ -33,13 +33,13 @@ $transparent-background: rgba(245, 245, 245, 0);
 
   #google-button {
     background-color: transparent;
-    background-image: url('/assets/images/google_signin_dark.png');
+    background-image: url('../../../assets/images/google_signin_dark.png');
     width: 191px;
     height: 46px;
     background-size: cover;
     background-repeat: no-repeat;
     &:active {
-      background-image: url('/assets/images/google_signin_dark_pressed.png');
+      background-image: url('../../../assets/images/google_signin_dark_pressed.png');
     }
   }
 }

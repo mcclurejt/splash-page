@@ -1,20 +1,20 @@
 <div class='dialogContainer'>
-  <!-- <h1 md-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1> -->
-  <md-dialog-content>
+  <!-- <h1 mat-dialog-title fxFlex fxLayoutAlign='center center'>Event</h1> -->
+  <mat-dialog-content>
     <form fxFlex fxLayout='column' #addEventForm='ngForm' (ngSubmit)='closeDialog()'>
 
-      <md-input-container fxFlex>
-        <input mdInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
-      </md-input-container>
+      <mat-input-container fxFlex>
+        <input matInput (keyup.enter)='closeDialog()' [(ngModel)]='newEvent.summary' type='text' placeholder='Summary' name='summary'>
+      </mat-input-container>
 
-      <md-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
-        <md-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
+      <mat-select placeholder="Calendar" [(ngModel)]='newEvent.calendarId' name='calendarId' required>
+        <mat-option fxFlex fxLayout fxLayoutAlign='start center' *ngFor="let calendar of calendars | async" [value]="calendar.id">
           <i fa [name]="'calendar-o'" [size]=1 [fw]=true [style.color]='calendar.backgroundColor'></i>
           <span>{{ calendar.summary }}</span>
-        </md-option>
-      </md-select>
+        </mat-option>
+      </mat-select>
 
-      <md-checkbox fxFlexAlign='start' mdInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding: 20px 0px'>All Day Event</md-checkbox>
+      <mat-checkbox fxFlexAlign='start' matInput [(ngModel)]='newEvent.allDayEvent' name='allDayEvent' style='padding: 20px 0px'>All Day Event</mat-checkbox>
 
       <div fxLayout='column' fxLayoutAlign='start center'>
         <div fxLayout='row' fxLayout.xs='column' fxLayoutAlign='space-between center'>
@@ -48,13 +48,13 @@
 
 
     </form>
-  </md-dialog-content>
-  <md-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center'>
-    <button *ngIf='mode == ADD' md-raised-button (click)='closeDialog(CANCEL)'>Cancel</button>
-    <button *ngIf='mode == ADD' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
+  </mat-dialog-content>
+  <mat-dialog-actions fxFlex fxLayout fxLayoutAlign='space-around center'>
+    <button *ngIf='mode == ADD' mat-raised-button (click)='closeDialog(CANCEL)'>Cancel</button>
+    <button *ngIf='mode == ADD' color='primary' mat-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
       type='submit'>Add</button>
-    <button *ngIf='mode == EDIT' color='warn' md-raised-button (click)='closeDialog(DELETE)'>Remove</button>
-    <button *ngIf='mode == EDIT' color='primary' md-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
+    <button *ngIf='mode == EDIT' color='warn' mat-raised-button (click)='closeDialog(DELETE)'>Remove</button>
+    <button *ngIf='mode == EDIT' color='primary' mat-raised-button (click)='addEventForm.ngSubmit.emit()' [disabled]='!addEventForm.form.valid'
       type='submit'>Submit</button>
-  </md-dialog-actions>
+  </mat-dialog-actions>
 </div>

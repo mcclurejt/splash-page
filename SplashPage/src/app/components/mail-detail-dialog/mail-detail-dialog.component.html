@@ -6,10 +6,10 @@
     </div>
     <div fxFlex></div>
     <div fxLayout='row'>
-      <button md-button (click)='replyCloseDialog()'>
+      <button mdbutton (click)='replyCloseDialog()'>
         <i fa [name]="'reply'" [size]=2 [fw]=true></i>
       </button>
-      <button md-button (click)='closeDialog()'>
+      <button mdbutton (click)='closeDialog()'>
         <i fa [name]="'times'" [size]=2 [fw]=true></i>
       </button>
     </div>
@@ -21,12 +21,12 @@
       <div class='message-select-header'>
         Messages:
       </div>
-      <md-radio-group (change)='setIframeContent($event.value)'>
-        <md-radio-button *ngFor='let message of messages | async;first as isFirst' class='thread-radio-button' color='warn' [value]='message'
+      <mat-radio-group (change)='setIframeContent($event.value)'>
+        <mat-radio-button *ngFor='let message of messages | async;first as isFirst' class='thread-radio-button' color='warn' [value]='message'
           [checked]='isFirst'>
           {{message.headers['subject']}}
-        </md-radio-button>
-      </md-radio-group>
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
 
     <div fxFlex class='iframe-container'>

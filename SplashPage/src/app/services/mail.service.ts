@@ -6,7 +6,7 @@ import * as MailActions from 'app/store/mail/mail.actions';
 import { Observable } from "rxjs/Observable";
 import { MailMessage } from "app/store/mail/mail-message";
 import { MailThread, MailMessageLookup } from "app/store/mail/mail.reducer";
-import { MdDialog } from "@angular/material";
+import { MatDialog } from "@angular/material";
 import { MailDetailDialogComponent } from "app/components/mail-detail-dialog/mail-detail-dialog.component";
 import { MailSendDialogComponent } from "app/components/mail-send-dialog/mail-send-dialog.component";
 import { Filter } from 'app/store/mail/mail.reducer';
@@ -31,7 +31,7 @@ export class MailService {
   public currentFilter: Observable<Filter>;
   public viewThreads: Observable<Thread[]>;
 
-  constructor(public gmailService: GmailService, private store: Store<fromRoot.State>, public dialog: MdDialog, public dialogSend: MdDialog) {
+  constructor(public gmailService: GmailService, private store: Store<fromRoot.State>, public dialog: MatDialog, public dialogSend: MatDialog) {
     this.messages = this.store.select(store => store.mail.messages);
     this.threads = this.store.select(store => store.mail.threads);
     this.messageLookup = this.store.select(store => store.mail.messageLookup);

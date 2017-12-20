@@ -4,31 +4,31 @@
       <span class='mail-tab-heading'>Mail</span>
       <i fa [name]="'envelope'" [size]=3 [fw]=true class='mail-tab-heading-icon'></i>
       <span fxFlex></span>
-      <button class='create-mail-btn' md-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
+      <button class='create-mail-btn' mat-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
     </div>
     <div fxLayout='row' class='sidnav-inbox-container'>
       <div class='sidenav'>
         <span>Filter Inbox:</span>
-        <md-radio-group (change)='updateFilter($event.value)' fxLayout='column'>
-          <md-radio-button [checked]='true' class='filter-radio-btn' color='warn' [value]="all">
+        <mat-radio-group (change)='updateFilter($event.value)' fxLayout='column'>
+          <mat-radio-button [checked]='true' class='filter-radio-btn' color='warn' [value]="all">
             All
-          </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="inbox">
+          </mat-radio-button>
+          <mat-radio-button class='filter-radio-btn' color='warn' [value]="inbox">
             Inbox
-          </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="unread">
+          </mat-radio-button>
+          <mat-radio-button class='filter-radio-btn' color='warn' [value]="unread">
             Unread
-          </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="personal">
+          </mat-radio-button>
+          <mat-radio-button class='filter-radio-btn' color='warn' [value]="personal">
             Personal
-          </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="social">
+          </mat-radio-button>
+          <mat-radio-button class='filter-radio-btn' color='warn' [value]="social">
             Social
-          </md-radio-button>
-          <md-radio-button class='filter-radio-btn' color='warn' [value]="promotions">
+          </mat-radio-button>
+          <mat-radio-button class='filter-radio-btn' color='warn' [value]="promotions">
             Promotions
-          </md-radio-button>
-        </md-radio-group>
+          </mat-radio-button>
+        </mat-radio-group>
       </div>
       <div fxFlex class='inbox' *ngIf='!(mailService.loading | async);else loadingTemplate'
       infinite-scroll

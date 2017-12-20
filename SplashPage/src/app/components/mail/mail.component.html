@@ -1,18 +1,18 @@
 <div class='mail-container card-drop-shadow' [style.xs]='{"height.px" : heightInput}' fxLayout='column' fxLayoutAlign='start center'>
   <div class='top-bar bar-drop-shadow' fxLayout fxLayoutAlign='start center'>
     <div>
-      <button class='create-mail-btn' md-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
+      <button class='create-mail-btn' mat-icon-button (click)='mailService.openSendDialog()'><i fa [name]="'share-square-o'" [size]=2 [fw]=true></i></button>
     </div>
     <span fxFlex></span>
     <form class='inbox-filter' fxFlexAlign='end'>
-      <md-select placeholder='Filter' (change)='updateFilter($event.value)' name='filter'>
-        <md-option selected class='inbox-filter-item' [value]='all'>All</md-option>
-        <md-option class='inbox-filter-item' [value]='inbox'>Inbox</md-option>
-        <md-option class='inbox-filter-item' [value]='unread'>Unread</md-option>
-        <md-option class='inbox-filter-item' [value]='personal'>Personal</md-option>
-        <md-option class='inbox-filter-item' [value]='social'>Social</md-option>
-        <md-option class='inbox-filter-item' [value]='promotions'>Promotions</md-option>
-      </md-select>
+      <mat-select placeholder='Filter' (change)='updateFilter($event.value)' name='filter'>
+        <mat-option selected class='inbox-filter-item' [value]='all'>All</mat-option>
+        <mat-option class='inbox-filter-item' [value]='inbox'>Inbox</mat-option>
+        <mat-option class='inbox-filter-item' [value]='unread'>Unread</mat-option>
+        <mat-option class='inbox-filter-item' [value]='personal'>Personal</mat-option>
+        <mat-option class='inbox-filter-item' [value]='social'>Social</mat-option>
+        <mat-option class='inbox-filter-item' [value]='promotions'>Promotions</mat-option>
+      </mat-select>
     </form>
   </div>
   <div class='viewContainer' *ngIf='!(mailService.loading | async);else loadingTemplate'

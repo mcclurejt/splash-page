@@ -2,15 +2,15 @@
     <!-- Expand buttons on desktop -->
     <div class='button-row' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.xs fxHide.sm>
 
-      <button md-button [routerLink]="['/home']" routerLinkActive='buttonHoverStyle'>
+      <button mdbutton [routerLink]="['/home']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'home'" [size]=2 [fw]=true></i>
       </button>
 
-      <button md-button [routerLink]="['/calendar']" routerLinkActive='buttonHoverStyle'>
+      <button mdbutton [routerLink]="['/calendar']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'calendar'" [size]=2 [fw]=true></i>
       </button>
 
-      <button md-button [routerLink]="['/mail']" routerLinkActive='buttonHoverStyle'>
+      <button mdbutton [routerLink]="['/mail']" routerLinkActive='buttonHoverStyle'>
         <i fa [name]="'envelope'" [size]=2 [fw]=true></i>
       </button>
 
@@ -18,25 +18,25 @@
 
     <!-- Condense buttons on mobile -->
     <div class='navigationButtons' fxFlex='30%' fxLayout fxLayoutAlign='start center' fxHide.gt-sm>
-       <button md-button [mdMenuTriggerFor]='buttonMenu'>
+       <button mdbutton [matMenuTriggerFor]='buttonMenu'>
         <i fa [name]="'bars'" [size]=2 [fw]=true></i>
       </button>
     </div>
 
-    <md-menu [overlapTrigger]='false' #buttonMenu='mdMenu'>
-      <button md-menu-item [routerLink]="['/home']">
+    <mat-menu [overlapTrigger]='false' #buttonMenu='matMenu'>
+      <button mat-menu-item [routerLink]="['/home']">
         <i fa [name]="'home'" [size]=1 [fw]=true></i>
         <span>Home</span>
       </button>
-      <button md-menu-item [routerLink]="['/calendar']">
+      <button mat-menu-item [routerLink]="['/calendar']">
         <i fa [name]="'calendar'" [size]=1 [fw]=true></i>
         <span>Calendar</span>
       </button>
-      <button md-menu-item [routerLink]="['/mail']">
+      <button mat-menu-item [routerLink]="['/mail']">
         <i fa [name]="'envelope'" [size]=1 [fw]=true></i>
         <span>Mail</span>
       </button>
-    </md-menu>
+    </mat-menu>
 
     <div class='timeContainer' fxFlex='40%' fxLayout fxLayoutAlign='center center'>
       <app-time></app-time>
@@ -44,14 +44,14 @@
 
     <div class='userInfo' fxFlex='30%' fxLayout fxLayoutAlign='end center'>
       <span id='displayName' fxHide.xs fxHide.sm>{{authService.displayName | async}}</span>
-      <button md-button [mdMenuTriggerFor]='signOutMenu'>
+      <button mdbutton [matMenuTriggerFor]='signOutMenu'>
         <i fa [name]="'user-circle'" [size]=2></i>
       </button>
-      <md-menu [overlapTrigger]='false' #signOutMenu='mdMenu'>
-        <button md-menu-item (click)='signOut()'>
+      <mat-menu [overlapTrigger]='false' #signOutMenu='matMenu'>
+        <button mat-menu-item (click)='signOut()'>
         <i fa [name]="'sign-out'" [size]=1 [fw]=true></i>
         <span>Sign Out</span>
       </button>
-      </md-menu>
+      </mat-menu>
     </div>
 </div>

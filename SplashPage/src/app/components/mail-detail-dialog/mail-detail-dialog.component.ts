@@ -1,6 +1,6 @@
 import { MailThread } from 'app/store/mail/mail.reducer';
 import { Component, Inject, OnInit, AfterContentInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MdDialogRef, MD_DIALOG_DATA, MdDialog } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from "@angular/material";
 import { MailMessage } from "app/store/mail/mail-message";
 import { Observable } from "rxjs/Observable";
 import { MailSendDialogComponent } from "app/components/mail-send-dialog/mail-send-dialog.component";
@@ -19,9 +19,9 @@ export class MailDetailDialogComponent implements OnInit, OnDestroy {
   public baseMessage: MailMessage;
   public messages: Observable<MailMessage[]>;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: any,
-    public dialogRef: MdDialogRef<MailDetailDialogComponent>,
-    public dialogSendRef: MdDialog,
+  constructor( @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<MailDetailDialogComponent>,
+    public dialogSendRef: MatDialog,
     private store: Store<fromRoot.State>) {
     this.baseMessage = data.message;
     this.messages = this.store

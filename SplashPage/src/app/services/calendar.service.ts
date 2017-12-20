@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { Injectable, OnInit } from '@angular/core';
 import { CalendarEvent } from "app/store/calendar/calendar-event";
 import { CalendarDialogComponent } from "app/components/calendar-dialog/calendar-dialog.component";
@@ -24,7 +24,7 @@ export class CalendarService {
   public events: Observable<CalendarEvent[]>;
   public loading: Observable<boolean>;
 
-  constructor(public dialog: MdDialog, private store: Store<fromRoot.State>) {
+  constructor(public dialog: MatDialog, private store: Store<fromRoot.State>) {
     this.calendars = this.store.select(state => state.calendar.calendars);
     this.events = this.store.select(state => state.calendar.events);
     this.loading = this.store.select(state => state.calendar.loading);

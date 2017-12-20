@@ -7,7 +7,8 @@
     "types": [
       "gapi",
       "gapi.auth2",
-      "gapi.calendar"
+      "gapi.calendar",
+      "firebase"
     ]
   },
   "exclude": [

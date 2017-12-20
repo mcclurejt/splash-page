@@ -3,9 +3,9 @@ import { CalendarService } from './../../services/calendar.service';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { CalendarEvent } from 'app/store/calendar/calendar-event';
 import { Component, Inject, OnInit, EventEmitter } from '@angular/core';
-import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material'
 import { Calendar } from "app/store/calendar/calendar";
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import * as _ from 'lodash';
 
 @Component({
@@ -27,7 +27,7 @@ export class CalendarDialogComponent implements OnInit {
   calendars: Observable<Calendar[]>;
   todaysDate: Date;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: any, public dialogRef: MdDialogRef<CalendarDialogComponent>, public snackBar: MdSnackBar) {
+  constructor( @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<CalendarDialogComponent>, public snackBar: MatSnackBar) {
     this._setTodaysDate();
   }
 
